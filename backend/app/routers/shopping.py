@@ -120,11 +120,16 @@ async def delete_category(
 #  Products
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-@router.get("/api/shopping/products", response_model=List[ProductResponse])
+@router.get("/api/shopping/products")
 async def get_products(
     category_id: Optional[int] = Query(None),
     is_new: Optional[bool] = Query(None),
     is_recommended: Optional[bool] = Query(None),
+    search: Optional[str] = Query(None),
+    min_price: Optional[int] = Query(None),
+    max_price: Optional[int] = Query(None),
+    page: Optional[int] = Query(None),
+    per_page: int = Query(20),
     db: AsyncSession = Depends(get_db),
 ):
     query = select(Product).order_by(Product.sort_order)
@@ -135,7 +140,36 @@ async def get_products(
         query = query.where(Product.is_new == is_new)
     if is_recommended is not None:
         query = query.where(Product.is_recommended == is_recommended)
+    if search:
+        query = query.where(Product.name.ilike(f"%{search}%"))
+    if min_price is not None:
+        query = query.where(Product.price >= min_price)
+    if max_price is not None:
+        query = query.where(Product.price <= max_price)
 
+    # If pagination is requested (page param provided)
+    if page is not None:
+        from sqlalchemy import func
+        # Get total count
+        count_query = select(func.count()).select_from(query.subquery())
+        total_result = await db.execute(count_query)
+        total = total_result.scalar() or 0
+
+        # Apply pagination
+        offset = (page - 1) * per_page
+        query = query.offset(offset).limit(per_page)
+        result = await db.execute(query)
+        items = result.scalars().all()
+
+        return {
+            "items": [ProductResponse.model_validate(item) for item in items],
+            "total": total,
+            "page": page,
+            "per_page": per_page,
+            "total_pages": (total + per_page - 1) // per_page,
+        }
+
+    # No pagination — return list as before (backwards compatible)
     result = await db.execute(query)
     return result.scalars().all()
 

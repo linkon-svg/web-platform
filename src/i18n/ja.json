@@ -17,5 +17,85 @@
     "terms": "利用規約",
     "privacy": "個人情報処理方針",
     "minor": "未成年施術同意書"
+  },
+  "shopping": {
+    "nav": {
+      "shop": "ショッピング",
+      "collection": "コレクション",
+      "stores": "店舗",
+      "news": "ニュース"
+    },
+    "header": {
+      "search": "検索",
+      "login": "ログイン",
+      "cart": "カート",
+      "currency": "KRW"
+    },
+    "product": {
+      "newBadge": "NEW",
+      "recommendedBadge": "おすすめ",
+      "quickBuy": "クイック購入",
+      "addToCart": "カートに追加",
+      "buyNow": "今すぐ購入",
+      "wishlistAdd": "ウィッシュリストに追加",
+      "wishlistRemove": "ウィッシュリストから削除",
+      "color": "カラー",
+      "size": "サイズ",
+      "quantity": "数量",
+      "description": "商品説明",
+      "material": "素材情報",
+      "shipping": "配送・返品",
+      "notFound": "商品が見つかりません"
+    },
+    "grid": {
+      "title": "ショッピング",
+      "filter": "フィルター",
+      "all": "すべて",
+      "sortDefault": "デフォルト",
+      "sortPriceAsc": "価格が低い順",
+      "sortPriceDesc": "価格が高い順",
+      "empty": "表示する商品がありません",
+      "viewMore": "もっと商品を見る"
+    },
+    "section": {
+      "newProducts": "新着商品",
+      "recommended": "おすすめ商品",
+      "recommendedSub": "タイムレス エッセンシャル コレクション",
+      "news": "最新ニュース"
+    },
+    "promo": {
+      "freeShipping": "全商品送料無料・返品無料",
+      "newMemberDiscount": "新規会員10%割引"
+    },
+    "stores": {
+      "title": "店舗",
+      "domestic": "国内店舗",
+      "international": "海外店舗"
+    },
+    "about": {
+      "title": "ブランド紹介",
+      "philosophy": "ブランド哲学",
+      "craftsmanship": "職人精神"
+    },
+    "footer": {
+      "about": "紹介",
+      "brandIntro": "ブランド紹介",
+      "storeGuide": "店舗案内",
+      "careers": "採用情報",
+      "customerService": "カスタマーサービス",
+      "orderTrack": "注文確認",
+      "shippingInfo": "配送案内",
+      "exchangeReturn": "交換・返品",
+      "faq": "よくある質問",
+      "legal": "法的表示",
+      "terms": "利用規約",
+      "privacy": "個人情報保護方針",
+      "dispute": "消費者紛争解決",
+      "social": "ソーシャルメディア",
+      "newsletter": "ニュースレター",
+      "newsletterPlaceholder": "メールアドレス",
+      "newsletterButton": "購読",
+      "newsletterConsent": "ニュースレターの受信に同意します"
+    }
   }
 }

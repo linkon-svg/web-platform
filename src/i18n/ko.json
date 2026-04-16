@@ -17,5 +17,85 @@
     "terms": "이용약관",
     "privacy": "개인정보처리방침",
     "minor": "미성년시술동의서"
+  },
+  "shopping": {
+    "nav": {
+      "shop": "쇼핑",
+      "collection": "컬렉션",
+      "stores": "매장",
+      "news": "소식"
+    },
+    "header": {
+      "search": "검색",
+      "login": "로그인",
+      "cart": "장바구니",
+      "currency": "KRW"
+    },
+    "product": {
+      "newBadge": "NEW",
+      "recommendedBadge": "추천",
+      "quickBuy": "빠른 구매",
+      "addToCart": "장바구니",
+      "buyNow": "바로 구매",
+      "wishlistAdd": "위시리스트 추가",
+      "wishlistRemove": "위시리스트 제거",
+      "color": "컬러",
+      "size": "사이즈",
+      "quantity": "수량",
+      "description": "상품 설명",
+      "material": "소재 정보",
+      "shipping": "배송 및 반품",
+      "notFound": "상품을 찾을 수 없습니다"
+    },
+    "grid": {
+      "title": "쇼핑",
+      "filter": "필터",
+      "all": "전체",
+      "sortDefault": "기본 정렬",
+      "sortPriceAsc": "가격 낮은순",
+      "sortPriceDesc": "가격 높은순",
+      "empty": "표시할 상품이 없습니다",
+      "viewMore": "더 많은 상품 보기"
+    },
+    "section": {
+      "newProducts": "새로운 상품",
+      "recommended": "추천 상품",
+      "recommendedSub": "타임리스 에센셜 컬렉션",
+      "news": "새로운 소식"
+    },
+    "promo": {
+      "freeShipping": "전 상품 무료 배송 & 무료 반품",
+      "newMemberDiscount": "신규 회원 10% 할인"
+    },
+    "stores": {
+      "title": "매장",
+      "domestic": "국내 매장",
+      "international": "해외 매장"
+    },
+    "about": {
+      "title": "브랜드 소개",
+      "philosophy": "브랜드 철학",
+      "craftsmanship": "장인 정신"
+    },
+    "footer": {
+      "about": "소개",
+      "brandIntro": "브랜드 소개",
+      "storeGuide": "매장 안내",
+      "careers": "채용",
+      "customerService": "고객 서비스",
+      "orderTrack": "주문 조회",
+      "shippingInfo": "배송 안내",
+      "exchangeReturn": "교환/반품",
+      "faq": "자주 묻는 질문",
+      "legal": "법적 고지",
+      "terms": "이용약관",
+      "privacy": "개인정보처리방침",
+      "dispute": "소비자 분쟁해결",
+      "social": "소셜 미디어",
+      "newsletter": "뉴스레터",
+      "newsletterPlaceholder": "이메일 주소",
+      "newsletterButton": "구독",
+      "newsletterConsent": "뉴스레터 수신에 동의합니다"
+    }
   }
 }

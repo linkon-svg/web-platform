@@ -17,5 +17,85 @@
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
     "minor": "Minor Consent Form"
+  },
+  "shopping": {
+    "nav": {
+      "shop": "SHOP",
+      "collection": "COLLECTION",
+      "stores": "STORES",
+      "news": "NEWS"
+    },
+    "header": {
+      "search": "Search",
+      "login": "Login",
+      "cart": "Cart",
+      "currency": "KRW"
+    },
+    "product": {
+      "newBadge": "NEW",
+      "recommendedBadge": "PICK",
+      "quickBuy": "Quick Buy",
+      "addToCart": "Add to Cart",
+      "buyNow": "Buy Now",
+      "wishlistAdd": "Add to Wishlist",
+      "wishlistRemove": "Remove from Wishlist",
+      "color": "Color",
+      "size": "Size",
+      "quantity": "Quantity",
+      "description": "Description",
+      "material": "Material",
+      "shipping": "Shipping & Returns",
+      "notFound": "Product not found"
+    },
+    "grid": {
+      "title": "Shop",
+      "filter": "Filter",
+      "all": "All",
+      "sortDefault": "Default",
+      "sortPriceAsc": "Price: Low to High",
+      "sortPriceDesc": "Price: High to Low",
+      "empty": "No products to display",
+      "viewMore": "View more products"
+    },
+    "section": {
+      "newProducts": "New Arrivals",
+      "recommended": "Recommended",
+      "recommendedSub": "Timeless Essential Collection",
+      "news": "Latest News"
+    },
+    "promo": {
+      "freeShipping": "Free shipping & free returns on all orders",
+      "newMemberDiscount": "10% off for new members"
+    },
+    "stores": {
+      "title": "Stores",
+      "domestic": "Domestic Stores",
+      "international": "International Stores"
+    },
+    "about": {
+      "title": "About",
+      "philosophy": "Brand Philosophy",
+      "craftsmanship": "Craftsmanship"
+    },
+    "footer": {
+      "about": "About",
+      "brandIntro": "Brand Story",
+      "storeGuide": "Store Locator",
+      "careers": "Careers",
+      "customerService": "Customer Service",
+      "orderTrack": "Track Order",
+      "shippingInfo": "Shipping Info",
+      "exchangeReturn": "Exchange & Return",
+      "faq": "FAQ",
+      "legal": "Legal",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy",
+      "dispute": "Consumer Dispute Resolution",
+      "social": "Social Media",
+      "newsletter": "Newsletter",
+      "newsletterPlaceholder": "Email address",
+      "newsletterButton": "Subscribe",
+      "newsletterConsent": "I agree to receive newsletters"
+    }
   }
 }

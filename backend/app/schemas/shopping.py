@@ -150,6 +150,14 @@ class StoreResponse(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class ProductPaginatedResponse(BaseModel):
+    items: List[ProductResponse]
+    total: int
+    page: int
+    per_page: int
+    total_pages: int
+
+
 # ── ShopConfig ──
 
 class ShopConfigUpdate(BaseModel):

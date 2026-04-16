@@ -17,5 +17,85 @@
     "terms": "使用条款",
     "privacy": "隐私政策",
     "minor": "未成年人手术同意书"
+  },
+  "shopping": {
+    "nav": {
+      "shop": "购物",
+      "collection": "系列",
+      "stores": "门店",
+      "news": "资讯"
+    },
+    "header": {
+      "search": "搜索",
+      "login": "登录",
+      "cart": "购物车",
+      "currency": "KRW"
+    },
+    "product": {
+      "newBadge": "NEW",
+      "recommendedBadge": "推荐",
+      "quickBuy": "快速购买",
+      "addToCart": "加入购物车",
+      "buyNow": "立即购买",
+      "wishlistAdd": "加入收藏",
+      "wishlistRemove": "取消收藏",
+      "color": "颜色",
+      "size": "尺码",
+      "quantity": "数量",
+      "description": "商品描述",
+      "material": "材质信息",
+      "shipping": "配送与退换",
+      "notFound": "找不到该商品"
+    },
+    "grid": {
+      "title": "购物",
+      "filter": "筛选",
+      "all": "全部",
+      "sortDefault": "默认排序",
+      "sortPriceAsc": "价格从低到高",
+      "sortPriceDesc": "价格从高到低",
+      "empty": "暂无商品",
+      "viewMore": "查看更多商品"
+    },
+    "section": {
+      "newProducts": "新品上架",
+      "recommended": "推荐商品",
+      "recommendedSub": "经典必备系列",
+      "news": "最新资讯"
+    },
+    "promo": {
+      "freeShipping": "全场免邮 & 免费退换",
+      "newMemberDiscount": "新会员享9折优惠"
+    },
+    "stores": {
+      "title": "门店",
+      "domestic": "国内门店",
+      "international": "海外门店"
+    },
+    "about": {
+      "title": "品牌介绍",
+      "philosophy": "品牌理念",
+      "craftsmanship": "匠人精神"
+    },
+    "footer": {
+      "about": "关于我们",
+      "brandIntro": "品牌故事",
+      "storeGuide": "门店查询",
+      "careers": "招聘信息",
+      "customerService": "客户服务",
+      "orderTrack": "订单查询",
+      "shippingInfo": "配送说明",
+      "exchangeReturn": "退换货",
+      "faq": "常见问题",
+      "legal": "法律声明",
+      "terms": "使用条款",
+      "privacy": "隐私政策",
+      "dispute": "消费者纠纷解决",
+      "social": "社交媒体",
+      "newsletter": "订阅邮件",
+      "newsletterPlaceholder": "邮箱地址",
+      "newsletterButton": "订阅",
+      "newsletterConsent": "同意接收新闻邮件"
+    }
   }
 }
