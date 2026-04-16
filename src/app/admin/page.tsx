@@ -11,6 +11,10 @@ interface Stats {
   treatments: number;
   promotions: number;
   spaces: number;
+  products: number;
+  categories: number;
+  shopNews: number;
+  stores: number;
 }
 
 const TEMPLATES = [
@@ -33,7 +37,8 @@ const TEMPLATES = [
     name: '쇼핑몰 템플릿',
     description: '제품 판매에 최적화된 이커머스 템플릿.',
     href: '/templates/shopping',
-    active: false,
+    active: true,
+    adminHref: '/admin/shopping/config',
   },
   {
     id: 'corporate',
@@ -44,75 +49,78 @@ const TEMPLATES = [
   },
 ];
 
-const MENU_CARDS = [
+interface MenuCard {
+  title: string;
+  description: string;
+  href: string;
+  statKey: keyof Stats | null;
+  unit?: string;
+}
+
+interface MenuSection {
+  title: string;
+  icon: string;
+  cards: MenuCard[];
+}
+
+const MENU_SECTIONS: MenuSection[] = [
   {
-    title: '병원 정보',
-    description: '병원명, 주소, 전화번호 관리',
-    href: '/admin/hospital',
-    statKey: null,
+    title: '병원 (Hospital)',
+    icon: '🏥',
+    cards: [
+      { title: '병원 정보', description: '병원명, 주소, 전화번호 관리', href: '/admin/hospital', statKey: null },
+      { title: '히어로 이미지', description: '메인 배너 이미지 관리', href: '/admin/hero', statKey: null },
+      { title: '의료진', description: '의료진 프로필, 이력, 사진 관리', href: '/admin/doctors', statKey: 'doctors', unit: '명' },
+      { title: '시술 관리', description: '시술 종류, 설명 관리', href: '/admin/treatments', statKey: 'treatments', unit: '개' },
+      { title: '프로모션', description: '할인, 이벤트 관리', href: '/admin/promotions', statKey: 'promotions', unit: '개' },
+      { title: '공간 사진', description: '병원 내부/외부 사진 관리', href: '/admin/spaces', statKey: 'spaces', unit: '장' },
+      { title: '진료시간', description: '요일별 진료시간 관리', href: '/admin/schedule', statKey: null },
+    ],
   },
   {
-    title: '히어로 이미지',
-    description: '메인 배너 이미지 관리',
-    href: '/admin/hero',
-    statKey: null,
-  },
-  {
-    title: '의료진',
-    description: '의료진 프로필, 이력, 사진 관리',
-    href: '/admin/doctors',
-    statKey: 'doctors' as const,
-    unit: '명',
-  },
-  {
-    title: '시술 관리',
-    description: '시술 종류, 설명 관리',
-    href: '/admin/treatments',
-    statKey: 'treatments' as const,
-    unit: '개',
-  },
-  {
-    title: '프로모션',
-    description: '할인, 이벤트 관리',
-    href: '/admin/promotions',
-    statKey: 'promotions' as const,
-    unit: '개',
-  },
-  {
-    title: '공간 사진',
-    description: '병원 내부/외부 사진 관리',
-    href: '/admin/spaces',
-    statKey: 'spaces' as const,
-    unit: '장',
-  },
-  {
-    title: '진료시간',
-    description: '요일별 진료시간 관리',
-    href: '/admin/schedule',
-    statKey: null,
+    title: '쇼핑몰 (Shopping)',
+    icon: '🛒',
+    cards: [
+      { title: '쇼핑몰 설정', description: '쇼핑몰명, 배너, 푸터 관리', href: '/admin/shopping/config', statKey: null },
+      { title: '상품 관리', description: '상품 등록, 수정, 삭제', href: '/admin/shopping/products', statKey: 'products', unit: '개' },
+      { title: '카테고리', description: '상품 카테고리 관리', href: '/admin/shopping/categories', statKey: 'categories', unit: '개' },
+      { title: '뉴스/캠페인', description: '소식, 캠페인 관리', href: '/admin/shopping/news', statKey: 'shopNews', unit: '개' },
+      { title: '매장 관리', description: '오프라인 매장 정보 관리', href: '/admin/shopping/stores', statKey: 'stores', unit: '개' },
+    ],
   },
 ];
 
 export default function AdminDashboardPage() {
   const { token } = useAuth();
-  const [stats, setStats] = useState<Stats>({ doctors: 0, treatments: 0, promotions: 0, spaces: 0 });
+  const [stats, setStats] = useState<Stats>({
+    doctors: 0, treatments: 0, promotions: 0, spaces: 0,
+    products: 0, categories: 0, shopNews: 0, stores: 0,
+  });
 
   useEffect(() => {
     if (!token) return;
 
     const fetchStats = async () => {
       try {
-        const [doctors, treatments, promotions, spaces] = await Promise.all([
+        const [doctors, treatments, promotions, spaces, products, categories, shopNews, stores] = await Promise.all([
           apiClient('/api/hospitals/1/doctors', { token }).catch(() => []),
           apiClient('/api/hospitals/1/treatments', { token }).catch(() => []),
           apiClient('/api/hospitals/1/promotions', { token }).catch(() => []),
           apiClient('/api/hospitals/1/spaces', { token }).catch(() => []),
+          apiClient('/api/shopping/products', { token }).catch(() => []),
+          apiClient('/api/shopping/categories', { token }).catch(() => []),
+          apiClient('/api/shopping/news', { token }).catch(() => []),
+          apiClient('/api/shopping/stores', { token }).catch(() => []),
         ]);
         setStats({
           doctors: Array.isArray(doctors) ? doctors.length : 0,
           treatments: Array.isArray(treatments) ? treatments.length : 0,
           promotions: Array.isArray(promotions) ? promotions.length : 0,
           spaces: Array.isArray(spaces) ? spaces.length : 0,
+          products: Array.isArray(products) ? products.length : 0,
+          categories: Array.isArray(categories) ? categories.length : 0,
+          shopNews: Array.isArray(shopNews) ? shopNews.length : 0,
+          stores: Array.isArray(stores) ? stores.length : 0,
         });
       } catch {
         // fallback to zeros
@@ -127,74 +135,89 @@ export default function AdminDashboardPage() {
       {/* Template Selection Section */}
       <div>
         <h2 className="text-lg font-semibold text-admin-text mb-4">
-          사용 중인 템플릿
+          템플릿 관리
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {TEMPLATES.map((tmpl) => (
-            <a
-              key={tmpl.id}
-              href={tmpl.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block group"
-            >
+            <div key={tmpl.id} className="block">
               <AdminCard
                 className={`h-full transition-all ${
                   tmpl.active
                     ? 'ring-2 ring-admin-primary border-admin-primary/40'
-                    : 'hover:shadow-md hover:border-admin-primary/30'
+                    : 'opacity-60'
                 }`}
               >
                 <div className="flex items-start justify-between">
-                  <h3 className="text-sm font-semibold text-admin-text group-hover:text-admin-primary transition-colors">
+                  <h3 className="text-sm font-semibold text-admin-text">
                     {tmpl.name}
                   </h3>
-                  {tmpl.active && (
+                  {tmpl.active ? (
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-admin-primary text-white flex-shrink-0">
-                      사용 중
+                      활성
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-200 text-gray-500 flex-shrink-0">
+                      준비 중
                     </span>
                   )}
                 </div>
                 <p className="text-xs text-admin-text-secondary mt-2 leading-relaxed">
                   {tmpl.description}
                 </p>
-                <p className="text-xs text-admin-primary mt-3 group-hover:underline">
-                  미리보기 &rarr;
-                </p>
+                <div className="flex items-center gap-3 mt-3">
+                  <a
+                    href={tmpl.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-admin-primary hover:underline"
+                  >
+                    미리보기 &rarr;
+                  </a>
+                  {'adminHref' in tmpl && (tmpl as any).adminHref && (
+                    <Link
+                      href={(tmpl as any).adminHref}
+                      className="text-xs text-admin-text-secondary hover:text-admin-primary hover:underline"
+                    >
+                      관리 &rarr;
+                    </Link>
+                  )}
+                </div>
               </AdminCard>
-            </a>
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Management Menu Cards */}
-      <div>
-        <h2 className="text-lg font-semibold text-admin-text mb-4">
-          콘텐츠 관리
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {MENU_CARDS.map((card) => (
-            <Link key={card.href} href={card.href} className="block group">
-              <AdminCard className="h-full hover:shadow-md hover:border-admin-primary/30 transition-all">
-                <h2 className="text-base font-semibold text-admin-text group-hover:text-admin-primary transition-colors">
-                  {card.title}
-                </h2>
-                <p className="text-sm text-admin-text-secondary mt-1">
-                  {card.description}
-                </p>
-                {card.statKey && (
-                  <p className="text-2xl font-bold text-admin-primary mt-3">
-                    {stats[card.statKey]}
-                    <span className="text-sm font-normal text-admin-text-secondary ml-1">
-                      {card.unit}
-                    </span>
+      {/* Management Menu Cards — grouped by template */}
+      {MENU_SECTIONS.map((section) => (
+        <div key={section.title}>
+          <h2 className="text-lg font-semibold text-admin-text mb-4">
+            {section.icon} {section.title}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {section.cards.map((card) => (
+              <Link key={card.href} href={card.href} className="block group">
+                <AdminCard className="h-full hover:shadow-md hover:border-admin-primary/30 transition-all">
+                  <h3 className="text-base font-semibold text-admin-text group-hover:text-admin-primary transition-colors">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm text-admin-text-secondary mt-1">
+                    {card.description}
                   </p>
-                )}
-              </AdminCard>
-            </Link>
-          ))}
+                  {card.statKey && (
+                    <p className="text-2xl font-bold text-admin-primary mt-3">
+                      {stats[card.statKey]}
+                      <span className="text-sm font-normal text-admin-text-secondary ml-1">
+                        {card.unit}
+                      </span>
+                    </p>
+                  )}
+                </AdminCard>
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 }
