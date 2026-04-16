@@ -153,6 +153,17 @@ const menuSections: MenuSection[] = [
       { key: 'shop-stores', label: '매장 관리', href: '/admin/shopping/stores', icon: icons.store },
     ],
   },
+  {
+    title: '기업 (Corporate)',
+    items: [
+      { key: 'corp-config', label: '기업 설정', href: '/admin/corporate/config', icon: icons.settings },
+      { key: 'corp-services', label: '서비스 관리', href: '/admin/corporate/services', icon: icons.list },
+      { key: 'corp-news', label: '뉴스 관리', href: '/admin/corporate/news', icon: icons.newspaper },
+      { key: 'corp-teams', label: '팀/스튜디오', href: '/admin/corporate/teams', icon: icons.users },
+      { key: 'corp-careers', label: '채용 관리', href: '/admin/corporate/careers', icon: icons.tag },
+      { key: 'corp-milestones', label: '연혁 관리', href: '/admin/corporate/milestones', icon: icons.clock },
+    ],
+  },
 ];
 
 export default function AdminSidebar({

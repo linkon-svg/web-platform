@@ -15,6 +15,11 @@ interface Stats {
   categories: number;
   shopNews: number;
   stores: number;
+  corpServices: number;
+  corpNews: number;
+  corpTeams: number;
+  corpCareers: number;
+  corpMilestones: number;
 }
 
 const TEMPLATES = [
@@ -44,8 +49,9 @@ const TEMPLATES = [
     id: 'corporate',
     name: '기업 템플릿',
     description: '기업 소개, 서비스 안내에 적합한 비즈니스 템플릿.',
-    href: '/templates/corporate-light',
-    active: false,
+    href: '/templates/corporate-dark',
+    active: true,
+    adminHref: '/admin/corporate/config',
   },
 ];
 
@@ -88,6 +94,18 @@ const MENU_SECTIONS: MenuSection[] = [
       { title: '매장 관리', description: '오프라인 매장 정보 관리', href: '/admin/shopping/stores', statKey: 'stores', unit: '개' },
     ],
   },
+  {
+    title: '기업 (Corporate)',
+    icon: '🏢',
+    cards: [
+      { title: '기업 설정', description: '회사명, 히어로, 비전/미션 관리', href: '/admin/corporate/config', statKey: null },
+      { title: '서비스 관리', description: '서비스/사업 소개 관리', href: '/admin/corporate/services', statKey: 'corpServices', unit: '개' },
+      { title: '뉴스 관리', description: '뉴스, 보도자료, 공지 관리', href: '/admin/corporate/news', statKey: 'corpNews', unit: '개' },
+      { title: '팀/스튜디오', description: '팀, 스튜디오, 계열사 관리', href: '/admin/corporate/teams', statKey: 'corpTeams', unit: '개' },
+      { title: '채용 관리', description: '채용 공고 관리', href: '/admin/corporate/careers', statKey: 'corpCareers', unit: '개' },
+      { title: '연혁 관리', description: '회사 연혁 타임라인 관리', href: '/admin/corporate/milestones', statKey: 'corpMilestones', unit: '개' },
+    ],
+  },
 ];
 
 export default function AdminDashboardPage() {
@@ -95,6 +113,7 @@ export default function AdminDashboardPage() {
   const [stats, setStats] = useState<Stats>({
     doctors: 0, treatments: 0, promotions: 0, spaces: 0,
     products: 0, categories: 0, shopNews: 0, stores: 0,
+    corpServices: 0, corpNews: 0, corpTeams: 0, corpCareers: 0, corpMilestones: 0,
   });
 
   useEffect(() => {
@@ -102,7 +121,7 @@ export default function AdminDashboardPage() {
 
     const fetchStats = async () => {
       try {
-        const [doctors, treatments, promotions, spaces, products, categories, shopNews, stores] = await Promise.all([
+        const [doctors, treatments, promotions, spaces, products, categories, shopNews, stores, corpServices, corpNews, corpTeams, corpCareers, corpMilestones] = await Promise.all([
           apiClient('/api/hospitals/1/doctors', { token }).catch(() => []),
           apiClient('/api/hospitals/1/treatments', { token }).catch(() => []),
           apiClient('/api/hospitals/1/promotions', { token }).catch(() => []),
@@ -111,6 +130,11 @@ export default function AdminDashboardPage() {
           apiClient('/api/shopping/categories', { token }).catch(() => []),
           apiClient('/api/shopping/news', { token }).catch(() => []),
           apiClient('/api/shopping/stores', { token }).catch(() => []),
+          apiClient('/api/corporate/services', { token }).catch(() => []),
+          apiClient('/api/corporate/news', { token }).catch(() => []),
+          apiClient('/api/corporate/teams', { token }).catch(() => []),
+          apiClient('/api/corporate/careers', { token }).catch(() => []),
+          apiClient('/api/corporate/milestones', { token }).catch(() => []),
         ]);
         setStats({
           doctors: Array.isArray(doctors) ? doctors.length : 0,
@@ -121,6 +145,11 @@ export default function AdminDashboardPage() {
           categories: Array.isArray(categories) ? categories.length : 0,
           shopNews: Array.isArray(shopNews) ? shopNews.length : 0,
           stores: Array.isArray(stores) ? stores.length : 0,
+          corpServices: Array.isArray(corpServices) ? corpServices.length : 0,
+          corpNews: Array.isArray(corpNews) ? corpNews.length : 0,
+          corpTeams: Array.isArray(corpTeams) ? corpTeams.length : 0,
+          corpCareers: Array.isArray(corpCareers) ? corpCareers.length : 0,
+          corpMilestones: Array.isArray(corpMilestones) ? corpMilestones.length : 0,
         });
       } catch {
         // fallback to zeros

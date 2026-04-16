@@ -24,6 +24,7 @@ async def init_db():
     from app.models.user import User
     from app.models.hospital import Hospital, Doctor, Schedule, Treatment, Promotion, Philosophy, SpaceImage
     from app.models.shopping import ShopConfig, Category, Product, ShopNews, Store
+    from app.models.corporate import CorporateConfig, CorporateService, CorporateNews, CorporateTeam, CorporateCareer, CorporateMilestone
     from app.core.security import get_password_hash
 
     async with engine.begin() as conn:
@@ -297,5 +298,85 @@ async def init_db():
             Store(name="Tokyo Flagship", address="Tokyo, Minato-ku, Omotesando 1-2-3", phone="+81-3-1234-5678", region="해외", sort_order=4),
         ]
         session.add_all(stores)
+
+        await session.commit()
+
+    # Corporate seed data
+    async with async_session() as session:
+        from sqlalchemy import select
+        result = await session.execute(select(CorporateConfig))
+        if result.scalars().first() is not None:
+            return
+
+        corp_config = CorporateConfig(
+            company_name="크래프톤",
+            company_name_en="KRAFTON",
+            logo="/images/corporate/logo.png",
+            logo_dark="/images/corporate/logo-dark.png",
+            hero_type="video",
+            hero_media="/images/corporate/hero-video.mp4",
+            vision_title="우리의 비전",
+            vision_description="게임을 통해 전 세계 사람들에게 즐거움을 선사하고, 새로운 경험을 창조합니다.",
+            mission_title="우리의 미션",
+            mission_description="최고의 인재들과 함께 혁신적인 게임을 만들어 글로벌 시장을 선도합니다.",
+            about_content="크래프톤은 대한민국의 글로벌 게임 기업입니다.",
+            dark_mode_default=True,
+            language_options=["ko", "en", "ja", "zh"],
+            footer_info={
+                "ceo": "장병규",
+                "address": "서울특별시 강남구 테헤란로 415 크래프톤타워",
+                "phone": "02-1234-5678",
+                "fax": "02-1234-5679",
+                "email": "contact@krafton.com",
+                "business_number": "123-45-67890",
+            },
+            sns_links={
+                "blog": "https://blog.krafton.com",
+                "youtube": "https://youtube.com/krafton",
+                "instagram": "https://instagram.com/krafton",
+                "facebook": "https://facebook.com/krafton",
+                "linkedin": "https://linkedin.com/company/krafton",
+            },
+        )
+        session.add(corp_config)
+
+        services = [
+            CorporateService(title="서비스", title_en="Service", description="나의 세계를 바꾸는 서비스", icon="globe", link="/services", sort_order=1),
+            CorporateService(title="AI 기술", title_en="AI Technology", description="나에게 가장 가까운, 가장 쉬운 AI", icon="cpu", link="/tech/ai", sort_order=2),
+            CorporateService(title="채용", title_en="Careers", description="함께 나아갈 미래의 크루들에게", icon="users", link="/careers", sort_order=3),
+            CorporateService(title="ESG", title_en="ESG", description="지속가능한 미래를 위한 약속과 책임", icon="leaf", link="/esg", sort_order=4),
+        ]
+        session.add_all(services)
+
+        news_list = [
+            CorporateNews(title="2026년 1분기 실적 발표", summary="매출 3조원 달성, 전년 대비 15% 성장", category="보도자료", is_featured=True, image="/images/corporate/news1.jpg"),
+            CorporateNews(title="신작 게임 글로벌 론칭", summary="전 세계 200개국 동시 출시", category="뉴스", is_featured=True, image="/images/corporate/news2.jpg"),
+            CorporateNews(title="ESG 경영보고서 발간", summary="2025년 지속가능경영 성과 공개", category="공지", is_featured=False, image="/images/corporate/news3.jpg"),
+        ]
+        session.add_all(news_list)
+
+        teams = [
+            CorporateTeam(name="PUBG STUDIOS", name_en="PUBG STUDIOS", description="배틀그라운드를 만든 스튜디오", image="/images/corporate/team-pubg.jpg", sort_order=1),
+            CorporateTeam(name="Bluehole Studio", name_en="Bluehole Studio", description="MMORPG 개발의 선구자", image="/images/corporate/team-bluehole.jpg", sort_order=2),
+            CorporateTeam(name="RisingWings", name_en="RisingWings", description="모바일 게임 전문 스튜디오", image="/images/corporate/team-risingwings.jpg", sort_order=3),
+            CorporateTeam(name="Striking Distance", name_en="Striking Distance Studios", description="차세대 공포 게임 개발", image="/images/corporate/team-striking.jpg", sort_order=4),
+        ]
+        session.add_all(teams)
+
+        careers = [
+            CorporateCareer(title="PEOPLE & LIFE", description="자유로운 소통과 활발한 교류를 바탕으로 크래프톤만의 문화를 만들어 갑니다.", image="/images/corporate/career-people.jpg", link="/careers/people"),
+            CorporateCareer(title="KRAFTON RECRUIT", description="크래프톤의 최신 채용공고를 살펴보세요.", image="/images/corporate/career-recruit.jpg", link="/careers/jobs"),
+        ]
+        session.add_all(careers)
+
+        milestones = [
+            CorporateMilestone(year=2026, title="글로벌 MAU 1억 돌파", sort_order=1),
+            CorporateMilestone(year=2025, title="크래프톤타워 신사옥 오픈", sort_order=1),
+            CorporateMilestone(year=2024, title="인디게임 펀드 500억 조성", sort_order=1),
+            CorporateMilestone(year=2023, title="배틀그라운드 글로벌 10억 다운로드", sort_order=1),
+            CorporateMilestone(year=2021, title="코스피 상장", sort_order=1),
+            CorporateMilestone(year=2018, title="크래프톤 설립", sort_order=1),
+        ]
+        session.add_all(milestones)
 
         await session.commit()
