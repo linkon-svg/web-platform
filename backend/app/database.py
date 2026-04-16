@@ -23,6 +23,7 @@ async def get_db():
 async def init_db():
     from app.models.user import User
     from app.models.hospital import Hospital, Doctor, Schedule, Treatment, Promotion, Philosophy, SpaceImage
+    from app.models.shopping import ShopConfig, Category, Product, ShopNews, Store
     from app.core.security import get_password_hash
 
     async with engine.begin() as conn:
@@ -218,5 +219,83 @@ async def init_db():
             SpaceImage(hospital_id=hospital.id, image_url="/images/spaces/recovery.jpg", caption="회복실", sort_order=4),
         ]
         session.add_all(spaces)
+
+        await session.commit()
+
+    # Shopping seed data
+    async with async_session() as session:
+        from sqlalchemy import select
+        result = await session.execute(select(ShopConfig))
+        if result.scalars().first() is not None:
+            return  # Already seeded
+
+        # Shop config
+        shop_config = ShopConfig(
+            shop_name="SOLID HOMME",
+            shop_name_en="SOLID HOMME",
+            logo="/images/shop/logo.png",
+            hero_image="/images/shop/hero.jpg",
+            hero_title="2026 Spring-Summer",
+            hero_subtitle="새로운 시즌, 새로운 스타일",
+            season_banner_image="/images/shop/season-banner.jpg",
+            season_banner_title="2026 봄-여름",
+            season_banner_subtitle="선물 제안",
+            promo_text="전 상품 무료 배송 & 무료 반품",
+            about_content="솔리드옴므는 현대 남성의 라이프스타일을 위한 프리미엄 패션 브랜드입니다.",
+            footer_info={
+                "company": "주식회사 솔리드",
+                "ceo": "김대표",
+                "business_number": "123-45-67890",
+                "address": "서울특별시 강남구 압구정로 123",
+                "phone": "02-1234-5678",
+                "email": "info@solidhomme.com",
+            },
+            sns_links={
+                "instagram": "https://instagram.com/solidhomme",
+                "youtube": "https://youtube.com/solidhomme",
+            },
+        )
+        session.add(shop_config)
+
+        # Categories
+        categories = [
+            Category(name="아우터", name_en="Outerwear", description="새롭게 재해석 되는 하나의 작품", image="/images/shop/cat-outerwear.jpg", sort_order=1),
+            Category(name="상의", name_en="Tops", description="모던한 실루엣의 상의 컬렉션", image="/images/shop/cat-tops.jpg", sort_order=2),
+            Category(name="하의", name_en="Bottoms", description="완벽한 핏의 하의 라인업", image="/images/shop/cat-bottoms.jpg", sort_order=3),
+            Category(name="악세서리", name_en="Accessories", description="기능성을 겸비한 섬세한 컬렉션", image="/images/shop/cat-accessories.jpg", sort_order=4),
+        ]
+        session.add_all(categories)
+        await session.flush()
+
+        # Products
+        products = [
+            Product(name="오버사이즈 트렌치코트", name_en="Oversized Trench Coat", price=890000, category_id=categories[0].id, thumbnail="/images/shop/product1.jpg", is_new=True, sort_order=1),
+            Product(name="울 블렌드 더블 코트", name_en="Wool Blend Double Coat", price=1250000, category_id=categories[0].id, thumbnail="/images/shop/product2.jpg", is_new=True, sort_order=2),
+            Product(name="캐시미어 니트", name_en="Cashmere Knit", price=450000, category_id=categories[1].id, thumbnail="/images/shop/product3.jpg", is_recommended=True, sort_order=3),
+            Product(name="실크 블렌드 셔츠", name_en="Silk Blend Shirt", price=380000, category_id=categories[1].id, thumbnail="/images/shop/product4.jpg", is_new=True, sort_order=4),
+            Product(name="와이드 슬랙스", name_en="Wide Slacks", price=320000, category_id=categories[2].id, thumbnail="/images/shop/product5.jpg", is_recommended=True, sort_order=5),
+            Product(name="테이퍼드 트라우저", name_en="Tapered Trousers", price=280000, category_id=categories[2].id, thumbnail="/images/shop/product6.jpg", sort_order=6),
+            Product(name="레더 토트백", name_en="Leather Tote Bag", price=680000, category_id=categories[3].id, thumbnail="/images/shop/product7.jpg", is_recommended=True, sort_order=7),
+            Product(name="실버 커프링크", name_en="Silver Cufflinks", price=180000, category_id=categories[3].id, thumbnail="/images/shop/product8.jpg", sort_order=8),
+        ]
+        session.add_all(products)
+
+        # ShopNews
+        news_items = [
+            ShopNews(title="2026 S/S 컬렉션 런칭", content="솔리드옴므의 새로운 봄-여름 컬렉션을 만나보세요.", image="/images/shop/news1.jpg", category="소식"),
+            ShopNews(title="압구정 플래그십 스토어 오픈", content="새롭게 단장한 압구정 플래그십 스토어를 소개합니다.", image="/images/shop/news2.jpg", category="소식"),
+            ShopNews(title="홀리데이 기프트 캠페인", content="소중한 사람에게 특별한 선물을 전하세요.", image="/images/shop/news3.jpg", category="캠페인"),
+            ShopNews(title="아티스트 콜라보레이션", content="현대 아티스트와의 특별한 협업 컬렉션.", image="/images/shop/news4.jpg", category="캠페인"),
+        ]
+        session.add_all(news_items)
+
+        # Stores
+        stores = [
+            Store(name="압구정 플래그십", address="서울특별시 강남구 압구정로 123", phone="02-1234-5678", region="국내", sort_order=1),
+            Store(name="청담 부티크", address="서울특별시 강남구 청담동 456", phone="02-2345-6789", region="국내", sort_order=2),
+            Store(name="현대백화점 본점", address="서울특별시 강남구 압구정로 165", phone="02-3456-7890", region="국내", sort_order=3),
+            Store(name="Tokyo Flagship", address="Tokyo, Minato-ku, Omotesando 1-2-3", phone="+81-3-1234-5678", region="해외", sort_order=4),
+        ]
+        session.add_all(stores)
 
         await session.commit()

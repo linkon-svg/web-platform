@@ -75,17 +75,84 @@ const icons = {
       <path d="M7 17H4a1 1 0 01-1-1V4a1 1 0 011-1h3M13 14l4-4-4-4M17 10H7" />
     </svg>
   ),
+  cart: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 6h12l-1.5 7H7.5L6 6zM6 6L5 2H2" />
+      <circle cx="9" cy="17" r="1.5" />
+      <circle cx="15" cy="17" r="1.5" />
+    </svg>
+  ),
+  box: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 6l8-4 8 4-8 4-8-4z" />
+      <path d="M2 6v8l8 4V10" />
+      <path d="M18 6v8l-8 4V10" />
+    </svg>
+  ),
+  grid: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="2" width="7" height="7" rx="1" />
+      <rect x="11" y="2" width="7" height="7" rx="1" />
+      <rect x="2" y="11" width="7" height="7" rx="1" />
+      <rect x="11" y="11" width="7" height="7" rx="1" />
+    </svg>
+  ),
+  newspaper: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="3" width="16" height="14" rx="2" />
+      <path d="M6 7h8M6 10h5M6 13h8" />
+    </svg>
+  ),
+  store: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 7l1-4h12l1 4" />
+      <path d="M3 7c0 1.1.9 2 2 2s2-.9 2-2c0 1.1.9 2 2 2s2-.9 2-2c0 1.1.9 2 2 2s2-.9 2-2" />
+      <path d="M4 9v8h12V9" />
+      <path d="M8 17v-5h4v5" />
+    </svg>
+  ),
+  settings: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="10" cy="10" r="3" />
+      <path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M4.22 15.78l1.42-1.42M14.36 5.64l1.42-1.42" />
+    </svg>
+  ),
 };
 
-const menuItems: MenuItem[] = [
-  { key: 'dashboard', label: '대시보드', href: '/admin', icon: icons.dashboard },
-  { key: 'info', label: '병원 정보', href: '/admin/hospital', icon: icons.building },
-  { key: 'hero', label: '히어로 이미지', href: '/admin/hero', icon: icons.image },
-  { key: 'doctors', label: '의료진 관리', href: '/admin/doctors', icon: icons.users },
-  { key: 'treatments', label: '시술 관리', href: '/admin/treatments', icon: icons.list },
-  { key: 'promotions', label: '프로모션 관리', href: '/admin/promotions', icon: icons.tag },
-  { key: 'gallery', label: '공간 사진', href: '/admin/spaces', icon: icons.camera },
-  { key: 'schedule', label: '진료시간', href: '/admin/schedule', icon: icons.clock },
+interface MenuSection {
+  title: string;
+  items: MenuItem[];
+}
+
+const menuSections: MenuSection[] = [
+  {
+    title: '',
+    items: [
+      { key: 'dashboard', label: '대시보드', href: '/admin', icon: icons.dashboard },
+    ],
+  },
+  {
+    title: '병원 (Hospital)',
+    items: [
+      { key: 'info', label: '병원 정보', href: '/admin/hospital', icon: icons.building },
+      { key: 'hero', label: '히어로 이미지', href: '/admin/hero', icon: icons.image },
+      { key: 'doctors', label: '의료진 관리', href: '/admin/doctors', icon: icons.users },
+      { key: 'treatments', label: '시술 관리', href: '/admin/treatments', icon: icons.list },
+      { key: 'promotions', label: '프로모션 관리', href: '/admin/promotions', icon: icons.tag },
+      { key: 'gallery', label: '공간 사진', href: '/admin/spaces', icon: icons.camera },
+      { key: 'schedule', label: '진료시간', href: '/admin/schedule', icon: icons.clock },
+    ],
+  },
+  {
+    title: '쇼핑몰 (Shopping)',
+    items: [
+      { key: 'shop-config', label: '쇼핑몰 설정', href: '/admin/shopping/config', icon: icons.settings },
+      { key: 'shop-products', label: '상품 관리', href: '/admin/shopping/products', icon: icons.box },
+      { key: 'shop-categories', label: '카테고리 관리', href: '/admin/shopping/categories', icon: icons.grid },
+      { key: 'shop-news', label: '뉴스/캠페인', href: '/admin/shopping/news', icon: icons.newspaper },
+      { key: 'shop-stores', label: '매장 관리', href: '/admin/shopping/stores', icon: icons.store },
+    ],
+  },
 ];
 
 export default function AdminSidebar({
@@ -131,31 +198,42 @@ export default function AdminSidebar({
 
         {/* Menu */}
         <nav className="flex-1 py-4 overflow-y-auto">
-          <ul className="space-y-0.5 px-3">
-            {menuItems.map((item) => {
-              const isActive = item.key === activeKey;
-              return (
-                <li key={item.key}>
-                  <Link
-                    href={item.href}
-                    onClick={onClose}
-                    className={`
-                      flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
-                      transition-colors
-                      ${
-                        isActive
-                          ? 'bg-admin-sidebar-active text-white'
-                          : 'text-white/70 hover:bg-admin-sidebar-hover hover:text-white'
-                      }
-                    `}
-                  >
-                    {item.icon}
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="px-3 space-y-4">
+            {menuSections.map((section, sIdx) => (
+              <div key={sIdx}>
+                {section.title && (
+                  <div className="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-widest text-white/40">
+                    {section.title}
+                  </div>
+                )}
+                <ul className="space-y-0.5">
+                  {section.items.map((item) => {
+                    const isActive = item.key === activeKey;
+                    return (
+                      <li key={item.key}>
+                        <Link
+                          href={item.href}
+                          onClick={onClose}
+                          className={`
+                            flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+                            transition-colors
+                            ${
+                              isActive
+                                ? 'bg-admin-sidebar-active text-white'
+                                : 'text-white/70 hover:bg-admin-sidebar-hover hover:text-white'
+                            }
+                          `}
+                        >
+                          {item.icon}
+                          {item.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
         </nav>
 
         {/* Logout */}

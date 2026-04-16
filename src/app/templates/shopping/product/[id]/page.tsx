@@ -1,25 +1,23 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import PromoBanner from "@/components/templates/shopping/PromoBanner";
 import ShopHeader from "@/components/templates/shopping/ShopHeader";
 import ShopFooter from "@/components/templates/shopping/ShopFooter";
 
-const demoProduct = {
-  name: "오버사이즈 울 코트",
-  price: 598000,
-  description:
-    "프리미엄 이탈리안 울 원단으로 제작된 오버사이즈 실루엣의 코트입니다. 클래식한 디자인에 모던한 핏을 더하여 다양한 스타일링이 가능합니다.",
-  material: "울 90%, 캐시미어 10% / 안감: 폴리에스터 100%",
-  shipping:
-    "주문 후 1-3일 이내 발송 / 무료 배송 / 수령 후 14일 이내 무료 반품 가능",
-  colors: [
-    { name: "블랙", hex: "#000000" },
-    { name: "그레이", hex: "#888888" },
-    { name: "네이비", hex: "#1a1a3e" },
-  ],
-  sizes: ["S", "M", "L", "XL"],
-};
+const API_BASE = "http://localhost:8000";
+
+const defaultColors = [
+  { name: "블랙", hex: "#000000" },
+  { name: "그레이", hex: "#888888" },
+  { name: "네이비", hex: "#1a1a3e" },
+];
+
+const defaultSizes = ["S", "M", "L", "XL"];
+
+const defaultMaterial = "울 90%, 캐시미어 10% / 안감: 폴리에스터 100%";
+const defaultShipping =
+  "주문 후 1-3일 이내 발송 / 무료 배송 / 수령 후 14일 이내 무료 반품 가능";
 
 export default function ProductDetailPage({
   params,
@@ -27,17 +25,75 @@ export default function ProductDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const [product, setProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [selectedColor, setSelectedColor] = useState(0);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [wishlisted, setWishlisted] = useState(false);
   const [openSection, setOpenSection] = useState<string | null>("description");
 
-  const product = demoProduct;
+  useEffect(() => {
+    fetch(`${API_BASE}/api/shopping/products/${id}`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        setProduct(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [id]);
 
   const toggleSection = (section: string) => {
     setOpenSection(openSection === section ? null : section);
   };
+
+  if (loading) {
+    return (
+      <div style={{ backgroundColor: "var(--color-shop-bg, #FFF)" }}>
+        <PromoBanner messages={["전 상품 무료 배송 & 무료 반품"]} />
+        <ShopHeader />
+        <div className="px-6 lg:px-12 py-12 lg:py-20 text-center">
+          <p
+            className="text-sm"
+            style={{
+              fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
+              color: "var(--color-shop-text-secondary, #999)",
+            }}
+          >
+            로딩 중...
+          </p>
+        </div>
+        <ShopFooter />
+      </div>
+    );
+  }
+
+  if (!product) {
+    return (
+      <div style={{ backgroundColor: "var(--color-shop-bg, #FFF)" }}>
+        <PromoBanner messages={["전 상품 무료 배송 & 무료 반품"]} />
+        <ShopHeader />
+        <div className="px-6 lg:px-12 py-12 lg:py-20 text-center">
+          <p
+            className="text-sm"
+            style={{
+              fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
+              color: "var(--color-shop-text-secondary, #999)",
+            }}
+          >
+            상품을 찾을 수 없습니다
+          </p>
+        </div>
+        <ShopFooter />
+      </div>
+    );
+  }
+
+  const colors = defaultColors;
+  const sizes = defaultSizes;
+  const images: string[] =
+    product.images && product.images.length > 0 ? product.images : [];
+  const hasImages = images.length > 0;
 
   return (
     <div style={{ backgroundColor: "var(--color-shop-bg, #FFF)" }}>
@@ -48,15 +104,25 @@ export default function ProductDetailPage({
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
           {/* Left: Images (60%) */}
           <div className="lg:w-[60%] flex flex-col gap-2">
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="w-full aspect-[3/4]"
-                style={{
-                  backgroundColor: "var(--color-shop-bg-product, #F0F0F0)",
-                }}
-              />
-            ))}
+            {hasImages
+              ? images.map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt={`${product.name} ${i + 1}`}
+                    className="w-full aspect-[3/4] object-cover"
+                  />
+                ))
+              : [1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className="w-full aspect-[3/4]"
+                    style={{
+                      backgroundColor:
+                        "var(--color-shop-bg-product, #F0F0F0)",
+                    }}
+                  />
+                ))}
           </div>
 
           {/* Right: Product info (40%) */}
@@ -85,15 +151,43 @@ export default function ProductDetailPage({
             </h1>
 
             {/* Price */}
-            <p
-              className="text-base mb-8"
-              style={{
-                fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
-                color: "var(--color-shop-text, #000)",
-              }}
-            >
-              KRW {product.price.toLocaleString()}
-            </p>
+            <div className="mb-8">
+              {product.sale_price ? (
+                <>
+                  <p
+                    className="text-sm line-through"
+                    style={{
+                      fontFamily:
+                        "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
+                      color: "var(--color-shop-text-secondary, #999)",
+                    }}
+                  >
+                    KRW {product.price.toLocaleString()}
+                  </p>
+                  <p
+                    className="text-base"
+                    style={{
+                      fontFamily:
+                        "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
+                      color: "var(--color-shop-text, #000)",
+                    }}
+                  >
+                    KRW {product.sale_price.toLocaleString()}
+                  </p>
+                </>
+              ) : (
+                <p
+                  className="text-base"
+                  style={{
+                    fontFamily:
+                      "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
+                    color: "var(--color-shop-text, #000)",
+                  }}
+                >
+                  KRW {product.price.toLocaleString()}
+                </p>
+              )}
+            </div>
 
             {/* Color selector */}
             <div className="mb-6">
@@ -104,10 +198,10 @@ export default function ProductDetailPage({
                   color: "var(--color-shop-text-secondary, #999)",
                 }}
               >
-                컬러: {product.colors[selectedColor].name}
+                컬러: {colors[selectedColor].name}
               </p>
               <div className="flex gap-3">
-                {product.colors.map((color, i) => (
+                {colors.map((color, i) => (
                   <button
                     key={color.name}
                     onClick={() => setSelectedColor(i)}
@@ -141,7 +235,7 @@ export default function ProductDetailPage({
                 사이즈
               </p>
               <div className="flex gap-2">
-                {product.sizes.map((size) => (
+                {sizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
@@ -252,9 +346,13 @@ export default function ProductDetailPage({
             {/* Accordion sections */}
             <div className="mt-10">
               {[
-                { key: "description", title: "상품 설명", content: product.description },
-                { key: "material", title: "소재 정보", content: product.material },
-                { key: "shipping", title: "배송 및 반품", content: product.shipping },
+                {
+                  key: "description",
+                  title: "상품 설명",
+                  content: product.description || "",
+                },
+                { key: "material", title: "소재 정보", content: defaultMaterial },
+                { key: "shipping", title: "배송 및 반품", content: defaultShipping },
               ].map((section) => (
                 <div
                   key={section.key}
@@ -265,7 +363,8 @@ export default function ProductDetailPage({
                     onClick={() => toggleSection(section.key)}
                     className="w-full flex items-center justify-between min-h-[44px] text-xs"
                     style={{
-                      fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
+                      fontFamily:
+                        "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
                       letterSpacing: "0.1em",
                       color: "var(--color-shop-text, #000)",
                     }}
@@ -277,7 +376,8 @@ export default function ProductDetailPage({
                     <p
                       className="mt-3 text-xs font-light leading-relaxed"
                       style={{
-                        fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
+                        fontFamily:
+                          "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
                         color: "var(--color-shop-text-secondary, #999)",
                       }}
                     >

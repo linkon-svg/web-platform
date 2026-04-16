@@ -2,41 +2,34 @@ import PromoBanner from "@/components/templates/shopping/PromoBanner";
 import ShopHeader from "@/components/templates/shopping/ShopHeader";
 import ShopFooter from "@/components/templates/shopping/ShopFooter";
 
-const domesticStores = [
-  {
-    name: "SOLID 압구정 플래그십",
-    address: "서울특별시 강남구 압구정로 100, 1-3층",
-    phone: "02-1234-5678",
-  },
-  {
-    name: "SOLID 한남",
-    address: "서울특별시 용산구 이태원로 200, 2층",
-    phone: "02-2345-6789",
-  },
-];
+const API_BASE = 'http://localhost:8000';
 
-const internationalStores = [
-  {
-    name: "SOLID Tokyo Aoyama",
-    address: "5-12-3 Minami-Aoyama, Minato-ku, Tokyo, Japan",
-    phone: "+81 3-1234-5678",
-  },
-  {
-    name: "SOLID Shanghai",
-    address: "No. 100 Huaihai Middle Road, Huangpu District, Shanghai, China",
-    phone: "+86 21-1234-5678",
-  },
-  {
-    name: "SOLID Paris Le Marais",
-    address: "15 Rue des Francs Bourgeois, 75004 Paris, France",
-    phone: "+33 1-1234-5678",
-  },
-];
+async function fetchAPI(endpoint: string) {
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
 
-export default function StoresPage() {
+export default async function StoresPage() {
+  const [stores, config] = await Promise.all([
+    fetchAPI('/api/shopping/stores'),
+    fetchAPI('/api/shopping/config'),
+  ]);
+
+  const storeList = stores || [];
+  const domesticStores = storeList.filter((s: any) => s.region === '국내');
+  const internationalStores = storeList.filter((s: any) => s.region === '해외');
+  const promoMessages = config?.promo_text
+    ? [config.promo_text]
+    : ["전 상품 무료 배송 & 무료 반품"];
+
   return (
     <div style={{ backgroundColor: "var(--color-shop-bg, #FFF)" }}>
-      <PromoBanner messages={["전 상품 무료 배송 & 무료 반품", "신규 회원 10% 할인"]} />
+      <PromoBanner messages={promoMessages} />
       <ShopHeader />
 
       <section className="px-6 lg:px-12 py-20 lg:py-28">
@@ -64,7 +57,7 @@ export default function StoresPage() {
             국내 매장
           </h2>
           <div className="flex flex-col gap-10">
-            {domesticStores.map((store) => (
+            {domesticStores.map((store: any) => (
               <div
                 key={store.name}
                 className="pb-10 border-b"
@@ -116,7 +109,7 @@ export default function StoresPage() {
             해외 매장
           </h2>
           <div className="flex flex-col gap-10">
-            {internationalStores.map((store) => (
+            {internationalStores.map((store: any) => (
               <div
                 key={store.name}
                 className="pb-10 border-b"

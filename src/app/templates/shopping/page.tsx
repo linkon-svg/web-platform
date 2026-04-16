@@ -7,46 +7,77 @@ import CategoryBanner from "@/components/templates/shopping/CategoryBanner";
 import NewsCarousel from "@/components/templates/shopping/NewsCarousel";
 import ShopFooter from "@/components/templates/shopping/ShopFooter";
 
-const newProducts = [
-  { id: "1", name: "오버사이즈 울 코트", price: 598000 },
-  { id: "2", name: "캐시미어 니트 스웨터", price: 298000 },
-  { id: "3", name: "와이드 테일러드 팬츠", price: 248000 },
-  { id: "4", name: "실크 블렌드 셔츠", price: 198000 },
-  { id: "5", name: "미니멀 레더 백", price: 458000 },
-];
+const API_BASE = "http://localhost:8000";
 
-const recommendedProducts = [
-  { id: "6", name: "더블 브레스티드 재킷", price: 498000 },
-  { id: "7", name: "메리노 울 터틀넥", price: 178000 },
-  { id: "8", name: "스트레이트 핏 데님", price: 228000 },
-  { id: "9", name: "코튼 저지 티셔츠", price: 98000 },
-  { id: "10", name: "나일론 윈드브레이커", price: 348000 },
-  { id: "11", name: "울 블렌드 머플러", price: 128000 },
-];
+async function fetchAPI(endpoint: string) {
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, { cache: "no-store" });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
 
-const categories = [
-  { title: "아우터", description: "코트, 재킷, 점퍼", link: "/templates/shopping/shop" },
-  { title: "상의", description: "셔츠, 니트, 티셔츠", link: "/templates/shopping/shop" },
-  { title: "하의", description: "팬츠, 데님, 쇼츠", link: "/templates/shopping/shop" },
-  { title: "액세서리", description: "가방, 머플러, 모자", link: "/templates/shopping/shop" },
-];
+export default async function ShoppingHomePage() {
+  const [config, rawNewProducts, rawRecommendedProducts, rawCategories, rawNews] =
+    await Promise.all([
+      fetchAPI("/api/shopping/config"),
+      fetchAPI("/api/shopping/products?is_new=true"),
+      fetchAPI("/api/shopping/products?is_recommended=true"),
+      fetchAPI("/api/shopping/categories"),
+      fetchAPI("/api/shopping/news"),
+    ]);
 
-const newsItems = [
-  { id: "n1", title: "2026 S/S 컬렉션 공개", category: "소식" },
-  { id: "n2", title: "압구정 플래그십 스토어 리뉴얼", category: "매장" },
-  { id: "n3", title: "지속 가능한 패션을 향하여", category: "캠페인" },
-  { id: "n4", title: "봄 스타일링 가이드", category: "소식" },
-  { id: "n5", title: "한정판 캡슐 컬렉션", category: "소식" },
-  { id: "n6", title: "아트 콜라보레이션 시리즈", category: "캠페인" },
-  { id: "n7", title: "글로벌 팝업 스토어 오픈", category: "매장" },
-  { id: "n8", title: "비하인드 더 브랜드: 장인의 손길", category: "캠페인" },
-];
+  const newProducts = (rawNewProducts ?? []).map(
+    (p: { id: number; name: string; price: number }) => ({
+      id: String(p.id),
+      name: p.name,
+      price: p.price,
+    }),
+  );
 
-export default function ShoppingHomePage() {
+  const recommendedProducts = (rawRecommendedProducts ?? []).map(
+    (p: { id: number; name: string; price: number }) => ({
+      id: String(p.id),
+      name: p.name,
+      price: p.price,
+    }),
+  );
+
+  const categories = (rawCategories ?? []).map(
+    (c: { name: string; description?: string }) => ({
+      title: c.name,
+      description: c.description || "",
+      link: "/templates/shopping/shop",
+    }),
+  );
+
+  const newsItems = (rawNews ?? []).map(
+    (n: { id: number; title: string; category?: string }) => ({
+      id: String(n.id),
+      title: n.title,
+      category: n.category || "소식",
+    }),
+  );
+
+  const promoMessages = config?.promo_text
+    ? [config.promo_text]
+    : ["전 상품 무료 배송 & 무료 반품", "신규 회원 10% 할인"];
+
+  const heroTitle = config?.hero_title ?? "Spring Essentials";
+  const heroSubtitle = config?.hero_subtitle ?? "Modern Tailoring";
+
+  const seasonSubtitle = config?.season_banner_subtitle ?? "선물 제안";
+  const seasonTitle = config?.season_banner_title ?? "2026 봄-여름";
+  const seasonDescription =
+    config?.season_banner_description ??
+    "새로운 시즌, 새로운 실루엣. 정교한 테일러링과 유연한 소재가 만들어내는 모던 스타일.";
+
   return (
     <div style={{ backgroundColor: "var(--color-shop-bg, #FFF)" }}>
       {/* 1. Promo Banner */}
-      <PromoBanner messages={["전 상품 무료 배송 & 무료 반품", "신규 회원 10% 할인"]} />
+      <PromoBanner messages={promoMessages} />
 
       {/* 2. Header */}
       <ShopHeader />
@@ -75,7 +106,7 @@ export default function ShoppingHomePage() {
                 color: "var(--color-shop-text, #000)",
               }}
             >
-              Spring Essentials
+              {heroTitle}
             </h2>
           </div>
         </div>
@@ -101,7 +132,7 @@ export default function ShoppingHomePage() {
                 color: "var(--color-shop-text, #000)",
               }}
             >
-              Modern Tailoring
+              {heroSubtitle}
             </h2>
           </div>
         </div>
@@ -135,7 +166,7 @@ export default function ShoppingHomePage() {
           className="flex gap-4 lg:gap-6 overflow-x-auto px-6 lg:px-12 snap-x snap-mandatory"
           style={{ scrollbarWidth: "none" }}
         >
-          {newProducts.map((product) => (
+          {newProducts.map((product: { id: string; name: string; price: number }) => (
             <div key={product.id} className="snap-start flex-shrink-0 w-64 lg:w-72">
               <ProductCard {...product} />
             </div>
@@ -145,9 +176,9 @@ export default function ShoppingHomePage() {
 
       {/* 5. Season Banner */}
       <SeasonBanner
-        subtitle="선물 제안"
-        heading="2026 봄-여름"
-        description="새로운 시즌, 새로운 실루엣. 정교한 테일러링과 유연한 소재가 만들어내는 모던 스타일."
+        subtitle={seasonSubtitle}
+        heading={seasonTitle}
+        description={seasonDescription}
         ctaText="컬렉션 보기"
         ctaLink="/templates/shopping/shop"
       />
@@ -176,7 +207,7 @@ export default function ShoppingHomePage() {
           </p>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mt-10">
-          {recommendedProducts.map((product) => (
+          {recommendedProducts.map((product: { id: string; name: string; price: number }) => (
             <ProductCard key={product.id} {...product} />
           ))}
         </div>
@@ -185,7 +216,7 @@ export default function ShoppingHomePage() {
       {/* 7. Category Banners — 2x2 grid */}
       <section className="px-6 lg:px-12 pb-20 lg:pb-28">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-          {categories.map((cat) => (
+          {categories.map((cat: { title: string; description: string; link: string }) => (
             <CategoryBanner key={cat.title} {...cat} />
           ))}
         </div>

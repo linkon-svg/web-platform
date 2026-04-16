@@ -16,6 +16,11 @@ const PATH_KEY_MAP: Record<string, string> = {
   '/admin/promotions': 'promotions',
   '/admin/spaces': 'gallery',
   '/admin/schedule': 'schedule',
+  '/admin/shopping/config': 'shop-config',
+  '/admin/shopping/products': 'shop-products',
+  '/admin/shopping/categories': 'shop-categories',
+  '/admin/shopping/news': 'shop-news',
+  '/admin/shopping/stores': 'shop-stores',
 };
 
 /* Map pathname → header title */
@@ -28,6 +33,11 @@ const PATH_TITLE_MAP: Record<string, string> = {
   '/admin/promotions': '프로모션 관리',
   '/admin/spaces': '공간 사진',
   '/admin/schedule': '진료시간',
+  '/admin/shopping/config': '쇼핑몰 설정',
+  '/admin/shopping/products': '상품 관리',
+  '/admin/shopping/categories': '카테고리 관리',
+  '/admin/shopping/news': '뉴스/캠페인',
+  '/admin/shopping/stores': '매장 관리',
 };
 
 function AdminGuard({ children }: { children: ReactNode }) {
