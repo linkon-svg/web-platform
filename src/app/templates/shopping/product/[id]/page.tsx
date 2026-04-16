@@ -91,9 +91,6 @@ export default function ProductDetailPage({
 
   const colors = defaultColors;
   const sizes = defaultSizes;
-  const images: string[] =
-    product.images && product.images.length > 0 ? product.images : [];
-  const hasImages = images.length > 0;
 
   return (
     <div style={{ backgroundColor: "var(--color-shop-bg, #FFF)" }}>
@@ -104,25 +101,36 @@ export default function ProductDetailPage({
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
           {/* Left: Images (60%) */}
           <div className="lg:w-[60%] flex flex-col gap-2">
-            {hasImages
-              ? images.map((src, i) => (
+            {product.images && product.images.length > 0 ? (
+              product.images.map((img: string, i: number) => (
+                <div key={i} className="w-full aspect-[3/4] relative overflow-hidden">
                   <img
-                    key={i}
-                    src={src}
+                    src={img.startsWith('http') ? img : `${API_BASE}${img}`}
                     alt={`${product.name} ${i + 1}`}
-                    className="w-full aspect-[3/4] object-cover"
+                    className="w-full h-full object-cover"
                   />
-                ))
-              : [1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="w-full aspect-[3/4]"
-                    style={{
-                      backgroundColor:
-                        "var(--color-shop-bg-product, #F0F0F0)",
-                    }}
-                  />
-                ))}
+                </div>
+              ))
+            ) : product.thumbnail ? (
+              <div className="w-full aspect-[3/4] relative overflow-hidden">
+                <img
+                  src={product.thumbnail.startsWith('http') ? product.thumbnail : `${API_BASE}${product.thumbnail}`}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              [1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="w-full aspect-[3/4]"
+                  style={{
+                    backgroundColor:
+                      "var(--color-shop-bg-product, #F0F0F0)",
+                  }}
+                />
+              ))
+            )}
           </div>
 
           {/* Right: Product info (40%) */}
@@ -150,44 +158,71 @@ export default function ProductDetailPage({
               {product.name}
             </h1>
 
+            {/* Badges */}
+            {(product.is_new || product.is_recommended) && (
+              <div className="flex gap-2 mb-4">
+                {product.is_new && (
+                  <span
+                    className="px-2 py-0.5 text-[10px] font-medium tracking-wider"
+                    style={{
+                      backgroundColor: "var(--color-shop-black, #000)",
+                      color: "var(--color-shop-white, #FFF)",
+                    }}
+                  >
+                    NEW
+                  </span>
+                )}
+                {product.is_recommended && (
+                  <span
+                    className="px-2 py-0.5 text-[10px] font-medium tracking-wider"
+                    style={{
+                      backgroundColor: "#B8860B",
+                      color: "#FFF",
+                    }}
+                  >
+                    추천
+                  </span>
+                )}
+              </div>
+            )}
+
             {/* Price */}
-            <div className="mb-8">
-              {product.sale_price ? (
-                <>
-                  <p
-                    className="text-sm line-through"
-                    style={{
-                      fontFamily:
-                        "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
-                      color: "var(--color-shop-text-secondary, #999)",
-                    }}
-                  >
-                    KRW {product.price.toLocaleString()}
-                  </p>
-                  <p
-                    className="text-base"
-                    style={{
-                      fontFamily:
-                        "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
-                      color: "var(--color-shop-text, #000)",
-                    }}
-                  >
-                    KRW {product.sale_price.toLocaleString()}
-                  </p>
-                </>
-              ) : (
+            {product.sale_price && product.sale_price > 0 ? (
+              <div className="mb-8">
+                <p
+                  className="text-sm line-through"
+                  style={{
+                    fontFamily:
+                      "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
+                    color: "var(--color-shop-text-secondary, #999)",
+                  }}
+                >
+                  KRW {product.price.toLocaleString()}
+                </p>
                 <p
                   className="text-base"
                   style={{
                     fontFamily:
                       "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
-                    color: "var(--color-shop-text, #000)",
+                    color: "#E53E3E",
+                    fontWeight: 500,
                   }}
                 >
-                  KRW {product.price.toLocaleString()}
+                  KRW {product.sale_price.toLocaleString()}
                 </p>
-              )}
-            </div>
+              </div>
+            ) : (
+              <p
+                className="text-base mb-8"
+                style={{
+                  fontFamily:
+                    "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
+                  color: "var(--color-shop-text, #000)",
+                }}
+              >
+                KRW {product.price?.toLocaleString()}
+              </p>
+            )}
 
             {/* Color selector */}
             <div className="mb-6">

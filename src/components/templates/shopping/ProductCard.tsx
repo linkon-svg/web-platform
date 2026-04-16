@@ -9,6 +9,11 @@ interface ProductCardProps {
   price: number;
   image?: string;
   currency?: string;
+  salePrice?: number;
+  thumbnail?: string;
+  isNew?: boolean;
+  isRecommended?: boolean;
+  categoryName?: string;
 }
 
 export default function ProductCard({
@@ -17,9 +22,19 @@ export default function ProductCard({
   price,
   image,
   currency = "KRW",
+  salePrice,
+  thumbnail,
+  isNew,
+  isRecommended,
+  categoryName,
 }: ProductCardProps) {
   const [hovered, setHovered] = useState(false);
   const [wishlisted, setWishlisted] = useState(false);
+
+  const displayImage = image || thumbnail;
+  const imgSrc = displayImage
+    ? displayImage.startsWith('http') ? displayImage : `http://localhost:8000${displayImage}`
+    : undefined;
 
   return (
     <div
@@ -33,11 +48,24 @@ export default function ProductCard({
           className="w-full aspect-square"
           style={{ backgroundColor: "var(--color-shop-bg-product, #F0F0F0)" }}
         >
-          {image && (
-            <div
-              className="w-full h-full bg-center bg-cover"
-              style={{ backgroundImage: `url(${image})` }}
-            />
+          {imgSrc ? (
+            <img src={imgSrc} alt={name} className="w-full h-full object-cover" />
+          ) : null}
+        </div>
+
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
+          {isNew && (
+            <span className="px-2 py-0.5 text-[10px] font-medium tracking-wider"
+              style={{ backgroundColor: 'var(--color-shop-black, #000)', color: 'var(--color-shop-white, #FFF)' }}>
+              NEW
+            </span>
+          )}
+          {isRecommended && (
+            <span className="px-2 py-0.5 text-[10px] font-medium tracking-wider"
+              style={{ backgroundColor: '#B8860B', color: '#FFF' }}>
+              추천
+            </span>
           )}
         </div>
 
@@ -84,6 +112,12 @@ export default function ProductCard({
       {/* Info */}
       <div className="mt-3">
         <Link href={`/templates/shopping/product/${id}`}>
+          {categoryName && (
+            <p className="text-[10px] uppercase mb-0.5"
+              style={{ letterSpacing: '0.15em', color: 'var(--color-shop-text-secondary, #999)', fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)" }}>
+              {categoryName}
+            </p>
+          )}
           <p
             className="text-sm font-light leading-snug"
             style={{
@@ -94,15 +128,26 @@ export default function ProductCard({
             {name}
           </p>
         </Link>
-        <p
-          className="mt-1 text-sm"
-          style={{
-            fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
-            color: "var(--color-shop-text, #000)",
-          }}
-        >
-          {currency} {price.toLocaleString()}
-        </p>
+        {salePrice && salePrice > 0 ? (
+          <div className="mt-1 flex items-center gap-2">
+            <span style={{ textDecoration: 'line-through', color: 'var(--color-shop-text-secondary, #999)', fontSize: '12px' }}>
+              {currency} {price.toLocaleString()}
+            </span>
+            <span style={{ color: '#E53E3E', fontSize: '14px', fontWeight: 500 }}>
+              {currency} {salePrice.toLocaleString()}
+            </span>
+          </div>
+        ) : (
+          <p
+            className="mt-1 text-sm"
+            style={{
+              fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
+              color: "var(--color-shop-text, #000)",
+            }}
+          >
+            {currency} {price.toLocaleString()}
+          </p>
+        )}
       </div>
     </div>
   );

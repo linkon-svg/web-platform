@@ -9,24 +9,45 @@ interface Product {
   price: number;
   image?: string;
   currency?: string;
+  categoryId?: number;
+  salePrice?: number;
+  thumbnail?: string;
+  isNew?: boolean;
+  isRecommended?: boolean;
+  categoryName?: string;
 }
 
 interface ProductGridProps {
   title?: string;
   products: Product[];
   showFilter?: boolean;
+  categories?: { id: number; name: string }[];
 }
 
 export default function ProductGrid({
   title = "쇼핑",
   products,
   showFilter = true,
+  categories,
 }: ProductGridProps) {
   const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeCategory, setActiveCategory] = useState<number | null>(null);
+  const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc'>('default');
   const perPage = 12;
-  const totalPages = Math.ceil(products.length / perPage);
-  const pagedProducts = products.slice(
+
+  const filteredProducts = activeCategory
+    ? products.filter(p => (p as any).categoryId === activeCategory)
+    : products;
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === 'price-asc') return a.price - b.price;
+    if (sortBy === 'price-desc') return b.price - a.price;
+    return 0;
+  });
+
+  const totalPages = Math.ceil(sortedProducts.length / perPage);
+  const pagedProducts = sortedProducts.slice(
     (currentPage - 1) * perPage,
     currentPage * perPage
   );
@@ -60,21 +81,37 @@ export default function ProductGrid({
         )}
       </div>
 
-      {/* Filter panel placeholder */}
+      {/* Filter panel */}
       {filterOpen && (
         <div
-          className="mb-8 pb-8 border-b flex flex-wrap gap-6 text-xs"
+          className="mb-8 pb-8 border-b flex flex-wrap items-center gap-6 text-xs"
           style={{
             borderColor: "var(--color-shop-border, #E5E5E5)",
             fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
-            color: "var(--color-shop-text-secondary, #999)",
           }}
         >
-          <span className="cursor-pointer hover:text-black transition-colors">전체</span>
-          <span className="cursor-pointer hover:text-black transition-colors">아우터</span>
-          <span className="cursor-pointer hover:text-black transition-colors">상의</span>
-          <span className="cursor-pointer hover:text-black transition-colors">하의</span>
-          <span className="cursor-pointer hover:text-black transition-colors">액세서리</span>
+          <button
+            onClick={() => { setActiveCategory(null); setCurrentPage(1); }}
+            className="cursor-pointer transition-colors"
+            style={{ color: activeCategory === null ? 'var(--color-shop-text, #000)' : 'var(--color-shop-text-secondary, #999)', fontWeight: activeCategory === null ? 600 : 300 }}>
+            전체
+          </button>
+          {(categories || []).map(cat => (
+            <button key={cat.id}
+              onClick={() => { setActiveCategory(cat.id); setCurrentPage(1); }}
+              className="cursor-pointer transition-colors"
+              style={{ color: activeCategory === cat.id ? 'var(--color-shop-text, #000)' : 'var(--color-shop-text-secondary, #999)', fontWeight: activeCategory === cat.id ? 600 : 300 }}>
+              {cat.name}
+            </button>
+          ))}
+          <span style={{ color: 'var(--color-shop-border, #E5E5E5)' }}>|</span>
+          <select value={sortBy} onChange={(e) => { setSortBy(e.target.value as any); setCurrentPage(1); }}
+            className="bg-transparent text-xs cursor-pointer outline-none"
+            style={{ color: 'var(--color-shop-text-secondary, #999)', fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)" }}>
+            <option value="default">기본 정렬</option>
+            <option value="price-asc">가격 낮은순</option>
+            <option value="price-desc">가격 높은순</option>
+          </select>
         </div>
       )}
 
@@ -83,6 +120,12 @@ export default function ProductGrid({
         {pagedProducts.map((product) => (
           <ProductCard key={product.id} {...product} />
         ))}
+        {pagedProducts.length === 0 && (
+          <div className="col-span-full py-20 text-center text-sm"
+            style={{ color: 'var(--color-shop-text-secondary, #999)', fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)" }}>
+            표시할 상품이 없습니다
+          </div>
+        )}
       </div>
 
       {/* Pagination */}

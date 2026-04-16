@@ -16,15 +16,32 @@ async function fetchAPI(endpoint: string) {
 }
 
 export default async function ShopListPage() {
-  const [products, config] = await Promise.all([
+  const [products, config, rawCategories] = await Promise.all([
     fetchAPI("/api/shopping/products"),
     fetchAPI("/api/shopping/config"),
+    fetchAPI("/api/shopping/categories"),
   ]);
+
+  const categoriesMap: Record<number, string> = {};
+  (rawCategories || []).forEach((c: any) => {
+    categoriesMap[c.id] = c.name;
+  });
+
+  const categoriesList = (rawCategories || []).map((c: any) => ({
+    id: c.id,
+    name: c.name,
+  }));
 
   const productList = (products || []).map((p: any) => ({
     id: String(p.id),
     name: p.name,
     price: p.price,
+    salePrice: p.sale_price || undefined,
+    thumbnail: p.thumbnail || undefined,
+    isNew: p.is_new || false,
+    isRecommended: p.is_recommended || false,
+    categoryId: p.category_id || undefined,
+    categoryName: categoriesMap[p.category_id] || undefined,
   }));
 
   const promoMessages = config?.promo_text
@@ -35,7 +52,7 @@ export default async function ShopListPage() {
     <div style={{ backgroundColor: "var(--color-shop-bg, #FFF)" }}>
       <PromoBanner messages={promoMessages} />
       <ShopHeader />
-      <ProductGrid title="쇼핑" products={productList} showFilter />
+      <ProductGrid title="쇼핑" products={productList} showFilter categories={categoriesList} />
       <ShopFooter />
     </div>
   );

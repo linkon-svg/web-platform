@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 interface NewsItem {
   id: string;
@@ -19,6 +19,19 @@ export default function NewsCarousel({
   items,
 }: NewsCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const API_BASE = 'http://localhost:8000';
+  const itemsPerView = 4;
+  const totalDots = Math.ceil(items.length / itemsPerView);
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+    const progress = scrollLeft / (scrollWidth - clientWidth);
+    const newIndex = Math.round(progress * (totalDots - 1));
+    setActiveIndex(Math.max(0, Math.min(newIndex, totalDots - 1)));
+  };
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -67,14 +80,23 @@ export default function NewsCarousel({
         ref={scrollRef}
         className="flex gap-4 lg:gap-6 overflow-x-auto px-6 lg:px-12 snap-x snap-mandatory scrollbar-hide"
         style={{ scrollbarWidth: "none" }}
+        onScroll={handleScroll}
       >
         {items.map((item) => (
           <div key={item.id} className="snap-start flex-shrink-0 w-72 lg:w-80">
             {/* Image */}
-            <div
-              className="w-full aspect-[4/3] mb-4"
-              style={{ backgroundColor: "var(--color-shop-bg-product, #F0F0F0)" }}
-            />
+            {item.image ? (
+              <img
+                src={item.image.startsWith('http') ? item.image : `${API_BASE}${item.image}`}
+                alt={item.title}
+                className="w-full aspect-[4/3] object-cover mb-4"
+              />
+            ) : (
+              <div
+                className="w-full aspect-[4/3] mb-4"
+                style={{ backgroundColor: "var(--color-shop-bg-product, #F0F0F0)" }}
+              />
+            )}
             {/* Category tag */}
             <span
               className="text-[10px] uppercase mb-2 inline-block"
@@ -99,6 +121,29 @@ export default function NewsCarousel({
           </div>
         ))}
       </div>
+
+      {/* Dot indicators */}
+      {totalDots > 1 && (
+        <div className="flex items-center justify-center gap-2 mt-8">
+          {Array.from({ length: totalDots }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => {
+                if (!scrollRef.current) return;
+                const scrollWidth = scrollRef.current.scrollWidth - scrollRef.current.clientWidth;
+                scrollRef.current.scrollTo({ left: (i / (totalDots - 1)) * scrollWidth, behavior: 'smooth' });
+              }}
+              className="w-2 h-2 rounded-full transition-colors"
+              style={{
+                backgroundColor: i === activeIndex
+                  ? 'var(--color-shop-text, #000)'
+                  : 'var(--color-shop-border, #E5E5E5)',
+              }}
+              aria-label={`페이지 ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }
