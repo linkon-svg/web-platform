@@ -1,0 +1,21 @@
+{
+  "common": {
+    "reserve": "Book Now",
+    "consultation": "Consult",
+    "viewMore": "View More",
+    "phone": "Call Us",
+    "kakao": "KakaoTalk"
+  },
+  "nav": {
+    "about": "About",
+    "space": "Facilities",
+    "staff": "Our Doctors",
+    "schedule": "Hours",
+    "promotion": "Promotions"
+  },
+  "footer": {
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "minor": "Minor Consent Form"
+  }
+}

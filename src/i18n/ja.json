@@ -1,0 +1,21 @@
+{
+  "common": {
+    "reserve": "予約する",
+    "consultation": "相談する",
+    "viewMore": "もっと見る",
+    "phone": "電話相談",
+    "kakao": "カカオトーク"
+  },
+  "nav": {
+    "about": "病院紹介",
+    "space": "施設紹介",
+    "staff": "医療スタッフ",
+    "schedule": "診療時間",
+    "promotion": "プロモーション"
+  },
+  "footer": {
+    "terms": "利用規約",
+    "privacy": "個人情報処理方針",
+    "minor": "未成年施術同意書"
+  }
+}

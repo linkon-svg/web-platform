@@ -1,0 +1,21 @@
+{
+  "common": {
+    "reserve": "예약하기",
+    "consultation": "상담하기",
+    "viewMore": "더보기",
+    "phone": "전화상담",
+    "kakao": "카톡상담"
+  },
+  "nav": {
+    "about": "병원 소개",
+    "space": "공간 소개",
+    "staff": "의료진 소개",
+    "schedule": "진료시간",
+    "promotion": "프로모션"
+  },
+  "footer": {
+    "terms": "이용약관",
+    "privacy": "개인정보처리방침",
+    "minor": "미성년시술동의서"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "common": {
+    "reserve": "预约",
+    "consultation": "咨询",
+    "viewMore": "查看更多",
+    "phone": "电话咨询",
+    "kakao": "KakaoTalk咨询"
+  },
+  "nav": {
+    "about": "医院介绍",
+    "space": "设施介绍",
+    "staff": "医疗团队",
+    "schedule": "就诊时间",
+    "promotion": "促销活动"
+  },
+  "footer": {
+    "terms": "使用条款",
+    "privacy": "隐私政策",
+    "minor": "未成年人手术同意书"
+  }
+}
