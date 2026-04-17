@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.database import init_db
-from app.routers import auth, hospitals, doctors, treatments, promotions, spaces, uploads, shopping, corporate, landing
+from app.routers import auth, hospitals, doctors, treatments, promotions, spaces, uploads, shopping, corporate, landing, sites, templates, pages, site_configs, dashboard
 
 
 @asynccontextmanager
@@ -45,6 +45,11 @@ app.include_router(uploads.router)
 app.include_router(shopping.router)
 app.include_router(corporate.router)
 app.include_router(landing.router)
+app.include_router(sites.router)
+app.include_router(templates.router)
+app.include_router(pages.router)
+app.include_router(site_configs.router)
+app.include_router(dashboard.router)
 
 # Static file serving for uploads (must be after router includes)
 _uploads_dir = Path(__file__).resolve().parent.parent / "uploads"
