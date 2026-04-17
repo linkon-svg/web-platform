@@ -1,5 +1,3 @@
-"use client";
-
 import {
   CorporateDarkHeader,
   FullscreenHero,
@@ -19,9 +17,23 @@ import type {
   TeamCard,
 } from "@/components/templates/corporate/dark";
 
-/* ─── Sample Data ─── */
+/* ─── API Helpers ─── */
 
-const newsItems: NewsItem[] = [
+const API_BASE = "http://localhost:8000";
+
+async function fetchAPI(endpoint: string) {
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, { cache: "no-store" });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+/* ─── Fallback Data ─── */
+
+const fallbackNews: NewsItem[] = [
   {
     title: "크래프톤, 2024년 4분기 실적 발표 — 매출 전년 대비 32% 증가",
     date: "2024.12.15",
@@ -39,7 +51,7 @@ const newsItems: NewsItem[] = [
   },
 ];
 
-const careerCards: CareerCard[] = [
+const fallbackCareers: CareerCard[] = [
   {
     heading: "PEOPLE & LIFE",
     description:
@@ -57,7 +69,7 @@ const careerCards: CareerCard[] = [
   },
 ];
 
-const productItems: ProductItem[] = [
+const fallbackProducts: ProductItem[] = [
   {
     thumbnail:
       "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&q=80",
@@ -94,45 +106,9 @@ const productItems: ProductItem[] = [
     studio: "STRIKING DISTANCE",
     title: "칼리스토 프로토콜",
   },
-  {
-    thumbnail:
-      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&q=80",
-    studio: "UNKNOWN WORLDS",
-    title: "서브노티카",
-  },
-  {
-    thumbnail:
-      "https://images.unsplash.com/photo-1535223289827-42f1e9919769?w=400&q=80",
-    studio: "UNKNOWN WORLDS",
-    title: "서브노티카: 빌로우 제로",
-  },
-  {
-    thumbnail:
-      "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&q=80",
-    studio: "DREAMOTION",
-    title: "로드 오브 히어로즈",
-  },
-  {
-    thumbnail:
-      "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400&q=80",
-    studio: "5MINLAB",
-    title: "스매시 레전드",
-  },
-  {
-    thumbnail:
-      "https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=400&q=80",
-    studio: "PUBG STUDIOS",
-    title: "뉴스테이트 모바일",
-  },
-  {
-    thumbnail:
-      "https://images.unsplash.com/photo-1585620385456-4a0a5e906fa1?w=400&q=80",
-    studio: "NEON GIANT",
-    title: "어센트",
-  },
 ];
 
-const teamCards: TeamCard[] = [
+const fallbackTeams: TeamCard[] = [
   {
     name: "PUBG STUDIOS",
     description: "배틀그라운드 시리즈를 만드는 글로벌 스튜디오",
@@ -161,15 +137,63 @@ const teamCards: TeamCard[] = [
 
 /* ─── Page ─── */
 
-export default function CorporateDarkPage() {
+export default async function CorporateDarkPage() {
+  const [config, news, careers, teams] = await Promise.all([
+    fetchAPI("/api/corporate/config"),
+    fetchAPI("/api/corporate/news?is_featured=true"),
+    fetchAPI("/api/corporate/careers"),
+    fetchAPI("/api/corporate/teams"),
+  ]);
+
+  /* Map API data to component props */
+  const heroTitle = config?.company_name_en || "UNKNOWN STARTS HERE";
+  const heroSubtitle =
+    config?.vision_description ||
+    "미지의 영역에 도전하며 새로운 경험을 만들어갑니다";
+  const heroImage =
+    config?.hero_media ||
+    "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1920&q=80";
+
+  const newsItems: NewsItem[] = news
+    ? (news as Array<Record<string, unknown>>).map((n) => ({
+        title: (n.title as string) || "",
+        date: n.published_at
+          ? new Date(n.published_at as string).toLocaleDateString("ko-KR")
+          : new Date(n.created_at as string).toLocaleDateString("ko-KR"),
+        href: `/templates/corporate-dark/news`,
+      }))
+    : fallbackNews;
+
+  const careerCards: CareerCard[] = careers
+    ? (careers as Array<Record<string, unknown>>).map((c) => ({
+        heading: (c.title as string) || "",
+        description: (c.description as string) || "",
+        backgroundImage:
+          (c.image as string) ||
+          "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80",
+        href: (c.link as string) || "/templates/corporate-dark/careers",
+      }))
+    : fallbackCareers;
+
+  const teamCards: TeamCard[] = teams
+    ? (teams as Array<Record<string, unknown>>).map((t) => ({
+        name: (t.name as string) || "",
+        description: (t.description as string) || "",
+        backgroundImage:
+          (t.image as string) ||
+          "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&q=80",
+        href: (t.link as string) || "#",
+      }))
+    : fallbackTeams;
+
   return (
     <main className="bg-black text-white">
-      <CorporateDarkHeader />
+      <CorporateDarkHeader logo={config?.company_name || "KRAFTON"} />
 
       <FullscreenHero
-        backgroundImage="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1920&q=80"
-        title="UNKNOWN STARTS HERE"
-        subtitle="미지의 영역에 도전하며 새로운 경험을 만들어갑니다"
+        backgroundImage={heroImage}
+        title={heroTitle}
+        subtitle={heroSubtitle}
       />
 
       <ScrollFadeIn>
@@ -181,7 +205,7 @@ export default function CorporateDarkPage() {
       </ScrollFadeIn>
 
       <ScrollFadeIn direction="left">
-        <ProductCarousel items={productItems} />
+        <ProductCarousel items={fallbackProducts} />
       </ScrollFadeIn>
 
       <ScrollFadeIn>

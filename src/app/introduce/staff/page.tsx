@@ -1,6 +1,18 @@
 import DoctorCard from '@/components/templates/hospital/DoctorCard';
 
-const DOCTORS = [
+const API_BASE = 'http://localhost:8000';
+
+async function fetchAPI(endpoint: string) {
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+const FALLBACK_DOCTORS = [
   {
     name: '김종석',
     title: '대표원장',
@@ -36,7 +48,18 @@ const DOCTORS = [
   },
 ];
 
-export default function StaffPage() {
+export default async function StaffPage() {
+  const doctors = await fetchAPI('/api/hospitals/1/doctors');
+
+  const doctorList = doctors && doctors.length > 0
+    ? doctors.map((d: { name: string; title: string; photo_url?: string; education?: string[]; career?: string[] }) => ({
+        name: d.name,
+        title: d.title,
+        education: d.education || [],
+        career: d.career || [],
+      }))
+    : FALLBACK_DOCTORS;
+
   return (
     <>
       {/* Spacer for fixed header */}
@@ -58,7 +81,7 @@ export default function StaffPage() {
 
           {/* Doctor List */}
           <div className="space-y-16 lg:space-y-24">
-            {DOCTORS.map((doctor, idx) => (
+            {doctorList.map((doctor: { name: string; title: string; education: string[]; career: string[] }, idx: number) => (
               <DoctorCard
                 key={idx}
                 name={doctor.name}

@@ -1,4 +1,16 @@
-const SPACE_IMAGES = [
+const API_BASE = 'http://localhost:8000';
+
+async function fetchAPI(endpoint: string) {
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+const FALLBACK_SPACES = [
   { label: '리셉션', gradient: 'from-hospital-beige to-hospital-cream' },
   { label: '상담실', gradient: 'from-hospital-cream to-hospital-beige' },
   { label: '시술실 A', gradient: 'from-hospital-gold-light/20 to-hospital-cream' },
@@ -9,7 +21,28 @@ const SPACE_IMAGES = [
   { label: '복도', gradient: 'from-hospital-cream to-hospital-gold-light/20' },
 ];
 
-export default function SpacePage() {
+const GRADIENTS = [
+  'from-hospital-beige to-hospital-cream',
+  'from-hospital-cream to-hospital-beige',
+  'from-hospital-gold-light/20 to-hospital-cream',
+  'from-hospital-beige to-hospital-gold-light/20',
+  'from-hospital-cream to-hospital-beige',
+  'from-hospital-beige to-hospital-cream',
+  'from-hospital-gold-light/20 to-hospital-beige',
+  'from-hospital-cream to-hospital-gold-light/20',
+];
+
+export default async function SpacePage() {
+  const spaces = await fetchAPI('/api/hospitals/1/spaces');
+
+  const spaceItems = spaces && spaces.length > 0
+    ? spaces.map((s: { image_url: string; caption?: string }, idx: number) => ({
+        label: s.caption || `공간 ${idx + 1}`,
+        gradient: GRADIENTS[idx % GRADIENTS.length],
+        image_url: s.image_url,
+      }))
+    : FALLBACK_SPACES;
+
   return (
     <>
       {/* Spacer for fixed header */}
@@ -31,7 +64,7 @@ export default function SpacePage() {
 
           {/* Space Gallery Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {SPACE_IMAGES.map((space, idx) => (
+            {spaceItems.map((space: { label: string; gradient: string; image_url?: string }, idx: number) => (
               <div
                 key={idx}
                 className="aspect-[16/10] rounded-sm overflow-hidden relative group"

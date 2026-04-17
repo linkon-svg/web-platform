@@ -6,7 +6,19 @@ import SpaceCarousel from '@/components/templates/hospital/SpaceCarousel';
 import MapSection from '@/components/templates/hospital/MapSection';
 import Button from '@/components/common/Button';
 
-const FEATURED_TREATMENTS = [
+const API_BASE = 'http://localhost:8000';
+
+async function fetchAPI(endpoint: string) {
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+const FALLBACK_TREATMENTS = [
   {
     name: 'Juvelook',
     category: '스킨부스터',
@@ -27,14 +39,42 @@ const FEATURED_TREATMENTS = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const [hospital, treatments, promotions, spaces, philosophies] = await Promise.all([
+    fetchAPI('/api/hospitals/1'),
+    fetchAPI('/api/hospitals/1/treatments'),
+    fetchAPI('/api/hospitals/1/promotions'),
+    fetchAPI('/api/hospitals/1/spaces'),
+    fetchAPI('/api/hospitals/1/philosophy'),
+  ]);
+
+  const featuredTreatments = treatments && treatments.length > 0
+    ? treatments.map((t: { name: string; category?: string; description?: string; image_url?: string }) => ({
+        name: t.name,
+        category: t.category || '',
+        description: t.description || '',
+        image_url: t.image_url,
+      }))
+    : FALLBACK_TREATMENTS;
+
+  const spaceItems = spaces && spaces.length > 0
+    ? spaces.map((s: { image_url: string; caption?: string }, idx: number) => ({
+        label: s.caption || `공간 ${idx + 1}`,
+        gradient: 'from-hospital-beige to-hospital-cream',
+        image_url: s.image_url,
+      }))
+    : undefined;
+
   return (
     <>
-      <HeroSection />
+      <HeroSection
+        title={hospital?.name_en || hospital?.name || 'YEPIDA CLINIC'}
+        subtitle="당신의 아름다움이 피어나는 곳"
+      />
 
-      <PhilosophySection />
+      <PhilosophySection philosophies={philosophies} />
 
-      <TreatmentSlider />
+      <TreatmentSlider treatments={treatments} />
 
       <CTASection />
 
@@ -51,7 +91,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {FEATURED_TREATMENTS.map((item, idx) => (
+            {featuredTreatments.slice(0, 3).map((item: { name: string; category: string; description: string; image_url?: string }, idx: number) => (
               <div
                 key={idx}
                 className="bg-white rounded-sm overflow-hidden group hover:shadow-lg transition-shadow duration-300"
@@ -84,7 +124,7 @@ export default function Home() {
         </div>
       </section>
 
-      <SpaceCarousel />
+      <SpaceCarousel spaces={spaceItems} />
 
       <MapSection />
     </>

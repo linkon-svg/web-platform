@@ -7,9 +7,10 @@ interface Treatment {
   name: string;
   category: string;
   description: string;
+  image_url?: string | null;
 }
 
-const TREATMENTS: Treatment[] = [
+const DEFAULT_TREATMENTS: Treatment[] = [
   {
     name: '울쎄라피 프라임',
     category: '디자인 리프팅',
@@ -37,7 +38,12 @@ const TREATMENTS: Treatment[] = [
   },
 ];
 
-export default function TreatmentSlider() {
+interface TreatmentSliderProps {
+  treatments?: Treatment[];
+}
+
+export default function TreatmentSlider({ treatments }: TreatmentSliderProps) {
+  const TREATMENTS = treatments && treatments.length > 0 ? treatments : DEFAULT_TREATMENTS;
   const categories = [...new Set(TREATMENTS.map((t) => t.category))];
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const filtered = TREATMENTS.filter((t) => t.category === activeCategory);

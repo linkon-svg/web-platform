@@ -37,7 +37,18 @@ const PHILOSOPHIES = [
   },
 ];
 
-export default function PhilosophySection() {
+interface PhilosophyItem {
+  icon?: string | null;
+  title: string;
+  title_ko?: string | null;
+  description?: string | null;
+}
+
+interface PhilosophySectionProps {
+  philosophies?: PhilosophyItem[];
+}
+
+export default function PhilosophySection({ philosophies }: PhilosophySectionProps) {
   return (
     <section className="section-padding bg-white">
       <div className="section-narrow">
@@ -57,30 +68,37 @@ export default function PhilosophySection() {
 
         {/* Philosophy Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {PHILOSOPHIES.map((item, idx) => (
-            <div
-              key={idx}
-              className="group relative bg-hospital-cream rounded-sm p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-            >
-              {/* Decorative top line */}
-              <div className="w-10 h-[2px] bg-hospital-gold mb-6 transition-all duration-300 group-hover:w-16" />
+          {(philosophies && philosophies.length > 0 ? philosophies : PHILOSOPHIES).map((item, idx) => {
+            const isApi = philosophies && philosophies.length > 0;
+            return (
+              <div
+                key={idx}
+                className="group relative bg-hospital-cream rounded-sm p-8 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              >
+                {/* Decorative top line */}
+                <div className="w-10 h-[2px] bg-hospital-gold mb-6 transition-all duration-300 group-hover:w-16" />
 
-              {/* Icon */}
-              <div className="text-hospital-gold mb-4">
-                {item.icon}
+                {/* Icon */}
+                <div className="text-hospital-gold mb-4">
+                  {isApi ? (
+                    <span className="text-2xl">{(item as PhilosophyItem).icon || '✦'}</span>
+                  ) : (
+                    (item as (typeof PHILOSOPHIES)[number]).icon
+                  )}
+                </div>
+
+                {/* Title */}
+                <h3 className="font-serif text-xl text-hospital-dark mb-3">
+                  {isApi ? (item as PhilosophyItem).title : (item as (typeof PHILOSOPHIES)[number]).titleEn}
+                </h3>
+
+                {/* Description */}
+                <p className="text-sm text-hospital-gray leading-relaxed whitespace-pre-line">
+                  {isApi ? ((item as PhilosophyItem).description || '') : (item as (typeof PHILOSOPHIES)[number]).descKo}
+                </p>
               </div>
-
-              {/* Title */}
-              <h3 className="font-serif text-xl text-hospital-dark mb-3">
-                {item.titleEn}
-              </h3>
-
-              {/* Description */}
-              <p className="text-sm text-hospital-gray leading-relaxed whitespace-pre-line">
-                {item.descKo}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

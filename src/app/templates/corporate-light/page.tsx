@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   CorporateLightHeader,
@@ -16,9 +14,23 @@ import type {
   ServiceItem,
 } from "@/components/templates/corporate/light";
 
-/* ── Sample Data ── */
+/* ─── API Helpers ─── */
 
-const heroSlides: HeroSlide[] = [
+const API_BASE = "http://localhost:8000";
+
+async function fetchAPI(endpoint: string) {
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, { cache: "no-store" });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+/* ─── Fallback Data ─── */
+
+const fallbackHeroSlides: HeroSlide[] = [
   {
     title: "AI로 여는\n새로운 연결의 시대",
     description:
@@ -42,60 +54,30 @@ const heroSlides: HeroSlide[] = [
   },
 ];
 
-const serviceCards: ServiceCard[] = [
+const fallbackServiceCards: ServiceCard[] = [
   {
     title: "서비스",
     description: "나의 세계를 바꾸는 카카오",
     href: "/service/service",
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2" />
-        <path d="M8 21h8" />
-        <path d="M12 17v4" />
-      </svg>
-    ),
   },
   {
     title: "AI 기술",
     description: "나에게 가장 가까운, 가장 쉬운 AI",
     href: "/service/tech/ai",
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2a4 4 0 0 1 4 4v1a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V6a4 4 0 0 1 4-4z" />
-        <path d="M9 8v2a3 3 0 0 0 6 0V8" />
-        <path d="M4 14h16" />
-        <path d="M6 14v4a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-4" />
-      </svg>
-    ),
   },
   {
     title: "채용",
     description: "함께 나아갈 미래의 크루들에게",
     href: "/careers",
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-    ),
   },
   {
     title: "ESG",
     description: "지속가능한 미래를 위한 카카오의 약속과 책임",
     href: "/esg",
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-        <path d="M2 12h20" />
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-      </svg>
-    ),
   },
 ];
 
-const infoCards: InfoCard[] = [
+const fallbackInfoCards: InfoCard[] = [
   {
     title: "뉴스",
     description: "카카오의 최신 소식과 미디어 보도자료를 확인하세요.",
@@ -111,43 +93,94 @@ const infoCards: InfoCard[] = [
     description: "카카오가 만들어가는 다양한 이야기를 전합니다.",
     href: "/news/kakao",
   },
-  {
-    title: "그룹사소식",
-    description: "카카오 그룹사들의 최신 소식을 확인하세요.",
-    href: "/news/group",
-  },
-  {
-    title: "고객센터",
-    description: "도움이 필요하시면 언제든 문의해 주세요.",
-    href: "/support",
-  },
 ];
 
-const serviceItems: ServiceItem[] = [
+const fallbackServiceItems: ServiceItem[] = [
   { name: "카카오톡", description: "국민 메신저, 카카오톡으로 대화하세요" },
   { name: "카카오맵", description: "길찾기부터 주변 정보까지 한 번에" },
   { name: "카카오톡 채널", description: "비즈니스 소통의 새로운 기준" },
   { name: "카카오페이지", description: "웹툰, 웹소설의 모든 것" },
   { name: "카카오페이", description: "간편하고 안전한 모바일 결제" },
   { name: "카카오T", description: "택시, 대리, 주차 등 이동의 모든 것" },
-  { name: "카카오뱅크", description: "쉽고 편리한 모바일 은행" },
-  { name: "카카오스토리", description: "일상을 기록하고 공유하세요" },
 ];
 
-/* ── Page ── */
+/* ─── Page ─── */
 
-export default function CorporateLightPage() {
+export default async function CorporateLightPage() {
+  const [config, news, services, milestones] = await Promise.all([
+    fetchAPI("/api/corporate/config"),
+    fetchAPI("/api/corporate/news?is_featured=true"),
+    fetchAPI("/api/corporate/services"),
+    fetchAPI("/api/corporate/milestones"),
+  ]);
+
+  /* Map API news to hero slides */
+  const heroSlides: HeroSlide[] = news
+    ? (news as Array<Record<string, unknown>>)
+        .slice(0, 3)
+        .map((n, i) => ({
+          title: (n.title as string) || "",
+          description: (n.summary as string) || (n.content as string) || "",
+          ctaHref: `/templates/corporate-light/news`,
+          bgColor: ["#EAEEF3", "#E8F0E8", "#F0ECE8"][i % 3],
+        }))
+    : fallbackHeroSlides;
+
+  /* Map API services to service cards */
+  const serviceCards: ServiceCard[] = services
+    ? (services as Array<Record<string, unknown>>).map((s) => ({
+        title: (s.title as string) || "",
+        description: (s.description as string) || "",
+        href: (s.link as string) || "/templates/corporate-light/services",
+      }))
+    : fallbackServiceCards;
+
+  /* News items for info cards */
+  const infoCards: InfoCard[] = news
+    ? [
+        {
+          title: "뉴스",
+          description: "최신 소식과 미디어 보도자료를 확인하세요.",
+          href: "/templates/corporate-light/news",
+        },
+        {
+          title: "서비스",
+          description: "다양한 서비스를 살펴보세요.",
+          href: "/templates/corporate-light/services",
+        },
+        {
+          title: "연혁",
+          description: "회사의 주요 연혁을 확인하세요.",
+          href: "/templates/corporate-light/milestones",
+        },
+        {
+          title: "소개",
+          description: "회사 비전과 미션을 살펴보세요.",
+          href: "/templates/corporate-light/about",
+        },
+      ]
+    : fallbackInfoCards;
+
+  /* Map API services to carousel items */
+  const serviceItems: ServiceItem[] = services
+    ? (services as Array<Record<string, unknown>>).map((s) => ({
+        name: (s.title as string) || "",
+        description: (s.description as string) || "",
+        href: (s.link as string) || "#",
+      }))
+    : fallbackServiceItems;
+
   return (
     <div className="min-h-screen bg-white text-[#191919]">
       <CorporateLightHeader />
 
       <main>
-        <HeroNewsSlider slides={heroSlides} />
-        <ServiceCardGrid cards={serviceCards} />
-        <InfoCardList title="카카오의 다양한 모습" cards={infoCards} />
+        <HeroNewsSlider slides={heroSlides.length > 0 ? heroSlides : fallbackHeroSlides} />
+        <ServiceCardGrid cards={serviceCards.length > 0 ? serviceCards : fallbackServiceCards} />
+        <InfoCardList title={`${config?.company_name || "카카오"}의 다양한 모습`} cards={infoCards} />
         <ServiceCarousel
-          title="더 나은 세상을 만드는 카카오 서비스"
-          items={serviceItems}
+          title={`더 나은 세상을 만드는 ${config?.company_name || "카카오"} 서비스`}
+          items={serviceItems.length > 0 ? serviceItems : fallbackServiceItems}
         />
       </main>
 

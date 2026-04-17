@@ -1,6 +1,18 @@
 import PromotionCard from '@/components/templates/hospital/PromotionCard';
 
-const PROMOTIONS = [
+const API_BASE = 'http://localhost:8000';
+
+async function fetchAPI(endpoint: string) {
+  try {
+    const res = await fetch(`${API_BASE}${endpoint}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
+const FALLBACK_PROMOTIONS = [
   {
     title: '써마지FLX 400샷 특별가',
     gradient: 'from-hospital-beige to-hospital-cream',
@@ -35,7 +47,29 @@ const PROMOTIONS = [
   },
 ];
 
-export default function ExhibitionsPage() {
+const GRADIENTS = [
+  'from-hospital-beige to-hospital-cream',
+  'from-hospital-cream to-hospital-beige',
+  'from-hospital-gold-light/20 to-hospital-cream',
+  'from-hospital-beige to-hospital-gold-light/20',
+  'from-hospital-cream to-hospital-beige',
+  'from-hospital-beige to-hospital-cream',
+  'from-hospital-gold-light/20 to-hospital-beige',
+  'from-hospital-cream to-hospital-gold-light/20',
+];
+
+export default async function ExhibitionsPage() {
+  const promotions = await fetchAPI('/api/hospitals/1/promotions');
+
+  const promoItems = promotions && promotions.length > 0
+    ? promotions
+        .filter((p: { is_active: boolean }) => p.is_active)
+        .map((p: { title: string; image_url?: string }, idx: number) => ({
+          title: p.title,
+          gradient: GRADIENTS[idx % GRADIENTS.length],
+        }))
+    : FALLBACK_PROMOTIONS;
+
   return (
     <>
       {/* Spacer for fixed header */}
@@ -55,7 +89,7 @@ export default function ExhibitionsPage() {
 
           {/* Promotion Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {PROMOTIONS.map((promo, idx) => (
+            {promoItems.map((promo: { title: string; gradient: string }, idx: number) => (
               <PromotionCard
                 key={idx}
                 title={promo.title}

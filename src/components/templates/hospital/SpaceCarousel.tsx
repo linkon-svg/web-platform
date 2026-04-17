@@ -5,9 +5,10 @@ import { useRef } from 'react';
 interface SpaceImage {
   label: string;
   gradient: string;
+  image_url?: string | null;
 }
 
-const SPACES: SpaceImage[] = [
+const DEFAULT_SPACES: SpaceImage[] = [
   { label: '리셉션', gradient: 'from-hospital-beige to-hospital-cream' },
   { label: '상담실', gradient: 'from-hospital-cream to-hospital-beige' },
   { label: '시술실', gradient: 'from-hospital-gold-light/20 to-hospital-cream' },
@@ -15,7 +16,11 @@ const SPACES: SpaceImage[] = [
   { label: '파우더룸', gradient: 'from-hospital-cream to-hospital-beige' },
 ];
 
-export default function SpaceCarousel() {
+interface SpaceCarouselProps {
+  spaces?: SpaceImage[];
+}
+
+export default function SpaceCarousel({ spaces }: SpaceCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -65,7 +70,7 @@ export default function SpaceCarousel() {
 
         {/* Carousel */}
         <div ref={scrollRef} className="snap-x-container gap-4">
-          {SPACES.map((space, idx) => (
+          {(spaces && spaces.length > 0 ? spaces : DEFAULT_SPACES).map((space, idx) => (
             <div
               key={idx}
               className="w-[280px] md:w-[400px] lg:w-[500px] aspect-[16/10] rounded-sm overflow-hidden relative group"

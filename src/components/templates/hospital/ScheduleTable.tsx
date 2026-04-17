@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 
-const HOURS = [
+const DEFAULT_HOURS = [
   { day: '평일', time: '10:00 - 20:30', color: 'text-hospital-dark' },
   { day: '토요일', time: '10:00 - 16:00', color: 'text-hospital-gold-dark' },
   { day: '일요일', time: '10:00 - 16:00', color: 'text-red-500' },
@@ -36,7 +36,30 @@ function getCalendarDays(year: number, month: number) {
   return cells;
 }
 
-export default function ScheduleTable() {
+interface ScheduleData {
+  weekday?: string | null;
+  saturday?: string | null;
+  sunday?: string | null;
+  holiday?: string | null;
+  lunch_time?: string | null;
+}
+
+interface ScheduleTableProps {
+  schedule?: ScheduleData | null;
+}
+
+function buildHours(schedule?: ScheduleData | null) {
+  if (!schedule) return DEFAULT_HOURS;
+  return [
+    { day: '평일', time: schedule.weekday || '10:00 - 20:30', color: 'text-hospital-dark' },
+    { day: '토요일', time: schedule.saturday || '10:00 - 16:00', color: 'text-hospital-gold-dark' },
+    { day: '일요일', time: schedule.sunday || '10:00 - 16:00', color: 'text-red-500' },
+    { day: '공휴일', time: schedule.holiday || '10:00 - 16:00', color: 'text-red-500' },
+    { day: '점심시간', time: schedule.lunch_time || '없음', color: 'text-hospital-gray-light' },
+  ];
+}
+
+export default function ScheduleTable({ schedule }: ScheduleTableProps) {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth();
@@ -44,6 +67,7 @@ export default function ScheduleTable() {
 
   const monthName = now.toLocaleDateString('en-US', { month: 'long' });
   const cells = useMemo(() => getCalendarDays(year, month), [year, month]);
+  const HOURS = useMemo(() => buildHours(schedule), [schedule]);
 
   return (
     <section className="section-padding bg-white">
