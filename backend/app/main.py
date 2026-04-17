@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.database import init_db
-from app.routers import auth, hospitals, doctors, treatments, promotions, spaces, uploads
+from app.routers import auth, hospitals, doctors, treatments, promotions, spaces, uploads, sites, templates, pages, site_configs, dashboard
 
 
 @asynccontextmanager
@@ -16,8 +16,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Hospital Template API",
-    description="병원 웹사이트 템플릿 백엔드 API",
+    title="Web Platform API",
+    description="웹사이트 템플릿 시스템 백엔드 API",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -42,6 +42,11 @@ app.include_router(treatments.router)
 app.include_router(promotions.router)
 app.include_router(spaces.router)
 app.include_router(uploads.router)
+app.include_router(sites.router)
+app.include_router(templates.router)
+app.include_router(pages.router)
+app.include_router(site_configs.router)
+app.include_router(dashboard.router)
 
 # Static file serving for uploads (must be after router includes)
 _uploads_dir = Path(__file__).resolve().parent.parent / "uploads"
@@ -51,7 +56,7 @@ app.mount("/uploads", StaticFiles(directory=str(_uploads_dir)), name="uploads")
 
 @app.get("/")
 async def root():
-    return {"message": "Hospital Template API", "version": "1.0.0"}
+    return {"message": "Web Platform API", "version": "1.0.0"}
 
 
 @app.get("/api/health")

@@ -23,6 +23,7 @@ async def get_db():
 async def init_db():
     from app.models.user import User
     from app.models.hospital import Hospital, Doctor, Schedule, Treatment, Promotion, Philosophy, SpaceImage
+    from app.models.site import Template, Site, Page, SiteConfig
     from app.core.security import get_password_hash
 
     async with engine.begin() as conn:
@@ -32,191 +33,201 @@ async def init_db():
     async with async_session() as session:
         from sqlalchemy import select
         result = await session.execute(select(Hospital))
-        if result.scalars().first() is not None:
-            return  # Already seeded
-
-        # Admin user
-        admin = User(
-            email="admin@linkonkr.com",
-            hashed_password=get_password_hash("dnflwlq12!"),
-            is_active=True,
-        )
-        session.add(admin)
-
-        # Hospital
-        hospital = Hospital(
-            name="예피다의원",
-            name_en="Yepida Clinic",
-            phone="02-6952-2586",
-            address="서울특별시 강남구 테헤란로 123 예피다빌딩 3층",
-            business_number="123-45-67890",
-            ceo="김예피",
-            logo_url="/images/logo.png",
-        )
-        session.add(hospital)
-        await session.flush()
-
-        # Doctors
-        doctors = [
-            Doctor(
-                hospital_id=hospital.id,
-                name="김예피",
-                title="대표원장",
-                photo_url="/images/doctors/doctor1.jpg",
-                education=["서울대학교 의과대학 졸업", "서울대학교 의과대학 석사", "피부과 전문의"],
-                career=["前 서울대학교병원 피부과 전공의", "대한피부과학회 정회원", "대한미용피부외과학회 정회원", "미국피부과학회(AAD) 회원"],
-                sort_order=1,
-            ),
-            Doctor(
-                hospital_id=hospital.id,
-                name="이수진",
-                title="부원장",
-                photo_url="/images/doctors/doctor2.jpg",
-                education=["연세대학교 의과대학 졸업", "피부과 전문의"],
-                career=["前 세브란스병원 피부과 전공의", "대한피부과학회 정회원", "레이저학회 정회원"],
-                sort_order=2,
-            ),
-            Doctor(
-                hospital_id=hospital.id,
-                name="박민호",
-                title="원장",
-                photo_url="/images/doctors/doctor3.jpg",
-                education=["고려대학교 의과대학 졸업", "피부과 전문의"],
-                career=["前 고려대학교병원 피부과 전공의", "대한피부과학회 정회원", "보톡스/필러 인증의"],
-                sort_order=3,
-            ),
-        ]
-        session.add_all(doctors)
-
-        # Schedule
-        schedule = Schedule(
-            hospital_id=hospital.id,
-            weekday="10:00 - 20:30",
-            saturday="10:00 - 16:00",
-            sunday="10:00 - 16:00",
-            holiday="10:00 - 16:00",
-            lunch_time="13:00 - 14:00",
-        )
-        session.add(schedule)
-
-        # Treatments
-        treatments = [
-            Treatment(
-                hospital_id=hospital.id,
-                name="써마지 FLX",
-                category="리프팅",
-                description="고주파 에너지를 이용하여 피부 깊숙이 열을 전달, 콜라겐 재생을 촉진하여 탄력 있는 피부로 개선합니다.",
-                image_url="/images/treatments/thermage.jpg",
-                sort_order=1,
-            ),
-            Treatment(
-                hospital_id=hospital.id,
-                name="울쎄라피",
-                category="리프팅",
-                description="초음파 에너지를 이용한 비수술 리프팅 시술로, SMAS층까지 에너지를 전달하여 자연스러운 리프팅 효과를 제공합니다.",
-                image_url="/images/treatments/ultherapy.jpg",
-                sort_order=2,
-            ),
-            Treatment(
-                hospital_id=hospital.id,
-                name="보톡스",
-                category="주사",
-                description="보툴리눔 톡신을 이용하여 주름 개선, 사각턱 축소, 다한증 치료 등 다양한 효과를 제공합니다.",
-                image_url="/images/treatments/botox.jpg",
-                sort_order=3,
-            ),
-            Treatment(
-                hospital_id=hospital.id,
-                name="필러",
-                category="주사",
-                description="히알루론산 등의 충전제를 주입하여 볼륨감을 더하고, 주름을 개선하며 얼굴 윤곽을 조절합니다.",
-                image_url="/images/treatments/filler.jpg",
-                sort_order=4,
-            ),
-            Treatment(
-                hospital_id=hospital.id,
-                name="스킨부스터",
-                category="피부관리",
-                description="히알루론산을 진피층에 직접 주입하여 피부 속부터 촉촉하게 수분을 공급하고, 피부결을 개선합니다.",
-                image_url="/images/treatments/skinbooster.jpg",
-                sort_order=5,
-            ),
-        ]
-        session.add_all(treatments)
-
-        # Promotions
-        promotions = [
-            Promotion(
-                hospital_id=hospital.id,
-                title="보톡스 원데이 특가 이벤트",
-                image_url="/images/promotions/botox-event.jpg",
-                start_date=date(2026, 4, 1),
-                end_date=date(2026, 5, 31),
+        if result.scalars().first() is None:
+            # Admin user
+            admin = User(
+                email="admin@linkonkr.com",
+                hashed_password=get_password_hash("dnflwlq12!"),
                 is_active=True,
-            ),
-            Promotion(
-                hospital_id=hospital.id,
-                title="리프팅 패키지 30% 할인",
-                image_url="/images/promotions/lifting-event.jpg",
-                start_date=date(2026, 4, 1),
-                end_date=date(2026, 6, 30),
-                is_active=True,
-            ),
-            Promotion(
-                hospital_id=hospital.id,
-                title="필러 시술 2+1 이벤트",
-                image_url="/images/promotions/filler-event.jpg",
-                start_date=date(2026, 4, 15),
-                end_date=date(2026, 5, 15),
-                is_active=True,
-            ),
-        ]
-        session.add_all(promotions)
+            )
+            session.add(admin)
 
-        # Philosophy
-        philosophies = [
-            Philosophy(
-                hospital_id=hospital.id,
-                icon="heart",
-                title="Healthy",
-                title_ko="건강한 아름다움",
-                description="건강한 피부를 기반으로 한 아름다움을 추구합니다. 무리한 시술보다 피부 본연의 건강함을 되찾는 것을 우선합니다.",
-                sort_order=1,
-            ),
-            Philosophy(
-                hospital_id=hospital.id,
-                icon="leaf",
-                title="Naturally",
-                title_ko="자연스러운 변화",
-                description="티 나지 않는 자연스러운 변화를 지향합니다. 본래의 아름다움을 살리는 섬세한 시술을 약속합니다.",
-                sort_order=2,
-            ),
-            Philosophy(
-                hospital_id=hospital.id,
-                icon="shield",
-                title="Safely",
-                title_ko="안전한 시술",
-                description="모든 시술은 안전을 최우선으로 합니다. 정품 제품만 사용하며, 철저한 위생 관리 아래 시술합니다.",
-                sort_order=3,
-            ),
-            Philosophy(
-                hospital_id=hospital.id,
-                icon="sparkles",
-                title="Beauty",
-                title_ko="진정한 아름다움",
-                description="외적인 아름다움과 내적인 자신감, 모두를 위한 맞춤형 솔루션을 제공합니다.",
-                sort_order=4,
-            ),
-        ]
-        session.add_all(philosophies)
+            # Hospital
+            hospital = Hospital(
+                name="예피다의원",
+                name_en="Yepida Clinic",
+                phone="02-6952-2586",
+                address="서울특별시 강남구 테헤란로 123 예피다빌딩 3층",
+                business_number="123-45-67890",
+                ceo="김예피",
+                logo_url="/images/logo.png",
+            )
+            session.add(hospital)
+            await session.flush()
 
-        # Space images
-        spaces = [
-            SpaceImage(hospital_id=hospital.id, image_url="/images/spaces/lobby.jpg", caption="로비", sort_order=1),
-            SpaceImage(hospital_id=hospital.id, image_url="/images/spaces/consulting.jpg", caption="상담실", sort_order=2),
-            SpaceImage(hospital_id=hospital.id, image_url="/images/spaces/treatment.jpg", caption="시술실", sort_order=3),
-            SpaceImage(hospital_id=hospital.id, image_url="/images/spaces/recovery.jpg", caption="회복실", sort_order=4),
-        ]
-        session.add_all(spaces)
+            # Doctors
+            doctors = [
+                Doctor(
+                    hospital_id=hospital.id,
+                    name="김예피",
+                    title="대표원장",
+                    photo_url="/images/doctors/doctor1.jpg",
+                    education=["서울대학교 의과대학 졸업", "서울대학교 의과대학 석사", "피부과 전문의"],
+                    career=["前 서울대학교병원 피부과 전공의", "대한피부과학회 정회원", "대한미용피부외과학회 정회원", "미국피부과학회(AAD) 회원"],
+                    sort_order=1,
+                ),
+                Doctor(
+                    hospital_id=hospital.id,
+                    name="이수진",
+                    title="부원장",
+                    photo_url="/images/doctors/doctor2.jpg",
+                    education=["연세대학교 의과대학 졸업", "피부과 전문의"],
+                    career=["前 세브란스병원 피부과 전공의", "대한피부과학회 정회원", "레이저학회 정회원"],
+                    sort_order=2,
+                ),
+                Doctor(
+                    hospital_id=hospital.id,
+                    name="박민호",
+                    title="원장",
+                    photo_url="/images/doctors/doctor3.jpg",
+                    education=["고려대학교 의과대학 졸업", "피부과 전문의"],
+                    career=["前 고려대학교병원 피부과 전공의", "대한피부과학회 정회원", "보톡스/필러 인증의"],
+                    sort_order=3,
+                ),
+            ]
+            session.add_all(doctors)
 
-        await session.commit()
+            # Schedule
+            schedule = Schedule(
+                hospital_id=hospital.id,
+                weekday="10:00 - 20:30",
+                saturday="10:00 - 16:00",
+                sunday="10:00 - 16:00",
+                holiday="10:00 - 16:00",
+                lunch_time="13:00 - 14:00",
+            )
+            session.add(schedule)
+
+            # Treatments
+            treatments = [
+                Treatment(
+                    hospital_id=hospital.id,
+                    name="써마지 FLX",
+                    category="리프팅",
+                    description="고주파 에너지를 이용하여 피부 깊숙이 열을 전달, 콜라겐 재생을 촉진하여 탄력 있는 피부로 개선합니다.",
+                    image_url="/images/treatments/thermage.jpg",
+                    sort_order=1,
+                ),
+                Treatment(
+                    hospital_id=hospital.id,
+                    name="울쎄라피",
+                    category="리프팅",
+                    description="초음파 에너지를 이용한 비수술 리프팅 시술로, SMAS층까지 에너지를 전달하여 자연스러운 리프팅 효과를 제공합니다.",
+                    image_url="/images/treatments/ultherapy.jpg",
+                    sort_order=2,
+                ),
+                Treatment(
+                    hospital_id=hospital.id,
+                    name="보톡스",
+                    category="주사",
+                    description="보툴리눔 톡신을 이용하여 주름 개선, 사각턱 축소, 다한증 치료 등 다양한 효과를 제공합니다.",
+                    image_url="/images/treatments/botox.jpg",
+                    sort_order=3,
+                ),
+                Treatment(
+                    hospital_id=hospital.id,
+                    name="필러",
+                    category="주사",
+                    description="히알루론산 등의 충전제를 주입하여 볼륨감을 더하고, 주름을 개선하며 얼굴 윤곽을 조절합니다.",
+                    image_url="/images/treatments/filler.jpg",
+                    sort_order=4,
+                ),
+                Treatment(
+                    hospital_id=hospital.id,
+                    name="스킨부스터",
+                    category="피부관리",
+                    description="히알루론산을 진피층에 직접 주입하여 피부 속부터 촉촉하게 수분을 공급하고, 피부결을 개선합니다.",
+                    image_url="/images/treatments/skinbooster.jpg",
+                    sort_order=5,
+                ),
+            ]
+            session.add_all(treatments)
+
+            # Promotions
+            promotions = [
+                Promotion(
+                    hospital_id=hospital.id,
+                    title="보톡스 원데이 특가 이벤트",
+                    image_url="/images/promotions/botox-event.jpg",
+                    start_date=date(2026, 4, 1),
+                    end_date=date(2026, 5, 31),
+                    is_active=True,
+                ),
+                Promotion(
+                    hospital_id=hospital.id,
+                    title="리프팅 패키지 30% 할인",
+                    image_url="/images/promotions/lifting-event.jpg",
+                    start_date=date(2026, 4, 1),
+                    end_date=date(2026, 6, 30),
+                    is_active=True,
+                ),
+                Promotion(
+                    hospital_id=hospital.id,
+                    title="필러 시술 2+1 이벤트",
+                    image_url="/images/promotions/filler-event.jpg",
+                    start_date=date(2026, 4, 15),
+                    end_date=date(2026, 5, 15),
+                    is_active=True,
+                ),
+            ]
+            session.add_all(promotions)
+
+            # Philosophy
+            philosophies = [
+                Philosophy(
+                    hospital_id=hospital.id,
+                    icon="heart",
+                    title="Healthy",
+                    title_ko="건강한 아름다움",
+                    description="건강한 피부를 기반으로 한 아름다움을 추구합니다. 무리한 시술보다 피부 본연의 건강함을 되찾는 것을 우선합니다.",
+                    sort_order=1,
+                ),
+                Philosophy(
+                    hospital_id=hospital.id,
+                    icon="leaf",
+                    title="Naturally",
+                    title_ko="자연스러운 변화",
+                    description="티 나지 않는 자연스러운 변화를 지향합니다. 본래의 아름다움을 살리는 섬세한 시술을 약속합니다.",
+                    sort_order=2,
+                ),
+                Philosophy(
+                    hospital_id=hospital.id,
+                    icon="shield",
+                    title="Safely",
+                    title_ko="안전한 시술",
+                    description="모든 시술은 안전을 최우선으로 합니다. 정품 제품만 사용하며, 철저한 위생 관리 아래 시술합니다.",
+                    sort_order=3,
+                ),
+                Philosophy(
+                    hospital_id=hospital.id,
+                    icon="sparkles",
+                    title="Beauty",
+                    title_ko="진정한 아름다움",
+                    description="외적인 아름다움과 내적인 자신감, 모두를 위한 맞춤형 솔루션을 제공합니다.",
+                    sort_order=4,
+                ),
+            ]
+            session.add_all(philosophies)
+
+            # Space images
+            spaces = [
+                SpaceImage(hospital_id=hospital.id, image_url="/images/spaces/lobby.jpg", caption="로비", sort_order=1),
+                SpaceImage(hospital_id=hospital.id, image_url="/images/spaces/consulting.jpg", caption="상담실", sort_order=2),
+                SpaceImage(hospital_id=hospital.id, image_url="/images/spaces/treatment.jpg", caption="시술실", sort_order=3),
+                SpaceImage(hospital_id=hospital.id, image_url="/images/spaces/recovery.jpg", caption="회복실", sort_order=4),
+            ]
+            session.add_all(spaces)
+
+            await session.commit()
+
+        # Seed default templates if empty
+        result = await session.execute(select(Template))
+        if result.scalars().first() is None:
+            default_templates = [
+                Template(name="landing", display_name="랜딩페이지", description="원페이지 소개 사이트"),
+                Template(name="shopping", display_name="쇼핑몰", description="이커머스 / 쇼핑몰 사이트"),
+                Template(name="corporate", display_name="기업 홈페이지", description="회사소개, 서비스, 문의 사이트"),
+                Template(name="portfolio", display_name="포트폴리오", description="포트폴리오 / 개인 사이트"),
+            ]
+            session.add_all(default_templates)
+            await session.commit()

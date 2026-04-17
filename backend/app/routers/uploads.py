@@ -11,7 +11,12 @@ from app.core.security import get_current_user
 router = APIRouter(tags=["uploads"])
 
 UPLOAD_DIR = Path(__file__).resolve().parent.parent.parent / "uploads"
-ALLOWED_CATEGORIES = {"hero", "doctors", "spaces", "treatments", "promotions", "general"}
+ALLOWED_CATEGORIES = {
+    # Hospital template
+    "hero", "doctors", "spaces", "treatments", "promotions",
+    # General platform
+    "general", "sites", "logos", "banners", "products", "portfolios", "backgrounds",
+}
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
