@@ -20,6 +20,9 @@ interface Stats {
   corpTeams: number;
   corpCareers: number;
   corpMilestones: number;
+  landSections: number;
+  landCards: number;
+  landServices: number;
 }
 
 const TEMPLATES = [
@@ -35,7 +38,8 @@ const TEMPLATES = [
     name: '랜딩 템플릿',
     description: '마케팅 캠페인, 이벤트용 원페이지 랜딩 페이지.',
     href: '/templates/landing',
-    active: false,
+    active: true,
+    adminHref: '/admin/landing/config',
   },
   {
     id: 'shopping',
@@ -106,6 +110,16 @@ const MENU_SECTIONS: MenuSection[] = [
       { title: '연혁 관리', description: '회사 연혁 타임라인 관리', href: '/admin/corporate/milestones', statKey: 'corpMilestones', unit: '개' },
     ],
   },
+  {
+    title: '랜딩 (Landing)',
+    icon: '📄',
+    cards: [
+      { title: '랜딩 설정', description: '사이트명, 히어로, 프로모 배너 관리', href: '/admin/landing/config', statKey: null },
+      { title: '섹션 관리', description: '서비스 소개 섹션 관리', href: '/admin/landing/sections', statKey: 'landSections', unit: '개' },
+      { title: '캐러셀 카드', description: '섹션별 캐러셀 카드 관리', href: '/admin/landing/cards', statKey: null },
+      { title: '서비스 카드', description: '하단 서비스 그리드 관리', href: '/admin/landing/services', statKey: 'landServices', unit: '개' },
+    ],
+  },
 ];
 
 export default function AdminDashboardPage() {
@@ -114,6 +128,7 @@ export default function AdminDashboardPage() {
     doctors: 0, treatments: 0, promotions: 0, spaces: 0,
     products: 0, categories: 0, shopNews: 0, stores: 0,
     corpServices: 0, corpNews: 0, corpTeams: 0, corpCareers: 0, corpMilestones: 0,
+    landSections: 0, landCards: 0, landServices: 0,
   });
 
   useEffect(() => {
@@ -121,7 +136,7 @@ export default function AdminDashboardPage() {
 
     const fetchStats = async () => {
       try {
-        const [doctors, treatments, promotions, spaces, products, categories, shopNews, stores, corpServices, corpNews, corpTeams, corpCareers, corpMilestones] = await Promise.all([
+        const [doctors, treatments, promotions, spaces, products, categories, shopNews, stores, corpServices, corpNews, corpTeams, corpCareers, corpMilestones, landSections, landServices] = await Promise.all([
           apiClient('/api/hospitals/1/doctors', { token }).catch(() => []),
           apiClient('/api/hospitals/1/treatments', { token }).catch(() => []),
           apiClient('/api/hospitals/1/promotions', { token }).catch(() => []),
@@ -135,6 +150,8 @@ export default function AdminDashboardPage() {
           apiClient('/api/corporate/teams', { token }).catch(() => []),
           apiClient('/api/corporate/careers', { token }).catch(() => []),
           apiClient('/api/corporate/milestones', { token }).catch(() => []),
+          apiClient('/api/landing/sections', { token }).catch(() => []),
+          apiClient('/api/landing/services', { token }).catch(() => []),
         ]);
         setStats({
           doctors: Array.isArray(doctors) ? doctors.length : 0,
@@ -150,6 +167,9 @@ export default function AdminDashboardPage() {
           corpTeams: Array.isArray(corpTeams) ? corpTeams.length : 0,
           corpCareers: Array.isArray(corpCareers) ? corpCareers.length : 0,
           corpMilestones: Array.isArray(corpMilestones) ? corpMilestones.length : 0,
+          landSections: Array.isArray(landSections) ? landSections.length : 0,
+          landCards: 0,
+          landServices: Array.isArray(landServices) ? landServices.length : 0,
         });
       } catch {
         // fallback to zeros

@@ -27,6 +27,10 @@ const PATH_KEY_MAP: Record<string, string> = {
   '/admin/corporate/teams': 'corp-teams',
   '/admin/corporate/careers': 'corp-careers',
   '/admin/corporate/milestones': 'corp-milestones',
+  '/admin/landing/config': 'land-config',
+  '/admin/landing/sections': 'land-sections',
+  '/admin/landing/cards': 'land-cards',
+  '/admin/landing/services': 'land-services',
 };
 
 /* Map pathname → header title */
@@ -50,6 +54,10 @@ const PATH_TITLE_MAP: Record<string, string> = {
   '/admin/corporate/teams': '팀/스튜디오',
   '/admin/corporate/careers': '채용 관리',
   '/admin/corporate/milestones': '연혁 관리',
+  '/admin/landing/config': '랜딩 설정',
+  '/admin/landing/sections': '섹션 관리',
+  '/admin/landing/cards': '캐러셀 카드',
+  '/admin/landing/services': '서비스 카드',
 };
 
 function AdminGuard({ children }: { children: ReactNode }) {

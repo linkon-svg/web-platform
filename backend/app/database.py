@@ -25,6 +25,7 @@ async def init_db():
     from app.models.hospital import Hospital, Doctor, Schedule, Treatment, Promotion, Philosophy, SpaceImage
     from app.models.shopping import ShopConfig, Category, Product, ShopNews, Store
     from app.models.corporate import CorporateConfig, CorporateService, CorporateNews, CorporateTeam, CorporateCareer, CorporateMilestone
+    from app.models.landing import LandingConfig, LandingSection, LandingCard, LandingServiceCard
     from app.core.security import get_password_hash
 
     async with engine.begin() as conn:
@@ -378,5 +379,60 @@ async def init_db():
             CorporateMilestone(year=2018, title="크래프톤 설립", sort_order=1),
         ]
         session.add_all(milestones)
+
+        await session.commit()
+
+    # Landing seed data
+    async with async_session() as session:
+        from sqlalchemy import select
+        result = await session.execute(select(LandingConfig))
+        if result.scalars().first() is not None:
+            return
+
+        landing_config = LandingConfig(
+            site_name="리멤버",
+            logo="/images/landing/logo.png",
+            promo_bar_text="리멤버에서 450만 경력직 인재를 찾아보세요",
+            promo_bar_link="https://remember.co.kr",
+            promo_bar_active=True,
+            hero_title="프로를 위한 모든 기회",
+            hero_subtitle="리멤버가 연결합니다",
+            hero_cta_text="지금 시작하기",
+            hero_cta_link="/signup",
+            footer_company_name="주식회사 리멤버앤컴퍼니",
+            footer_ceo="최재호",
+            footer_address="서울특별시 강남구 테헤란로 427",
+            footer_phone="02-6205-0300",
+            footer_email="help@rememberapp.co.kr",
+            footer_business_number="211-88-12345",
+            sns_links={"blog": "https://blog.remember.co.kr", "linkedin": "https://linkedin.com/company/remember", "facebook": "https://facebook.com/remember"},
+        )
+        session.add(landing_config)
+
+        sections = [
+            LandingSection(title="Career", heading="프로필 등록하면 스카웃 제안이 찾아와요!", description="내 경력과 전문성에 딱 맞는 제안을 만나보세요.", cta_text="지금 프로필 등록하기", cta_link="/profile", layout="left-text", sort_order=1),
+            LandingSection(title="Business", heading="촬영 한 번으로 명함관리 쉽게 해요!", description="내 인맥의 이직, 승진 소식도 받아보세요.", cta_text="명함 관리 시작하기", cta_link="/business", layout="right-text", sort_order=2),
+            LandingSection(title="Community", heading="업계 사람들과 깊이 있게 소통해요!", description="커리어 고민과 직장 생활의 노하우를 공유해요.", cta_text="커뮤니티 바로가기", cta_link="/community", layout="left-text", has_carousel=True, sort_order=3),
+            LandingSection(title="Now", heading="전문가 브리핑으로 인사이트 충전해요!", description="매일 아침, 국내 최고 전문가들의 경제 브리핑을 받아보세요.", cta_text="바로 읽어보기", cta_link="/now", layout="right-text", has_carousel=True, sort_order=4),
+        ]
+        session.add_all(sections)
+        await session.flush()
+
+        cards = [
+            LandingCard(section_id=sections[2].id, title="이직 후기 공유", description="새 직장 적응기를 들어보세요", sort_order=1),
+            LandingCard(section_id=sections[2].id, title="업계 트렌드 토론", description="2026년 주목할 키워드는?", sort_order=2),
+            LandingCard(section_id=sections[2].id, title="연봉 협상 꿀팁", description="실전 노하우를 공유합니다", sort_order=3),
+            LandingCard(section_id=sections[3].id, title="AI 시대의 HR 전략", description="전문가 브리핑", sort_order=1),
+            LandingCard(section_id=sections[3].id, title="반도체 시장 전망", description="산업 분석 리포트", sort_order=2),
+        ]
+        session.add_all(cards)
+
+        service_cards = [
+            LandingServiceCard(title="채용 솔루션", description="다른 곳에는 없는 핵심 인재들을 만나보세요", icon="briefcase", link="/recruit", sort_order=1),
+            LandingServiceCard(title="광고 상품", description="잠재 고객을 타깃하고 제품을 효과적으로 알리세요", icon="megaphone", link="/ads", sort_order=2),
+            LandingServiceCard(title="리서치 서비스", description="설문조사와 전문가 인터뷰로 고객의 정확한 니즈를 파악하세요", icon="chart", link="/research", sort_order=3),
+            LandingServiceCard(title="기업용 명함 관리", description="소중한 회사의 영업자산 팀 명함첩으로 관리하세요", icon="card", link="/biz-card", sort_order=4),
+        ]
+        session.add_all(service_cards)
 
         await session.commit()

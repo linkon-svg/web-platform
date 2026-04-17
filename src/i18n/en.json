@@ -97,5 +97,18 @@
       "newsletterButton": "Subscribe",
       "newsletterConsent": "I agree to receive newsletters"
     }
+  },
+  "corporate": {
+    "nav": { "about": "About", "studios": "Studios", "games": "Games", "careers": "Careers", "ir": "IR", "csr": "CSR", "news": "News" },
+    "hero": { "scrollDown": "Scroll" },
+    "section": { "news": "News", "careers": "Careers", "games": "Games", "studios": "Studios", "more": "More" },
+    "about": { "vision": "Vision", "mission": "Mission", "about": "About Us" },
+    "services": { "title": "Services", "description": "Our Services" },
+    "news": { "title": "News", "press": "Press Release", "notice": "Notice", "featured": "Featured", "readMore": "Read More" },
+    "teams": { "title": "Teams / Studios", "more": "More" },
+    "careers": { "title": "Careers", "peopleLife": "PEOPLE & LIFE", "recruit": "Open Positions" },
+    "milestones": { "title": "Milestones" },
+    "footer": { "directions": "Directions", "privacy": "Privacy Policy", "contact": "Contact Us", "familySite": "FAMILY SITE" },
+    "cookie": { "message": "This website uses cookies.", "accept": "Accept", "decline": "Decline" }
   }
 }

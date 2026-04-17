@@ -97,5 +97,18 @@
       "newsletterButton": "订阅",
       "newsletterConsent": "同意接收新闻邮件"
     }
+  },
+  "corporate": {
+    "nav": { "about": "关于", "studios": "工作室", "games": "游戏", "careers": "招聘", "ir": "投资信息", "csr": "社会责任", "news": "新闻" },
+    "hero": { "scrollDown": "滚动" },
+    "section": { "news": "新闻", "careers": "招聘", "games": "游戏", "studios": "工作室", "more": "查看更多" },
+    "about": { "vision": "愿景", "mission": "使命", "about": "公司介绍" },
+    "services": { "title": "服务", "description": "服务介绍" },
+    "news": { "title": "新闻", "press": "新闻稿", "notice": "公告", "featured": "重点新闻", "readMore": "查看详情" },
+    "teams": { "title": "团队/工作室", "more": "查看更多" },
+    "careers": { "title": "招聘信息", "peopleLife": "PEOPLE & LIFE", "recruit": "招聘公告" },
+    "milestones": { "title": "发展历程" },
+    "footer": { "directions": "交通指南", "privacy": "隐私政策", "contact": "联系我们", "familySite": "FAMILY SITE" },
+    "cookie": { "message": "本网站使用Cookie。", "accept": "同意", "decline": "拒绝" }
   }
 }

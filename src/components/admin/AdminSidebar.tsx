@@ -164,6 +164,15 @@ const menuSections: MenuSection[] = [
       { key: 'corp-milestones', label: '연혁 관리', href: '/admin/corporate/milestones', icon: icons.clock },
     ],
   },
+  {
+    title: '랜딩 (Landing)',
+    items: [
+      { key: 'land-config', label: '랜딩 설정', href: '/admin/landing/config', icon: icons.settings },
+      { key: 'land-sections', label: '섹션 관리', href: '/admin/landing/sections', icon: icons.list },
+      { key: 'land-cards', label: '캐러셀 카드', href: '/admin/landing/cards', icon: icons.grid },
+      { key: 'land-services', label: '서비스 카드', href: '/admin/landing/services', icon: icons.box },
+    ],
+  },
 ];
 
 export default function AdminSidebar({

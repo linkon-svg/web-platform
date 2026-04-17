@@ -97,5 +97,18 @@
       "newsletterButton": "구독",
       "newsletterConsent": "뉴스레터 수신에 동의합니다"
     }
+  },
+  "corporate": {
+    "nav": { "about": "소개", "studios": "스튜디오", "games": "게임", "careers": "채용", "ir": "투자정보", "csr": "사회공헌", "news": "뉴스" },
+    "hero": { "scrollDown": "스크롤" },
+    "section": { "news": "News", "careers": "Careers", "games": "게임", "studios": "Studios", "more": "더보기" },
+    "about": { "vision": "비전", "mission": "미션", "about": "회사 소개" },
+    "services": { "title": "서비스", "description": "서비스 소개" },
+    "news": { "title": "뉴스", "press": "보도자료", "notice": "공지", "featured": "주요 뉴스", "readMore": "자세히 보기" },
+    "teams": { "title": "팀/스튜디오", "more": "더보기" },
+    "careers": { "title": "채용", "peopleLife": "PEOPLE & LIFE", "recruit": "채용 공고" },
+    "milestones": { "title": "연혁" },
+    "footer": { "directions": "찾아오시는 길", "privacy": "개인정보처리방침", "contact": "문의하기", "familySite": "FAMILY SITE" },
+    "cookie": { "message": "이 웹사이트는 쿠키를 사용합니다.", "accept": "동의", "decline": "거부" }
   }
 }

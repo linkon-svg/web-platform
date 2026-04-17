@@ -97,5 +97,18 @@
       "newsletterButton": "購読",
       "newsletterConsent": "ニュースレターの受信に同意します"
     }
+  },
+  "corporate": {
+    "nav": { "about": "紹介", "studios": "スタジオ", "games": "ゲーム", "careers": "採用", "ir": "IR情報", "csr": "CSR", "news": "ニュース" },
+    "hero": { "scrollDown": "スクロール" },
+    "section": { "news": "ニュース", "careers": "採用情報", "games": "ゲーム", "studios": "スタジオ", "more": "もっと見る" },
+    "about": { "vision": "ビジョン", "mission": "ミッション", "about": "会社紹介" },
+    "services": { "title": "サービス", "description": "サービス紹介" },
+    "news": { "title": "ニュース", "press": "プレスリリース", "notice": "お知らせ", "featured": "注目ニュース", "readMore": "詳しく見る" },
+    "teams": { "title": "チーム/スタジオ", "more": "もっと見る" },
+    "careers": { "title": "採用情報", "peopleLife": "PEOPLE & LIFE", "recruit": "採用情報" },
+    "milestones": { "title": "沿革" },
+    "footer": { "directions": "アクセス", "privacy": "プライバシーポリシー", "contact": "お問い合わせ", "familySite": "FAMILY SITE" },
+    "cookie": { "message": "このウェブサイトはCookieを使用しています。", "accept": "同意する", "decline": "拒否する" }
   }
 }
