@@ -9,6 +9,8 @@ import { AdminSidebar, AdminHeader } from '@/components/admin';
 /* Map pathname → sidebar activeKey */
 const PATH_KEY_MAP: Record<string, string> = {
   '/admin': 'dashboard',
+  '/admin/sites': 'sites',
+  '/admin/sites/new': 'sites',
   '/admin/hospital': 'info',
   '/admin/hero': 'hero',
   '/admin/doctors': 'doctors',
@@ -36,6 +38,8 @@ const PATH_KEY_MAP: Record<string, string> = {
 /* Map pathname → header title */
 const PATH_TITLE_MAP: Record<string, string> = {
   '/admin': '대시보드',
+  '/admin/sites': '사이트 관리',
+  '/admin/sites/new': '새 사이트 만들기',
   '/admin/hospital': '병원 정보',
   '/admin/hero': '히어로 이미지',
   '/admin/doctors': '의료진 관리',
@@ -90,8 +94,11 @@ function AdminGuard({ children }: { children: ReactNode }) {
     return null;
   }
 
-  const activeKey = PATH_KEY_MAP[pathname] || 'dashboard';
-  const headerTitle = PATH_TITLE_MAP[pathname] || '관리자';
+  /* Exact match first, then prefix match for dynamic routes like /admin/sites/[id]/edit */
+  const activeKey = PATH_KEY_MAP[pathname]
+    || (pathname.startsWith('/admin/sites') ? 'sites' : 'dashboard');
+  const headerTitle = PATH_TITLE_MAP[pathname]
+    || (pathname.includes('/edit') && pathname.startsWith('/admin/sites') ? '사이트 편집' : '관리자');
 
   return (
     <div className="min-h-screen flex bg-admin-bg">
@@ -99,6 +106,10 @@ function AdminGuard({ children }: { children: ReactNode }) {
         activeKey={activeKey}
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
+        onLogout={() => {
+          logout();
+          router.replace('/admin/login');
+        }}
       />
 
       <div className="flex-1 flex flex-col min-w-0">

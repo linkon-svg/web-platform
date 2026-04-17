@@ -1,3 +1,7 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { API_BASE } from '@/lib/api';
 import HeroSection from '@/components/templates/hospital/HeroSection';
 import PhilosophySection from '@/components/templates/hospital/PhilosophySection';
 import TreatmentSlider from '@/components/templates/hospital/TreatmentSlider';
@@ -6,11 +10,11 @@ import SpaceCarousel from '@/components/templates/hospital/SpaceCarousel';
 import MapSection from '@/components/templates/hospital/MapSection';
 import Button from '@/components/common/Button';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE_URL = 'http://localhost:8000';
 
 async function fetchAPI(endpoint: string) {
   try {
-    const res = await fetch(`${API_BASE}${endpoint}`, { cache: 'no-store' });
+    const res = await fetch(`${API_BASE_URL}${endpoint}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -49,7 +53,8 @@ export default async function Home() {
   ]);
 
   const featuredTreatments = treatments && treatments.length > 0
-    ? treatments.map((t: { name: string; category?: string; description?: string; image_url?: string }) => ({
+    ? treatments.map((t: { id?: number; name: string; category?: string; description?: string; image_url?: string }) => ({
+        id: t.id,
         name: t.name,
         category: t.category || '',
         description: t.description || '',
@@ -90,37 +95,53 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredTreatments.slice(0, 3).map((item: { name: string; category: string; description: string; image_url?: string }, idx: number) => (
-              <div
-                key={idx}
-                className="bg-white rounded-sm overflow-hidden group hover:shadow-lg transition-shadow duration-300"
-              >
-                {/* Image placeholder */}
-                <div className="aspect-[4/3] bg-gradient-to-br from-hospital-beige via-hospital-gold-light/30 to-hospital-cream flex items-center justify-center">
-                  <span className="font-serif text-2xl text-hospital-gold/40 italic">
-                    {item.name}
-                  </span>
-                </div>
-                <div className="p-6">
-                  <span className="text-xs text-hospital-gold tracking-wide uppercase">
-                    {item.category}
-                  </span>
-                  <h3 className="mt-1 text-lg font-medium text-hospital-dark">
-                    {item.name}
-                  </h3>
-                  <p className="mt-2 text-sm text-hospital-gray leading-relaxed line-clamp-3">
-                    {item.description}
-                  </p>
-                  <div className="mt-4">
-                    <Button variant="outline" size="sm">
-                      자세히 보기
-                    </Button>
+          {featuredTreatments.length === 0 ? (
+            <div className="text-center py-12 text-hospital-gray">
+              아직 등록된 시술이 없습니다.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {featuredTreatments.slice(0, 3).map((item: { id?: number; name: string; category: string; description: string; image_url?: string }, idx: number) => (
+                <div
+                  key={item.id ?? idx}
+                  className="bg-white rounded-sm overflow-hidden group hover:shadow-lg transition-shadow duration-300"
+                >
+                  {/* Image or placeholder */}
+                  {item.image_url ? (
+                    <div className="aspect-[4/3] overflow-hidden">
+                      <img
+                        src={`${API_BASE}${item.image_url}`}
+                        alt={item.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                  ) : (
+                    <div className="aspect-[4/3] bg-gradient-to-br from-hospital-beige via-hospital-gold-light/30 to-hospital-cream flex items-center justify-center">
+                      <span className="font-serif text-2xl text-hospital-gold/40 italic">
+                        {item.name}
+                      </span>
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <span className="text-xs text-hospital-gold tracking-wide uppercase">
+                      {item.category ?? '기타'}
+                    </span>
+                    <h3 className="mt-1 text-lg font-medium text-hospital-dark">
+                      {item.name}
+                    </h3>
+                    <p className="mt-2 text-sm text-hospital-gray leading-relaxed line-clamp-3">
+                      {item.description ?? ''}
+                    </p>
+                    <div className="mt-4">
+                      <Button variant="outline" size="sm">
+                        자세히 보기
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

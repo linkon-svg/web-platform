@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { API_BASE } from '@/lib/api';
 import Button from '@/components/common/Button';
 
 interface Treatment {
+  id?: number;
   name: string;
   category: string;
   description: string;
@@ -44,8 +46,8 @@ interface TreatmentSliderProps {
 
 export default function TreatmentSlider({ treatments }: TreatmentSliderProps) {
   const TREATMENTS = treatments && treatments.length > 0 ? treatments : DEFAULT_TREATMENTS;
-  const categories = [...new Set(TREATMENTS.map((t) => t.category))];
-  const [activeCategory, setActiveCategory] = useState(categories[0]);
+  const categories = [...new Set(TREATMENTS.map((t) => t.category).filter(Boolean))] as string[];
+  const [activeCategory, setActiveCategory] = useState(categories[0] || '');
   const filtered = TREATMENTS.filter((t) => t.category === activeCategory);
 
   return (
@@ -82,26 +84,36 @@ export default function TreatmentSlider({ treatments }: TreatmentSliderProps) {
         <div className="snap-x-container gap-5 pb-4">
           {filtered.map((treatment, idx) => (
             <div
-              key={idx}
+              key={treatment.id ?? idx}
               className="w-[300px] md:w-[360px] bg-hospital-cream rounded-sm overflow-hidden group"
             >
-              {/* Image placeholder */}
-              <div className="aspect-[4/3] bg-gradient-to-br from-hospital-beige via-hospital-gold-light/30 to-hospital-cream flex items-center justify-center">
-                <span className="font-serif text-2xl text-hospital-gold/50 italic">
-                  {treatment.name}
-                </span>
-              </div>
+              {/* Image or placeholder */}
+              {treatment.image_url ? (
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={`${API_BASE}${treatment.image_url}`}
+                    alt={treatment.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+              ) : (
+                <div className="aspect-[4/3] bg-gradient-to-br from-hospital-beige via-hospital-gold-light/30 to-hospital-cream flex items-center justify-center">
+                  <span className="font-serif text-2xl text-hospital-gold/50 italic">
+                    {treatment.name}
+                  </span>
+                </div>
+              )}
 
               {/* Content */}
               <div className="p-6">
                 <span className="text-xs text-hospital-gold tracking-wide uppercase">
-                  {treatment.category}
+                  {treatment.category ?? '기타'}
                 </span>
                 <h3 className="mt-1 text-lg font-medium text-hospital-dark">
                   {treatment.name}
                 </h3>
                 <p className="mt-2 text-sm text-hospital-gray leading-relaxed line-clamp-3">
-                  {treatment.description}
+                  {treatment.description ?? ''}
                 </p>
                 <div className="mt-4">
                   <Button variant="outline" size="sm">

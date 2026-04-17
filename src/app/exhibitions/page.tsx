@@ -1,10 +1,13 @@
+'use client';
+
+import { API_BASE } from '@/lib/api';
 import PromotionCard from '@/components/templates/hospital/PromotionCard';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE_URL = 'http://localhost:8000';
 
 async function fetchAPI(endpoint: string) {
   try {
-    const res = await fetch(`${API_BASE}${endpoint}`, { cache: 'no-store' });
+    const res = await fetch(`${API_BASE_URL}${endpoint}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -64,9 +67,11 @@ export default async function ExhibitionsPage() {
   const promoItems = promotions && promotions.length > 0
     ? promotions
         .filter((p: { is_active: boolean }) => p.is_active)
-        .map((p: { title: string; image_url?: string }, idx: number) => ({
+        .map((p: { id?: number; title: string; image_url?: string }, idx: number) => ({
+          id: p.id,
           title: p.title,
           gradient: GRADIENTS[idx % GRADIENTS.length],
+          image_url: p.image_url,
         }))
     : FALLBACK_PROMOTIONS;
 
@@ -88,15 +93,22 @@ export default async function ExhibitionsPage() {
           </div>
 
           {/* Promotion Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {promoItems.map((promo: { title: string; gradient: string }, idx: number) => (
-              <PromotionCard
-                key={idx}
-                title={promo.title}
-                gradient={promo.gradient}
-              />
-            ))}
-          </div>
+          {promoItems.length === 0 ? (
+            <div className="text-center py-12 text-hospital-gray">
+              현재 진행 중인 프로모션이 없습니다.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              {promoItems.map((promo: { id?: number; title: string; gradient: string; image_url?: string }, idx: number) => (
+                <PromotionCard
+                  key={promo.id ?? idx}
+                  title={promo.title}
+                  gradient={promo.gradient}
+                  imageUrl={promo.image_url ? `${API_BASE}${promo.image_url}` : undefined}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

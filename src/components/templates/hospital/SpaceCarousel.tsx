@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import { API_BASE } from '@/lib/api';
 
 interface SpaceImage {
   label: string;
@@ -22,6 +23,7 @@ interface SpaceCarouselProps {
 
 export default function SpaceCarousel({ spaces }: SpaceCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const items = spaces && spaces.length > 0 ? spaces : DEFAULT_SPACES;
 
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
@@ -70,15 +72,23 @@ export default function SpaceCarousel({ spaces }: SpaceCarouselProps) {
 
         {/* Carousel */}
         <div ref={scrollRef} className="snap-x-container gap-4">
-          {(spaces && spaces.length > 0 ? spaces : DEFAULT_SPACES).map((space, idx) => (
+          {items.map((space, idx) => (
             <div
               key={idx}
               className="w-[280px] md:w-[400px] lg:w-[500px] aspect-[16/10] rounded-sm overflow-hidden relative group"
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${space.gradient}`} />
+              {space.image_url ? (
+                <img
+                  src={`${API_BASE}${space.image_url}`}
+                  alt={space.label ?? '공간 사진'}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div className={`absolute inset-0 bg-gradient-to-br ${space.gradient}`} />
+              )}
               <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
               <div className="absolute bottom-4 left-4">
-                <span className="text-sm text-hospital-brown/60 font-medium">{space.label}</span>
+                <span className="text-sm text-white font-medium drop-shadow-md">{space.label}</span>
               </div>
             </div>
           ))}

@@ -16,40 +16,40 @@ const NAV_ITEMS = [
   { label: 'PROMOTION', href: '/exhibitions' },
   {
     label: '디자인 리프팅',
-    href: '#',
+    href: '/#treatments',
     children: [
-      { label: '써마지FLX', href: '#' },
-      { label: '울쎄라피프라임', href: '#' },
-      { label: '써펙트', href: '#' },
-      { label: '리프테라2', href: '#' },
+      { label: '써마지FLX', href: '/#treatments' },
+      { label: '울쎄라피프라임', href: '/#treatments' },
+      { label: '써펙트', href: '/#treatments' },
+      { label: '리프테라2', href: '/#treatments' },
     ],
   },
   {
     label: '모공 · 탄력 · 볼륨',
-    href: '#',
+    href: '/#treatments',
     children: [
-      { label: '스킨부스터', href: '#' },
-      { label: '콜라겐 부스터', href: '#' },
-      { label: '포텐자', href: '#' },
+      { label: '스킨부스터', href: '/#treatments' },
+      { label: '콜라겐 부스터', href: '/#treatments' },
+      { label: '포텐자', href: '/#treatments' },
     ],
   },
   {
     label: '쁘띠',
-    href: '#',
+    href: '/#treatments',
     children: [
-      { label: '보톡스', href: '#' },
-      { label: '필러', href: '#' },
-      { label: '브이디파인', href: '#' },
+      { label: '보톡스', href: '/#treatments' },
+      { label: '필러', href: '/#treatments' },
+      { label: '브이디파인', href: '/#treatments' },
     ],
   },
   {
     label: '기타 시술',
-    href: '#',
+    href: '/#treatments',
     children: [
-      { label: '에어녹스', href: '#' },
+      { label: '에어녹스', href: '/#treatments' },
     ],
   },
-  { label: '커뮤니티', href: '#' },
+  { label: '커뮤니티', href: '/exhibitions' },
 ];
 
 export default function Header() {
@@ -128,13 +128,13 @@ export default function Header() {
           <div className="flex items-center gap-3">
             {/* Language Toggle */}
             <div className="hidden md:flex items-center gap-1 text-sm text-white/70">
-              <button className="px-2 py-1 hover:text-white transition-colors cursor-pointer">EN</button>
+              <button aria-label="Switch to English" className="px-2 py-1 hover:text-white transition-colors cursor-pointer">EN</button>
               <span className="text-white/30">|</span>
-              <button className="px-2 py-1 text-white hover:text-white transition-colors cursor-pointer">KO</button>
+              <button aria-label="한국어로 변경" className="px-2 py-1 text-white hover:text-white transition-colors cursor-pointer">KO</button>
             </div>
 
             {/* Search */}
-            <button className="hidden md:flex p-2 text-white/70 hover:text-white transition-colors cursor-pointer">
+            <button aria-label="검색" className="hidden md:flex p-2 text-white/70 hover:text-white transition-colors cursor-pointer">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
@@ -194,9 +194,9 @@ export default function Header() {
               ))}
               <div className="border-t border-hospital-beige mt-2 pt-2 px-6">
                 <div className="flex items-center gap-3 py-2 text-sm text-hospital-gray">
-                  <button className="hover:text-hospital-dark transition-colors cursor-pointer">EN</button>
+                  <button aria-label="Switch to English" className="hover:text-hospital-dark transition-colors cursor-pointer">EN</button>
                   <span>|</span>
-                  <button className="text-hospital-dark font-medium cursor-pointer">KO</button>
+                  <button aria-label="한국어로 변경" className="text-hospital-dark font-medium cursor-pointer">KO</button>
                 </div>
               </div>
             </nav>

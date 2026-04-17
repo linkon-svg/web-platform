@@ -14,6 +14,7 @@ interface AdminSidebarProps {
   activeKey?: string;
   isOpen?: boolean;
   onClose?: () => void;
+  onLogout?: () => void;
 }
 
 /* ─── SVG Icons ─── */
@@ -68,6 +69,12 @@ const icons = {
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="10" cy="10" r="8" />
       <path d="M10 5v5l3 3" />
+    </svg>
+  ),
+  globe: (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="10" cy="10" r="8" />
+      <path d="M2 10h16M10 2c2.5 2.5 3.5 5 3.5 8s-1 5.5-3.5 8c-2.5-2.5-3.5-5-3.5-8s1-5.5 3.5-8z" />
     </svg>
   ),
   logout: (
@@ -179,6 +186,7 @@ export default function AdminSidebar({
   activeKey = 'dashboard',
   isOpen = false,
   onClose,
+  onLogout,
 }: AdminSidebarProps) {
   return (
     <>
@@ -259,6 +267,7 @@ export default function AdminSidebar({
         {/* Logout */}
         <div className="p-3 border-t border-white/10">
           <button
+            onClick={onLogout}
             className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-white/70 hover:bg-admin-sidebar-hover hover:text-white transition-colors"
           >
             {icons.logout}

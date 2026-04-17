@@ -1,3 +1,13 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { API_BASE } from '@/lib/api';
+
+interface HeroImage {
+  url: string;
+  filename: string;
+}
+
 interface HeroSectionProps {
   title?: string;
   subtitle?: string;
@@ -9,12 +19,30 @@ export default function HeroSection({
   subtitle = '당신의 아름다움이 피어나는 곳',
   className = '',
 }: HeroSectionProps) {
+  const [heroImages, setHeroImages] = useState<HeroImage[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/upload/hero`)
+      .then((res) => res.json())
+      .then((data) => setHeroImages(Array.isArray(data) ? data : []))
+      .catch(() => {});
+  }, []);
+
+  const backgroundImage = heroImages.length > 0 ? `${API_BASE}${heroImages[0].url}` : null;
+
   return (
     <section
       className={`relative w-full h-screen min-h-[600px] max-h-[900px] flex items-center justify-center ${className}`}
     >
-      {/* Background placeholder - gradient simulating clinic interior */}
-      <div className="absolute inset-0 bg-hero-placeholder" />
+      {/* Background - image or gradient fallback */}
+      {backgroundImage ? (
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${backgroundImage})` }}
+        />
+      ) : (
+        <div className="absolute inset-0 bg-hero-placeholder" />
+      )}
 
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-hospital-brown/60 via-hospital-brown/30 to-hospital-brown/70" />

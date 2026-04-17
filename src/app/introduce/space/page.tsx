@@ -1,8 +1,10 @@
-const API_BASE = 'http://localhost:8000';
+import { API_BASE } from '@/lib/api';
+
+const API_BASE_URL = 'http://localhost:8000';
 
 async function fetchAPI(endpoint: string) {
   try {
-    const res = await fetch(`${API_BASE}${endpoint}`, { cache: 'no-store' });
+    const res = await fetch(`${API_BASE_URL}${endpoint}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -36,10 +38,12 @@ export default async function SpacePage() {
   const spaces = await fetchAPI('/api/hospitals/1/spaces');
 
   const spaceItems = spaces && spaces.length > 0
-    ? spaces.map((s: { image_url: string; caption?: string }, idx: number) => ({
+    ? spaces.map((s: { id?: number; image_url: string; caption?: string }, idx: number) => ({
+        id: s.id,
         label: s.caption || `공간 ${idx + 1}`,
         gradient: GRADIENTS[idx % GRADIENTS.length],
         image_url: s.image_url,
+        caption: s.caption,
       }))
     : FALLBACK_SPACES;
 
@@ -63,24 +67,36 @@ export default async function SpacePage() {
           </div>
 
           {/* Space Gallery Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {spaceItems.map((space: { label: string; gradient: string; image_url?: string }, idx: number) => (
-              <div
-                key={idx}
-                className="aspect-[16/10] rounded-sm overflow-hidden relative group"
-              >
+          {spaceItems.length === 0 ? (
+            <div className="text-center py-12 text-hospital-gray">
+              등록된 공간 사진이 없습니다.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {spaceItems.map((space: { id?: number; label: string; gradient: string; image_url?: string; caption?: string }, idx: number) => (
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${space.gradient}`}
-                />
-                <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
-                <div className="absolute bottom-4 left-4">
-                  <span className="text-sm text-hospital-brown/60 font-medium">
-                    {space.label}
-                  </span>
+                  key={space.id ?? idx}
+                  className="aspect-[16/10] rounded-sm overflow-hidden relative group"
+                >
+                  {space.image_url ? (
+                    <img
+                      src={`${API_BASE}${space.image_url}`}
+                      alt={space.caption ?? space.label ?? '공간 사진'}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className={`absolute inset-0 bg-gradient-to-br ${space.gradient}`} />
+                  )}
+                  <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
+                  <div className="absolute bottom-4 left-4">
+                    <span className="text-sm text-hospital-brown/60 font-medium">
+                      {space.caption ?? space.label ?? ''}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

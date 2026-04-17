@@ -1,10 +1,13 @@
+'use client';
+
+import { API_BASE } from '@/lib/api';
 import DoctorCard from '@/components/templates/hospital/DoctorCard';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE_URL = 'http://localhost:8000';
 
 async function fetchAPI(endpoint: string) {
   try {
-    const res = await fetch(`${API_BASE}${endpoint}`, { cache: 'no-store' });
+    const res = await fetch(`${API_BASE_URL}${endpoint}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -52,11 +55,13 @@ export default async function StaffPage() {
   const doctors = await fetchAPI('/api/hospitals/1/doctors');
 
   const doctorList = doctors && doctors.length > 0
-    ? doctors.map((d: { name: string; title: string; photo_url?: string; education?: string[]; career?: string[] }) => ({
+    ? doctors.map((d: { id?: number; name: string; title: string; photo_url?: string; education?: string[]; career?: string[] }) => ({
+        id: d.id,
         name: d.name,
         title: d.title,
         education: d.education || [],
         career: d.career || [],
+        photo_url: d.photo_url,
       }))
     : FALLBACK_DOCTORS;
 
@@ -80,17 +85,24 @@ export default async function StaffPage() {
           </div>
 
           {/* Doctor List */}
-          <div className="space-y-16 lg:space-y-24">
-            {doctorList.map((doctor: { name: string; title: string; education: string[]; career: string[] }, idx: number) => (
-              <DoctorCard
-                key={idx}
-                name={doctor.name}
-                title={doctor.title}
-                education={doctor.education}
-                career={doctor.career}
-              />
-            ))}
-          </div>
+          {doctorList.length === 0 ? (
+            <div className="text-center py-12 text-hospital-gray">
+              등록된 의료진이 없습니다.
+            </div>
+          ) : (
+            <div className="space-y-16 lg:space-y-24">
+              {doctorList.map((doctor: { id?: number; name: string; title: string; education: string[]; career: string[]; photo_url?: string }, idx: number) => (
+                <DoctorCard
+                  key={doctor.id ?? idx}
+                  name={doctor.name}
+                  title={doctor.title}
+                  education={doctor.education}
+                  career={doctor.career}
+                  photoUrl={doctor.photo_url ? `${API_BASE}${doctor.photo_url}` : undefined}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

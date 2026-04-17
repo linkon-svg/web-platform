@@ -21,9 +21,11 @@ export default function CTASection() {
             당신의 아름다움이 피어나는 곳
           </p>
           <div className="mt-8">
-            <Button variant="secondary" size="lg">
-              상담 예약하기
-            </Button>
+            <a href="tel:02-6952-2586">
+              <Button variant="secondary" size="lg">
+                상담 예약하기
+              </Button>
+            </a>
           </div>
         </div>
       </div>

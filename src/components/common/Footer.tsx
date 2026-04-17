@@ -38,11 +38,11 @@ export default function Footer() {
       {/* Legal Links */}
       <div className="border-t border-hospital-gold-light/30">
         <div className="section-narrow py-4 flex flex-wrap items-center gap-4 text-xs text-hospital-gray">
-          <a href="#" className="hover:text-hospital-dark transition-colors">이용약관</a>
+          <a href="/terms" className="hover:text-hospital-dark transition-colors">이용약관</a>
           <span className="text-hospital-gray-light">·</span>
-          <a href="#" className="hover:text-hospital-dark transition-colors font-medium">개인정보처리방침</a>
+          <a href="/privacy" className="hover:text-hospital-dark transition-colors font-medium">개인정보처리방침</a>
           <span className="text-hospital-gray-light">·</span>
-          <a href="#" className="hover:text-hospital-dark transition-colors">미성년시술동의서</a>
+          <a href="/minor-consent" className="hover:text-hospital-dark transition-colors">미성년시술동의서</a>
         </div>
       </div>
 
