@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface MenuItem {
   label: string;
@@ -10,21 +11,26 @@ interface MenuItem {
 
 interface ShopHeaderProps {
   logo?: string;
+  shopName?: string;
   menuItems?: MenuItem[];
 }
 
 const defaultMenuItems: MenuItem[] = [
   { label: "쇼핑", href: "/templates/shopping/shop" },
   { label: "컬렉션", href: "/templates/shopping/shop" },
+  { label: "소개", href: "/templates/shopping/about" },
   { label: "매장", href: "/templates/shopping/stores" },
   { label: "소식", href: "/templates/shopping/news" },
 ];
 
 export default function ShopHeader({
   logo = "SOLID",
+  shopName,
   menuItems = defaultMenuItems,
 }: ShopHeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
+  const displayLogo = shopName || logo;
 
   return (
     <header
@@ -42,7 +48,7 @@ export default function ShopHeader({
             color: "var(--color-shop-black, #000)",
           }}
         >
-          {logo}
+          {displayLogo}
         </Link>
 
         {/* Desktop Nav */}
@@ -51,18 +57,15 @@ export default function ShopHeader({
             <Link
               key={item.href + item.label}
               href={item.href}
-              className="text-xs min-h-[44px] flex items-center transition-colors"
+              className="text-xs min-h-[44px] flex items-center transition-colors hover:opacity-70"
               style={{
                 fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",
                 letterSpacing: "0.1em",
-                color: "var(--color-shop-text, #000)",
+                color: pathname === item.href
+                  ? "var(--color-shop-text, #000)"
+                  : "var(--color-shop-text-secondary, #999)",
+                fontWeight: pathname === item.href ? 600 : 300,
               }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.color = "var(--color-shop-text-secondary, #999)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.color = "var(--color-shop-text, #000)")
-              }
             >
               {item.label.toUpperCase()}
             </Link>
@@ -106,7 +109,7 @@ export default function ShopHeader({
                 letterSpacing: "0.3em",
               }}
             >
-              {logo}
+              {displayLogo}
             </span>
             <button
               className="min-h-[44px] min-w-[44px] flex items-center justify-center text-2xl"

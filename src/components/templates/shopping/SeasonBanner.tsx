@@ -1,11 +1,14 @@
 import Link from "next/link";
 
+const API_BASE = 'http://localhost:8000';
+
 interface SeasonBannerProps {
   subtitle?: string;
   heading: string;
   description?: string;
   ctaText?: string;
   ctaLink?: string;
+  image?: string;
 }
 
 export default function SeasonBanner({
@@ -14,17 +17,26 @@ export default function SeasonBanner({
   description,
   ctaText = "컬렉션 보기",
   ctaLink = "/templates/shopping/shop",
+  image,
 }: SeasonBannerProps) {
+  const bgImage = image ? (image.startsWith('http') ? image : `${API_BASE}${image}`) : undefined;
+
   return (
     <section
-      className="relative w-full flex items-end justify-start px-6 lg:px-16"
+      className="relative w-full flex items-end justify-start px-6 lg:px-16 py-16 lg:py-0"
       style={{
-        height: "80vh",
+        minHeight: "60vh",
         backgroundColor: "var(--color-shop-hover, #333)",
+        backgroundImage: bgImage ? `url(${bgImage})` : undefined,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
     >
-      {/* Overlay content */}
-      <div className="relative z-10 pb-16 lg:pb-24 max-w-xl">
+      {/* Dark overlay for text readability */}
+      {bgImage && <div className="absolute inset-0 bg-black/40" />}
+
+      {/* Content */}
+      <div className="relative z-10 pb-12 lg:pb-24 max-w-xl">
         {subtitle && (
           <p
             className="text-xs mb-4 uppercase"

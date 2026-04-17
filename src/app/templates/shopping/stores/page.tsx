@@ -30,7 +30,7 @@ export default async function StoresPage() {
   return (
     <div style={{ backgroundColor: "var(--color-shop-bg, #FFF)" }}>
       <PromoBanner messages={promoMessages} />
-      <ShopHeader />
+      <ShopHeader shopName={config?.shop_name} />
 
       <section className="px-6 lg:px-12 py-20 lg:py-28">
         <h1
@@ -148,7 +148,7 @@ export default async function StoresPage() {
         </div>
       </section>
 
-      <ShopFooter />
+      <ShopFooter companyName={config?.shop_name_en || config?.shop_name} snsLinks={config?.sns_links} />
     </div>
   );
 }

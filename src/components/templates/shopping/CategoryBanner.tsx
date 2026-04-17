@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+const API_BASE = 'http://localhost:8000';
+
 interface CategoryBannerProps {
   title: string;
   description: string;
@@ -10,15 +12,24 @@ interface CategoryBannerProps {
 export default function CategoryBanner({
   title,
   description,
+  image,
   link,
 }: CategoryBannerProps) {
   return (
     <Link href={link} className="group relative block overflow-hidden">
-      {/* Image placeholder */}
+      {/* Image area */}
       <div
-        className="w-full aspect-[16/9] transition-all duration-500 group-hover:brightness-75"
+        className="w-full aspect-[16/9] transition-all duration-500 group-hover:brightness-75 overflow-hidden"
         style={{ backgroundColor: "var(--color-shop-bg-product, #F0F0F0)" }}
-      />
+      >
+        {image && (
+          <img
+            src={image.startsWith('http') ? image : `${API_BASE}${image}`}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        )}
+      </div>
 
       {/* Overlay text */}
       <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">

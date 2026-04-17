@@ -15,6 +15,7 @@ interface BizInfo {
 interface ShopFooterProps {
   companyName?: string;
   bizInfo?: BizInfo;
+  snsLinks?: { instagram?: string; youtube?: string; facebook?: string };
 }
 
 const defaultBizInfo: BizInfo = {
@@ -26,46 +27,47 @@ const defaultBizInfo: BizInfo = {
   email: "contact@solid.co.kr",
 };
 
-const footerLinks = {
-  about: {
-    title: "소개",
-    items: [
-      { label: "브랜드 소개", href: "/templates/shopping/about" },
-      { label: "매장 안내", href: "/templates/shopping/stores" },
-      { label: "채용", href: "#" },
-    ],
-  },
-  service: {
-    title: "고객 서비스",
-    items: [
-      { label: "주문 조회", href: "#" },
-      { label: "배송 안내", href: "#" },
-      { label: "교환/반품", href: "#" },
-      { label: "자주 묻는 질문", href: "#" },
-    ],
-  },
-  legal: {
-    title: "법적 고지",
-    items: [
-      { label: "이용약관", href: "#" },
-      { label: "개인정보처리방침", href: "#" },
-      { label: "소비자 분쟁해결", href: "#" },
-    ],
-  },
-  social: {
-    title: "소셜 미디어",
-    items: [
-      { label: "Instagram", href: "#" },
-      { label: "YouTube", href: "#" },
-      { label: "KakaoTalk", href: "#" },
-    ],
-  },
-};
-
 export default function ShopFooter({
   companyName = "SOLID",
   bizInfo = defaultBizInfo,
+  snsLinks,
 }: ShopFooterProps) {
+  const footerLinks = {
+    about: {
+      title: "소개",
+      items: [
+        { label: "브랜드 소개", href: "/templates/shopping/about" },
+        { label: "매장 안내", href: "/templates/shopping/stores" },
+        { label: "채용", href: "#" },
+      ],
+    },
+    service: {
+      title: "고객 서비스",
+      items: [
+        { label: "주문 조회", href: "#" },
+        { label: "배송 안내", href: "#" },
+        { label: "교환/반품", href: "#" },
+        { label: "자주 묻는 질문", href: "#" },
+      ],
+    },
+    legal: {
+      title: "법적 고지",
+      items: [
+        { label: "이용약관", href: "#" },
+        { label: "개인정보처리방침", href: "#" },
+        { label: "소비자 분쟁해결", href: "#" },
+      ],
+    },
+    social: {
+      title: "소셜 미디어",
+      items: [
+        { label: "Instagram", href: snsLinks?.instagram || "#" },
+        { label: "YouTube", href: snsLinks?.youtube || "#" },
+        { label: "KakaoTalk", href: "#" },
+      ],
+    },
+  };
+
   return (
     <footer
       className="border-t"
@@ -95,6 +97,8 @@ export default function ShopFooter({
                   <li key={item.label}>
                     <Link
                       href={item.href}
+                      target={item.href !== "#" ? "_blank" : undefined}
+                      rel={item.href !== "#" ? "noopener noreferrer" : undefined}
                       className="text-xs font-light transition-colors min-h-[44px] inline-flex items-center"
                       style={{
                         fontFamily: "var(--font-shop-sans, 'Noto Sans KR', sans-serif)",

@@ -30,26 +30,35 @@ export default async function ShoppingHomePage() {
     ]);
 
   const newProducts = (rawNewProducts ?? []).map(
-    (p: { id: number; name: string; price: number }) => ({
+    (p: any) => ({
       id: String(p.id),
       name: p.name,
       price: p.price,
+      salePrice: p.sale_price || undefined,
+      thumbnail: p.thumbnail,
+      isNew: p.is_new,
+      isRecommended: p.is_recommended,
     }),
   );
 
   const recommendedProducts = (rawRecommendedProducts ?? []).map(
-    (p: { id: number; name: string; price: number }) => ({
+    (p: any) => ({
       id: String(p.id),
       name: p.name,
       price: p.price,
+      salePrice: p.sale_price || undefined,
+      thumbnail: p.thumbnail,
+      isNew: p.is_new,
+      isRecommended: p.is_recommended,
     }),
   );
 
   const categories = (rawCategories ?? []).map(
-    (c: { name: string; description?: string }) => ({
+    (c: { name: string; description?: string; image?: string }) => ({
       title: c.name,
       description: c.description || "",
       link: "/templates/shopping/shop",
+      image: c.image,
     }),
   );
 
@@ -80,7 +89,7 @@ export default async function ShoppingHomePage() {
       <PromoBanner messages={promoMessages} />
 
       {/* 2. Header */}
-      <ShopHeader />
+      <ShopHeader shopName={config?.shop_name} />
 
       {/* 3. Hero — 2-column split */}
       <section className="grid grid-cols-1 md:grid-cols-2">
@@ -166,7 +175,7 @@ export default async function ShoppingHomePage() {
           className="flex gap-4 lg:gap-6 overflow-x-auto px-6 lg:px-12 snap-x snap-mandatory"
           style={{ scrollbarWidth: "none" }}
         >
-          {newProducts.map((product: { id: string; name: string; price: number }) => (
+          {newProducts.map((product: { id: string; name: string; price: number; salePrice?: number; thumbnail?: string; isNew?: boolean; isRecommended?: boolean }) => (
             <div key={product.id} className="snap-start flex-shrink-0 w-64 lg:w-72">
               <ProductCard {...product} />
             </div>
@@ -181,6 +190,7 @@ export default async function ShoppingHomePage() {
         description={seasonDescription}
         ctaText="컬렉션 보기"
         ctaLink="/templates/shopping/shop"
+        image={config?.season_banner_image}
       />
 
       {/* 6. Recommended Products — 3-col grid */}
@@ -207,7 +217,7 @@ export default async function ShoppingHomePage() {
           </p>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mt-10">
-          {recommendedProducts.map((product: { id: string; name: string; price: number }) => (
+          {recommendedProducts.map((product: { id: string; name: string; price: number; salePrice?: number; thumbnail?: string; isNew?: boolean; isRecommended?: boolean }) => (
             <ProductCard key={product.id} {...product} />
           ))}
         </div>
@@ -216,7 +226,7 @@ export default async function ShoppingHomePage() {
       {/* 7. Category Banners — 2x2 grid */}
       <section className="px-6 lg:px-12 pb-20 lg:pb-28">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
-          {categories.map((cat: { title: string; description: string; link: string }) => (
+          {categories.map((cat: { title: string; description: string; link: string; image?: string }) => (
             <CategoryBanner key={cat.title} {...cat} />
           ))}
         </div>
@@ -226,7 +236,18 @@ export default async function ShoppingHomePage() {
       <NewsCarousel title="새로운 소식" items={newsItems} />
 
       {/* 9. Footer */}
-      <ShopFooter />
+      <ShopFooter
+        companyName={config?.shop_name_en || config?.shop_name}
+        snsLinks={config?.sns_links}
+        bizInfo={config?.footer_info ? {
+          name: config.footer_info.company || '',
+          ceo: config.footer_info.ceo || '',
+          bizNumber: config.footer_info.business_number || '',
+          address: config.footer_info.address || '',
+          phone: config.footer_info.phone || '',
+          email: config.footer_info.email || '',
+        } : undefined}
+      />
     </div>
   );
 }
