@@ -46,6 +46,12 @@ const TEMPLATES = [
 
 const MENU_CARDS = [
   {
+    title: '사이트 관리',
+    description: '사이트 생성, 편집, 삭제',
+    href: '/admin/sites',
+    statKey: null,
+  },
+  {
     title: '병원 정보',
     description: '병원명, 주소, 전화번호 관리',
     href: '/admin/hospital',

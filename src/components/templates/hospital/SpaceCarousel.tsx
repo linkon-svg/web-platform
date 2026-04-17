@@ -1,22 +1,22 @@
 'use client';
 
-import { useRef } from 'react';
-
-interface SpaceImage {
-  label: string;
-  gradient: string;
-}
-
-const SPACES: SpaceImage[] = [
-  { label: '리셉션', gradient: 'from-hospital-beige to-hospital-cream' },
-  { label: '상담실', gradient: 'from-hospital-cream to-hospital-beige' },
-  { label: '시술실', gradient: 'from-hospital-gold-light/20 to-hospital-cream' },
-  { label: '대기실', gradient: 'from-hospital-beige to-hospital-gold-light/20' },
-  { label: '파우더룸', gradient: 'from-hospital-cream to-hospital-beige' },
-];
+import { useRef, useState, useEffect } from 'react';
+import { API_BASE } from '@/lib/api';
+import Loading from '@/components/common/Loading';
+import type { SpaceImage } from '@/types/hospital';
 
 export default function SpaceCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [spaces, setSpaces] = useState<SpaceImage[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/hospitals/1/spaces`)
+      .then((res) => res.json())
+      .then((data) => setSpaces(Array.isArray(data) ? data : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
 
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
@@ -64,20 +64,34 @@ export default function SpaceCarousel() {
         </div>
 
         {/* Carousel */}
-        <div ref={scrollRef} className="snap-x-container gap-4">
-          {SPACES.map((space, idx) => (
-            <div
-              key={idx}
-              className="w-[280px] md:w-[400px] lg:w-[500px] aspect-[16/10] rounded-sm overflow-hidden relative group"
-            >
-              <div className={`absolute inset-0 bg-gradient-to-br ${space.gradient}`} />
-              <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
-              <div className="absolute bottom-4 left-4">
-                <span className="text-sm text-hospital-brown/60 font-medium">{space.label}</span>
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <Loading size="md" />
+          </div>
+        ) : (
+          <div ref={scrollRef} className="snap-x-container gap-4">
+            {spaces.map((space) => (
+              <div
+                key={space.id}
+                className="w-[280px] md:w-[400px] lg:w-[500px] aspect-[16/10] rounded-sm overflow-hidden relative group"
+              >
+                {space.image_url ? (
+                  <img
+                    src={`${API_BASE}${space.image_url}`}
+                    alt={space.caption ?? '공간 사진'}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-br from-hospital-beige to-hospital-cream" />
+                )}
+                <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
+                <div className="absolute bottom-4 left-4">
+                  <span className="text-sm text-white font-medium drop-shadow-md">{space.caption ?? ''}</span>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

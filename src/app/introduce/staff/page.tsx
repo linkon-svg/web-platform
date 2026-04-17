@@ -1,42 +1,23 @@
-import DoctorCard from '@/components/templates/hospital/DoctorCard';
+'use client';
 
-const DOCTORS = [
-  {
-    name: '김종석',
-    title: '대표원장',
-    education: ['연세대학교 의과대학 졸업', '연세대학교 의과대학원 석사'],
-    career: [
-      '대한피부과학회 정회원',
-      '대한레이저의학회 정회원',
-      '대한미용피부외과학회 정회원',
-      '前 연세대학교 세브란스병원 피부과 전공의',
-    ],
-  },
-  {
-    name: '이수현',
-    title: '부원장',
-    education: ['서울대학교 의과대학 졸업', '서울대학교 의과대학원 석사'],
-    career: [
-      '대한레이저의학회 정회원',
-      '대한피부과학회 정회원',
-      '前 서울대학교병원 피부과 전공의',
-      '국제 피부과학회(ISD) 회원',
-    ],
-  },
-  {
-    name: '박지영',
-    title: '원장',
-    education: ['고려대학교 의과대학 졸업', '고려대학교 의과대학원 석사'],
-    career: [
-      '대한미용피부외과학회 정회원',
-      '대한피부과학회 정회원',
-      '前 고려대학교 안암병원 피부과 전공의',
-      '대한비만학회 정회원',
-    ],
-  },
-];
+import { useState, useEffect } from 'react';
+import { API_BASE } from '@/lib/api';
+import DoctorCard from '@/components/templates/hospital/DoctorCard';
+import Loading from '@/components/common/Loading';
+import type { Doctor } from '@/types/hospital';
 
 export default function StaffPage() {
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/hospitals/1/doctors`)
+      .then((res) => res.json())
+      .then((data) => setDoctors(Array.isArray(data) ? data : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <>
       {/* Spacer for fixed header */}
@@ -57,17 +38,28 @@ export default function StaffPage() {
           </div>
 
           {/* Doctor List */}
-          <div className="space-y-16 lg:space-y-24">
-            {DOCTORS.map((doctor, idx) => (
-              <DoctorCard
-                key={idx}
-                name={doctor.name}
-                title={doctor.title}
-                education={doctor.education}
-                career={doctor.career}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <Loading size="md" />
+            </div>
+          ) : doctors.length === 0 ? (
+            <div className="text-center py-12 text-hospital-gray">
+              등록된 의료진이 없습니다.
+            </div>
+          ) : (
+            <div className="space-y-16 lg:space-y-24">
+              {doctors.map((doctor) => (
+                <DoctorCard
+                  key={doctor.id}
+                  name={doctor.name}
+                  title={doctor.title}
+                  education={doctor.education}
+                  career={doctor.career}
+                  photoUrl={doctor.photo_url ? `${API_BASE}${doctor.photo_url}` : undefined}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

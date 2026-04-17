@@ -6,7 +6,6 @@ import { API_BASE } from '@/lib/api';
 import { AdminCard, AdminButton } from '@/components/admin';
 
 interface HeroImage {
-  file_path: string;
   url: string;
   filename: string;
 }
@@ -65,7 +64,7 @@ export default function AdminHeroPage() {
     }
   };
 
-  const handleDelete = async (filePath: string) => {
+  const handleDelete = async (url: string) => {
     if (!confirm('이 이미지를 삭제하시겠습니까?')) return;
     setMessage(null);
     try {
@@ -75,7 +74,7 @@ export default function AdminHeroPage() {
           'Content-Type': 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ file_path: filePath }),
+        body: JSON.stringify({ url: url }),
       });
       if (!res.ok) throw new Error('Delete failed');
       setMessage({ type: 'success', text: '이미지가 삭제되었습니다.' });
@@ -120,9 +119,13 @@ export default function AdminHeroPage() {
 
       <AdminCard title="이미지 업로드">
         <div
+          role="button"
+          tabIndex={0}
+          aria-label="히어로 이미지 업로드 영역"
           onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInputRef.current?.click(); } }}
           className="flex flex-col items-center justify-center h-48 rounded-lg border-2 border-dashed border-admin-border hover:border-admin-primary/50 hover:bg-admin-bg cursor-pointer transition-colors"
         >
           {uploading ? (
@@ -167,7 +170,7 @@ export default function AdminHeroPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {images.map((img) => (
-              <div key={img.file_path} className="relative group rounded-lg overflow-hidden border border-admin-border">
+              <div key={img.url} className="relative group rounded-lg overflow-hidden border border-admin-border">
                 <img
                   src={img.url.startsWith('http') ? img.url : `${API_BASE}${img.url}`}
                   alt={img.filename}
@@ -177,7 +180,7 @@ export default function AdminHeroPage() {
                   <p className="text-xs text-white truncate">{img.filename}</p>
                 </div>
                 <button
-                  onClick={() => handleDelete(img.file_path)}
+                  onClick={() => handleDelete(img.url)}
                   className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-black/60 text-white hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
                   aria-label="이미지 삭제"
                 >

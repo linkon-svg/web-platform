@@ -1,41 +1,26 @@
-import PromotionCard from '@/components/templates/hospital/PromotionCard';
+'use client';
 
-const PROMOTIONS = [
-  {
-    title: '써마지FLX 400샷 특별가',
-    gradient: 'from-hospital-beige to-hospital-cream',
-  },
-  {
-    title: '울쎄라피 프라임 리프팅 패키지',
-    gradient: 'from-hospital-cream to-hospital-beige',
-  },
-  {
-    title: '스킨부스터 3회 프로그램 할인',
-    gradient: 'from-hospital-gold-light/20 to-hospital-cream',
-  },
-  {
-    title: '보톡스 + 필러 동시 시술 혜택',
-    gradient: 'from-hospital-beige to-hospital-gold-light/20',
-  },
-  {
-    title: '엑소좀 재생 관리 신규 론칭 이벤트',
-    gradient: 'from-hospital-cream to-hospital-beige',
-  },
-  {
-    title: '주벨룩 볼륨 3회 패키지 특가',
-    gradient: 'from-hospital-beige to-hospital-cream',
-  },
-  {
-    title: '써펙트 모공 집중 관리 프로그램',
-    gradient: 'from-hospital-gold-light/20 to-hospital-beige',
-  },
-  {
-    title: '리쥬란 힐러 첫 시술 할인 이벤트',
-    gradient: 'from-hospital-cream to-hospital-gold-light/20',
-  },
-];
+import { useState, useEffect } from 'react';
+import { API_BASE } from '@/lib/api';
+import PromotionCard from '@/components/templates/hospital/PromotionCard';
+import Loading from '@/components/common/Loading';
+import type { Promotion } from '@/types/hospital';
 
 export default function ExhibitionsPage() {
+  const [promotions, setPromotions] = useState<Promotion[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/hospitals/1/promotions`)
+      .then((res) => res.json())
+      .then((data) => {
+        const items = Array.isArray(data) ? data : [];
+        setPromotions(items.filter((p: Promotion) => p.is_active));
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <>
       {/* Spacer for fixed header */}
@@ -54,15 +39,25 @@ export default function ExhibitionsPage() {
           </div>
 
           {/* Promotion Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {PROMOTIONS.map((promo, idx) => (
-              <PromotionCard
-                key={idx}
-                title={promo.title}
-                gradient={promo.gradient}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <Loading size="md" />
+            </div>
+          ) : promotions.length === 0 ? (
+            <div className="text-center py-12 text-hospital-gray">
+              현재 진행 중인 프로모션이 없습니다.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+              {promotions.map((promo) => (
+                <PromotionCard
+                  key={promo.id}
+                  title={promo.title}
+                  imageUrl={promo.image_url ? `${API_BASE}${promo.image_url}` : undefined}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

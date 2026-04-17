@@ -1,9 +1,28 @@
 'use client';
 
-import Button from '@/components/common/Button';
+import { useState, useEffect } from 'react';
+import { API_BASE } from '@/lib/api';
+
+const DEFAULT_ADDRESS = '서울특별시 강남구 강남대로 424 (신사빌딩) 6층';
 
 export default function MapSection() {
-  const address = '서울특별시 강남구 강남대로 424 (신사빌딩) 6층';
+  const [address, setAddress] = useState(DEFAULT_ADDRESS);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/hospitals/1`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch hospital');
+        return res.json();
+      })
+      .then((data: { address?: string }) => {
+        if (data.address) {
+          setAddress(data.address);
+        }
+      })
+      .catch(() => {
+        // Fall back to hardcoded address (already set as default)
+      });
+  }, []);
 
   const handleCopy = async () => {
     try {
@@ -20,6 +39,21 @@ export default function MapSection() {
       alert('주소가 복사되었습니다.');
     }
   };
+
+  const mapLinks = [
+    {
+      label: '네이버지도',
+      href: `https://map.naver.com/v5/search/${encodeURIComponent(address)}`,
+    },
+    {
+      label: '카카오맵',
+      href: `https://map.kakao.com/?q=${encodeURIComponent(address)}`,
+    },
+    {
+      label: '구글맵',
+      href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`,
+    },
+  ];
 
   return (
     <section className="section-padding bg-white">
@@ -88,15 +122,17 @@ export default function MapSection() {
             <div>
               <h3 className="text-sm font-medium text-hospital-dark mb-3">지도 앱으로 열기</h3>
               <div className="flex flex-wrap gap-2">
-                <Button variant="outline" size="sm">
-                  네이버지도
-                </Button>
-                <Button variant="outline" size="sm">
-                  카카오맵
-                </Button>
-                <Button variant="outline" size="sm">
-                  구글맵
-                </Button>
+                {mapLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center rounded-sm font-medium transition-all duration-200 ease-out cursor-pointer bg-transparent border border-hospital-gold text-hospital-gold hover:bg-hospital-gold hover:text-white min-h-[36px] px-4 py-2 text-sm"
+                  >
+                    {link.label}
+                  </a>
+                ))}
               </div>
             </div>
           </div>

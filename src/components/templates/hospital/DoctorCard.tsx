@@ -4,6 +4,7 @@ interface DoctorCardProps {
   education: string[];
   career: string[];
   imageGradient?: string;
+  photoUrl?: string;
 }
 
 export default function DoctorCard({
@@ -12,14 +13,21 @@ export default function DoctorCard({
   education,
   career,
   imageGradient = 'from-hospital-beige via-hospital-cream to-hospital-beige',
+  photoUrl,
 }: DoctorCardProps) {
   return (
     <div className="group">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-        {/* Portrait placeholder */}
-        <div className={`aspect-[3/4] rounded-sm bg-gradient-to-b ${imageGradient} flex items-end justify-center overflow-hidden`}>
-          <div className="w-3/4 h-3/4 bg-gradient-to-t from-hospital-brown-light/20 to-transparent rounded-t-full" />
-        </div>
+        {/* Portrait */}
+        {photoUrl ? (
+          <div className="aspect-[3/4] rounded-sm overflow-hidden">
+            <img src={photoUrl} alt={name} className="w-full h-full object-cover" />
+          </div>
+        ) : (
+          <div className={`aspect-[3/4] rounded-sm bg-gradient-to-b ${imageGradient} flex items-end justify-center overflow-hidden`}>
+            <div className="w-3/4 h-3/4 bg-gradient-to-t from-hospital-brown-light/20 to-transparent rounded-t-full" />
+          </div>
+        )}
 
         {/* Info */}
         <div className="py-4">

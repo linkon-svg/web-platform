@@ -1,15 +1,22 @@
-const SPACE_IMAGES = [
-  { label: '리셉션', gradient: 'from-hospital-beige to-hospital-cream' },
-  { label: '상담실', gradient: 'from-hospital-cream to-hospital-beige' },
-  { label: '시술실 A', gradient: 'from-hospital-gold-light/20 to-hospital-cream' },
-  { label: '시술실 B', gradient: 'from-hospital-beige to-hospital-gold-light/20' },
-  { label: '대기실', gradient: 'from-hospital-cream to-hospital-beige' },
-  { label: '파우더룸', gradient: 'from-hospital-beige to-hospital-cream' },
-  { label: 'VIP 룸', gradient: 'from-hospital-gold-light/20 to-hospital-beige' },
-  { label: '복도', gradient: 'from-hospital-cream to-hospital-gold-light/20' },
-];
+'use client';
+
+import { useState, useEffect } from 'react';
+import { API_BASE } from '@/lib/api';
+import Loading from '@/components/common/Loading';
+import type { SpaceImage } from '@/types/hospital';
 
 export default function SpacePage() {
+  const [spaces, setSpaces] = useState<SpaceImage[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/hospitals/1/spaces`)
+      .then((res) => res.json())
+      .then((data) => setSpaces(Array.isArray(data) ? data : []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <>
       {/* Spacer for fixed header */}
@@ -30,24 +37,40 @@ export default function SpacePage() {
           </div>
 
           {/* Space Gallery Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {SPACE_IMAGES.map((space, idx) => (
-              <div
-                key={idx}
-                className="aspect-[16/10] rounded-sm overflow-hidden relative group"
-              >
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <Loading size="md" />
+            </div>
+          ) : spaces.length === 0 ? (
+            <div className="text-center py-12 text-hospital-gray">
+              등록된 공간 사진이 없습니다.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {spaces.map((space) => (
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${space.gradient}`}
-                />
-                <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
-                <div className="absolute bottom-4 left-4">
-                  <span className="text-sm text-hospital-brown/60 font-medium">
-                    {space.label}
-                  </span>
+                  key={space.id}
+                  className="aspect-[16/10] rounded-sm overflow-hidden relative group"
+                >
+                  {space.image_url ? (
+                    <img
+                      src={`${API_BASE}${space.image_url}`}
+                      alt={space.caption ?? '공간 사진'}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 bg-gradient-to-br from-hospital-beige to-hospital-cream" />
+                  )}
+                  <div className="absolute inset-0 bg-black/5 group-hover:bg-black/0 transition-colors duration-300" />
+                  <div className="absolute bottom-4 left-4">
+                    <span className="text-sm text-hospital-brown/60 font-medium">
+                      {space.caption ?? ''}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

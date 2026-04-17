@@ -1,8 +1,9 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import { API_BASE } from '@/lib/api';
 
-const HOURS = [
+const DEFAULT_HOURS = [
   { day: '평일', time: '10:00 - 20:30', color: 'text-hospital-dark' },
   { day: '토요일', time: '10:00 - 16:00', color: 'text-hospital-gold-dark' },
   { day: '일요일', time: '10:00 - 16:00', color: 'text-red-500' },
@@ -11,6 +12,26 @@ const HOURS = [
 ];
 
 const DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
+interface ScheduleResponse {
+  id: number;
+  hospital_id: number;
+  weekday: string | null;
+  saturday: string | null;
+  sunday: string | null;
+  holiday: string | null;
+  lunch_time: string | null;
+}
+
+function mapScheduleToHours(data: ScheduleResponse) {
+  return [
+    { day: '평일', time: data.weekday ?? '10:00 - 20:30', color: 'text-hospital-dark' },
+    { day: '토요일', time: data.saturday ?? '10:00 - 16:00', color: 'text-hospital-gold-dark' },
+    { day: '일요일', time: data.sunday ?? '10:00 - 16:00', color: 'text-red-500' },
+    { day: '공휴일', time: data.holiday ?? '10:00 - 16:00', color: 'text-red-500' },
+    { day: '점심시간', time: data.lunch_time ?? '없음', color: 'text-hospital-gray-light' },
+  ];
+}
 
 function getCalendarDays(year: number, month: number) {
   const firstDay = new Date(year, month, 1).getDay();
@@ -45,6 +66,26 @@ export default function ScheduleTable() {
   const monthName = now.toLocaleDateString('en-US', { month: 'long' });
   const cells = useMemo(() => getCalendarDays(year, month), [year, month]);
 
+  const [hours, setHours] = useState(DEFAULT_HOURS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/hospitals/1/schedule`)
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch schedule');
+        return res.json();
+      })
+      .then((data: ScheduleResponse) => {
+        setHours(mapScheduleToHours(data));
+      })
+      .catch(() => {
+        // Fall back to hardcoded values (already set as default)
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <section className="section-padding bg-white">
       <div className="section-narrow">
@@ -68,12 +109,23 @@ export default function ScheduleTable() {
 
             {/* Hours table */}
             <div className="space-y-2">
-              {HOURS.map((item, idx) => (
-                <div key={idx} className="flex items-center justify-between text-sm">
-                  <span className={`font-medium ${item.color}`}>{item.day}</span>
-                  <span className="text-hospital-gray">{item.time}</span>
+              {loading ? (
+                <div className="space-y-2">
+                  {[...Array(5)].map((_, idx) => (
+                    <div key={idx} className="flex items-center justify-between text-sm">
+                      <span className="h-4 w-12 bg-hospital-beige rounded animate-pulse" />
+                      <span className="h-4 w-24 bg-hospital-beige rounded animate-pulse" />
+                    </div>
+                  ))}
                 </div>
-              ))}
+              ) : (
+                hours.map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between text-sm">
+                    <span className={`font-medium ${item.color}`}>{item.day}</span>
+                    <span className="text-hospital-gray">{item.time}</span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
