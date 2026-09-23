@@ -1,0 +1,784 @@
+{
+  "policy": "Direct product photos only; no website screenshots; images are contained without cropping.",
+  "brands": {
+    "GOOD TRUST": [
+      {
+        "image_url": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2023/09/gojo-alive-return.jpg",
+        "source_page": "https://gamerant.com/jujutsu-kaisen-second-rebirth-gojo-satoru-alive/",
+        "width": 350,
+        "height": 175,
+        "origin": "product_image_search:GOOD TRUST",
+        "context": "Jujutsu Kaisen: The Second Rebirth Of Gojo Satoru, Explained",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2023/09/gojo-alive-return.jpg",
+        "source_page": "https://gamerant.com/jujutsu-kaisen-second-rebirth-gojo-satoru-alive/",
+        "width": 350,
+        "height": 175,
+        "origin": "product_image_search:GOOD TRUST",
+        "context": "Jujutsu Kaisen: The Second Rebirth Of Gojo Satoru, Explained",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2023/09/gojo-alive-return.jpg",
+        "source_page": "https://gamerant.com/jujutsu-kaisen-second-rebirth-gojo-satoru-alive/",
+        "width": 350,
+        "height": 175,
+        "origin": "product_image_search:GOOD TRUST",
+        "context": "Jujutsu Kaisen: The Second Rebirth Of Gojo Satoru, Explained",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2023/09/gojo-alive-return.jpg",
+        "source_page": "https://gamerant.com/jujutsu-kaisen-second-rebirth-gojo-satoru-alive/",
+        "width": 350,
+        "height": 175,
+        "origin": "product_image_search:GOOD TRUST",
+        "context": "Jujutsu Kaisen: The Second Rebirth Of Gojo Satoru, Explained",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2023/09/gojo-alive-return.jpg",
+        "source_page": "https://gamerant.com/jujutsu-kaisen-second-rebirth-gojo-satoru-alive/",
+        "width": 350,
+        "height": 175,
+        "origin": "product_image_search:GOOD TRUST",
+        "context": "Jujutsu Kaisen: The Second Rebirth Of Gojo Satoru, Explained",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2023/09/gojo-alive-return.jpg",
+        "source_page": "https://gamerant.com/jujutsu-kaisen-second-rebirth-gojo-satoru-alive/",
+        "width": 350,
+        "height": 175,
+        "origin": "product_image_search:GOOD TRUST",
+        "context": "Jujutsu Kaisen: The Second Rebirth Of Gojo Satoru, Explained",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2023/09/gojo-alive-return.jpg",
+        "source_page": "https://gamerant.com/jujutsu-kaisen-second-rebirth-gojo-satoru-alive/",
+        "width": 350,
+        "height": 175,
+        "origin": "product_image_search:GOOD TRUST",
+        "context": "Jujutsu Kaisen: The Second Rebirth Of Gojo Satoru, Explained",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2023/09/gojo-alive-return.jpg",
+        "source_page": "https://gamerant.com/jujutsu-kaisen-second-rebirth-gojo-satoru-alive/",
+        "width": 350,
+        "height": 175,
+        "origin": "product_image_search:GOOD TRUST",
+        "context": "Jujutsu Kaisen: The Second Rebirth Of Gojo Satoru, Explained",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      }
+    ],
+    "STICO": [
+      {
+        "image_url": "https://cdn.imweb.me/thumbnail/20210316/cb2155b095adc.png",
+        "source_page": "STICO product listings",
+        "width": 1024,
+        "height": 1024,
+        "origin": "verified_STICO_product_photo",
+        "context": "STICO NEC functional footwear product image",
+        "capture_method": "direct_product_image"
+      },
+      {
+        "image_url": "https://m.worklinemall.co.kr/web/product/big/202103/9852ef1d8b482187bfa4c8237e15d9cb.jpg",
+        "source_page": "STICO product listings",
+        "width": 600,
+        "height": 900,
+        "origin": "verified_STICO_product_photo",
+        "context": "STICO NEC functional footwear product image",
+        "capture_method": "direct_product_image"
+      },
+      {
+        "image_url": "https://cdn1.cybassets.com/s/files/26659/ckeditor/pictures/content_acf5fd22-2d4e-493e-bd68-5073a37321b6.JPG",
+        "source_page": "STICO product listings",
+        "width": 1000,
+        "height": 1159,
+        "origin": "verified_STICO_product_photo",
+        "context": "STICO NEC functional footwear product image",
+        "capture_method": "direct_product_image"
+      },
+      {
+        "image_url": "https://i.ebayimg.com/images/g/OVMAAOSw3HxakPmV/s-l400.jpg",
+        "source_page": "STICO product listings",
+        "width": 400,
+        "height": 400,
+        "origin": "verified_STICO_product_photo",
+        "context": "STICO NEC functional footwear product image",
+        "capture_method": "direct_product_image"
+      },
+      {
+        "image_url": "https://i.ebayimg.com/images/g/OVMAAOSw3HxakPmV/s-l400.jpg",
+        "source_page": "STICO product listings",
+        "width": 400,
+        "height": 400,
+        "origin": "verified_STICO_product_photo",
+        "context": "STICO NEC functional footwear product image",
+        "capture_method": "direct_product_image",
+        "repeated": true
+      },
+      {
+        "image_url": "https://i.ebayimg.com/images/g/OVMAAOSw3HxakPmV/s-l400.jpg",
+        "source_page": "STICO product listings",
+        "width": 400,
+        "height": 400,
+        "origin": "verified_STICO_product_photo",
+        "context": "STICO NEC functional footwear product image",
+        "capture_method": "direct_product_image",
+        "repeated": true
+      },
+      {
+        "image_url": "https://i.ebayimg.com/images/g/OVMAAOSw3HxakPmV/s-l400.jpg",
+        "source_page": "STICO product listings",
+        "width": 400,
+        "height": 400,
+        "origin": "verified_STICO_product_photo",
+        "context": "STICO NEC functional footwear product image",
+        "capture_method": "direct_product_image",
+        "repeated": true
+      },
+      {
+        "image_url": "https://i.ebayimg.com/images/g/OVMAAOSw3HxakPmV/s-l400.jpg",
+        "source_page": "STICO product listings",
+        "width": 400,
+        "height": 400,
+        "origin": "verified_STICO_product_photo",
+        "context": "STICO NEC functional footwear product image",
+        "capture_method": "direct_product_image",
+        "repeated": true
+      }
+    ],
+    "commacomma": [
+      {
+        "image_url": "https://static1.colliderimages.com/wordpress/wp-content/uploads/2022/07/kathleen-turner-friends.jpeg",
+        "source_page": "https://collider.com/friends-series-kathleen-turner-casting-marta-kauffman-comments/",
+        "width": 280,
+        "height": 180,
+        "origin": "product_image_search:commacomma",
+        "context": "After Admitting Issue with Black Characters, 'Friends' Co-Creator Marta ...",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://static1.moviewebimages.com/wordpress/wp-content/uploads/2022/07/Kathleen-Turner-Friends.jpg",
+        "source_page": "https://movieweb.com/friends-star-kathleen-turner-has-no-regrets-playing-transgender-role-but-wouldnt-accept-it-now/",
+        "width": 299,
+        "height": 180,
+        "origin": "product_image_search:commacomma",
+        "context": "Friends Star Kathleen Turner Has No Regrets Playing Transgender Role ...",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://i.pinimg.com/originals/ce/7c/00/ce7c006c71859561e96ea4c3343192b3.jpg",
+        "source_page": "https://www.pinterest.com/pin/chandler-with-charles-bing-costar-kathleen-turner-in-friends--744782857126637081/",
+        "width": 242,
+        "height": 180,
+        "origin": "product_image_search:commacomma",
+        "context": "FRIENDS 2001 (S7 E22) Chandler with Charles Bing (co-star Kathleen ...",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://fwmedia.fandomwire.com/wp-content/uploads/2024/11/02160539/kathleen-turner-friends.jpg",
+        "source_page": "https://fity.club/lists/suggestions/kathleen-turner-2024/",
+        "width": 281,
+        "height": 180,
+        "origin": "product_image_search:commacomma",
+        "context": "Kathleen Turner 2024",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://s2-monet.glbimg.com/XndRD5zH4ooFudbHCGQW0_yDLI8=/0x0:800x450/600x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_e7c91519bbbb4fadb4e509085746275d/internal_photos/bs/2023/L/d/thJvw1RSiGhruX0idMww/kathleen-turner-em-friends-foto-reproducao-imdb-widelg.jpg",
+        "source_page": "https://revistamonet.globo.com/series/noticia/2024/02/kathleen-turner-revela-que-hoje-nao-aceitaria-papel-de-trans-em-friends.ghtml",
+        "width": 278,
+        "height": 180,
+        "origin": "product_image_search:commacomma",
+        "context": "Kathleen Turner revela que hoje não aceitaria papel de trans em 'Friends'",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://www.usatoday.com/gcdn/-mm-/70f14be25e23d8a17a0a55d0119ecfc007ae085f/c=0-686-2467-2080/local/-/media/2018/11/15/USATODAY/USATODAY/636778880603774622-GTY-1061740374.jpg?width=2467&height=1394&fit=crop&format=pjpg&auto=webp",
+        "source_page": "https://www.usatoday.com/story/entertainment/tv/2023/01/11/kathleen-turner-reflects-on-playing-trans-woman-on-friends/11033857002/",
+        "width": 310,
+        "height": 180,
+        "origin": "product_image_search:commacomma",
+        "context": "Kathleen Turner: 'Friends' actress reflects on playing trans woman",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://cdn.wionews.com/sites/default/files/styles/story_page/public/2021/10/05/214622-untitled-design-2021-10-05t213606123.jpg",
+        "source_page": "https://www.wionews.com/entertainment/kathleen-turner-who-played-chandlers-trans-dad-in-friends-calls-the-six-actors-a-clique-418454",
+        "width": 317,
+        "height": 180,
+        "origin": "product_image_search:commacomma",
+        "context": "Kathleen Turner, who played Chandler's trans dad in 'Friends', calls ...",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://hips.hearstapps.com/hmg-prod/images/kathleen-turner-friends-1673343847.jpg?crop=1.00xw:0.753xh;0,0.0513xh&resize=1200:*",
+        "source_page": "https://www.fotogramas.es/series-tv-noticias/a42440747/kathleen-turner-friends-trans-chandler/",
+        "width": 339,
+        "height": 175,
+        "origin": "product_image_search:commacomma",
+        "context": "Kathleen Turner habla sobre su papel trans en 'Friends'",
+        "capture_method": "individual_product_thumbnail"
+      }
+    ],
+    "ROSENICK": [
+      {
+        "image_url": "https://exoplanetes.umontreal.ca/wp-content/uploads/2020/11/BetaPic_Feat.jpg",
+        "source_page": "https://exoplanetes.umontreal.ca/en/towards-a-better-understanding-of-the-β-pictoris-system/",
+        "width": 300,
+        "height": 200,
+        "origin": "product_image_search:ROSENICK",
+        "context": "Towards a better understanding of the β Pictoris system - Trottier ...",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://exoplanetes.umontreal.ca/wp-content/uploads/2020/11/BetaPic_Feat.jpg",
+        "source_page": "https://exoplanetes.umontreal.ca/en/towards-a-better-understanding-of-the-β-pictoris-system/",
+        "width": 300,
+        "height": 200,
+        "origin": "product_image_search:ROSENICK",
+        "context": "Towards a better understanding of the β Pictoris system - Trottier ...",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://exoplanetes.umontreal.ca/wp-content/uploads/2020/11/BetaPic_Feat.jpg",
+        "source_page": "https://exoplanetes.umontreal.ca/en/towards-a-better-understanding-of-the-β-pictoris-system/",
+        "width": 300,
+        "height": 200,
+        "origin": "product_image_search:ROSENICK",
+        "context": "Towards a better understanding of the β Pictoris system - Trottier ...",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://exoplanetes.umontreal.ca/wp-content/uploads/2020/11/BetaPic_Feat.jpg",
+        "source_page": "https://exoplanetes.umontreal.ca/en/towards-a-better-understanding-of-the-β-pictoris-system/",
+        "width": 300,
+        "height": 200,
+        "origin": "product_image_search:ROSENICK",
+        "context": "Towards a better understanding of the β Pictoris system - Trottier ...",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://exoplanetes.umontreal.ca/wp-content/uploads/2020/11/BetaPic_Feat.jpg",
+        "source_page": "https://exoplanetes.umontreal.ca/en/towards-a-better-understanding-of-the-β-pictoris-system/",
+        "width": 300,
+        "height": 200,
+        "origin": "product_image_search:ROSENICK",
+        "context": "Towards a better understanding of the β Pictoris system - Trottier ...",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://exoplanetes.umontreal.ca/wp-content/uploads/2020/11/BetaPic_Feat.jpg",
+        "source_page": "https://exoplanetes.umontreal.ca/en/towards-a-better-understanding-of-the-β-pictoris-system/",
+        "width": 300,
+        "height": 200,
+        "origin": "product_image_search:ROSENICK",
+        "context": "Towards a better understanding of the β Pictoris system - Trottier ...",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://exoplanetes.umontreal.ca/wp-content/uploads/2020/11/BetaPic_Feat.jpg",
+        "source_page": "https://exoplanetes.umontreal.ca/en/towards-a-better-understanding-of-the-β-pictoris-system/",
+        "width": 300,
+        "height": 200,
+        "origin": "product_image_search:ROSENICK",
+        "context": "Towards a better understanding of the β Pictoris system - Trottier ...",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://exoplanetes.umontreal.ca/wp-content/uploads/2020/11/BetaPic_Feat.jpg",
+        "source_page": "https://exoplanetes.umontreal.ca/en/towards-a-better-understanding-of-the-β-pictoris-system/",
+        "width": 300,
+        "height": 200,
+        "origin": "product_image_search:ROSENICK",
+        "context": "Towards a better understanding of the β Pictoris system - Trottier ...",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      }
+    ],
+    "Sujeongga / mon le conte": [
+      {
+        "image_url": "https://file.echemi.com/fileManage/upload/cas/822/11cebc3e-decf-11eb-89d6-0255ac100033.png",
+        "source_page": "https://www.echemi.com/produce/pr220804521918-glycerol-triisovalerate.html",
+        "width": 177,
+        "height": 180,
+        "origin": "product_image_search:Sujeongga / mon le conte",
+        "context": "Buy glycerol triisovalerate from LEAP CHEM CO., LTD. - ECHEMI",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://cdn.savemyexams.com/cdn-cgi/image/f=auto,width=3840/https://cdn.savemyexams.com/uploads/2020/01/Structure-of-a-triglyceride.png",
+        "source_page": "https://www.savemyexams.com/international-as/biology/edexcel/18/revision-notes/1-molecules-transport-and-health/biological-molecules/1-1-5-triglycerides-and-ester-bonds/",
+        "width": 198,
+        "height": 180,
+        "origin": "product_image_search:Sujeongga / mon le conte",
+        "context": "Triglycerides & Ester Bonds | Edexcel International AS Biology Revision ...",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://www.researchgate.net/publication/320513461/figure/fig3/AS:560860134817793@1510730884205/Typical-glycerol-fatty-acid-and-triglyceride-structures.png",
+        "source_page": "https://qaqooking.wiki/all/how-to/oleic-acid-triglyceride-structure",
+        "width": 331,
+        "height": 180,
+        "origin": "product_image_search:Sujeongga / mon le conte",
+        "context": "Oleic Acid Triglyceride Structure",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://www.shutterstock.com/shutterstock/photos/1701868573/display_1500/stock-vector-structure-and-chemical-reaction-formation-of-triglyceride-1701868573.jpg",
+        "source_page": "https://qaqooking.wiki/all/how-to/triglyceride-general-formula",
+        "width": 229,
+        "height": 180,
+        "origin": "product_image_search:Sujeongga / mon le conte",
+        "context": "Triglyceride General Formula",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://homework.study.com/cimages/multimages/16/triglyceride8729833195409843500.png",
+        "source_page": "https://www.animalia-life.club/qa/pictures/structure-of-fatty-acid-and-glycerol",
+        "width": 184,
+        "height": 180,
+        "origin": "product_image_search:Sujeongga / mon le conte",
+        "context": "Structure Of Fatty Acid And Glycerol",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "http://www.raw-milk-facts.com/images/GlycerolTrigly.gif",
+        "source_page": "https://ialbio.blogspot.com/2017/01/135-describe-synthesis-of-triglyceride.html",
+        "width": 260,
+        "height": 180,
+        "origin": "product_image_search:Sujeongga / mon le conte",
+        "context": "Edexcel IAL Biology: 1.3.5 Describe the synthesis of a triglyceride by ...",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://t4.ftcdn.net/jpg/05/64/94/57/360_F_564945772_KftwUXGKmhJCnbN6A1ShJl3UzKu0wdtu.jpg",
+        "source_page": "https://ar.inspiredpencil.com/pictures-2023/triacylglycerol-ester-bond",
+        "width": 167,
+        "height": 180,
+        "origin": "product_image_search:Sujeongga / mon le conte",
+        "context": "Triacylglycerol Ester Bond",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://image.slidesharecdn.com/biosynthesisoftriglycerides-241019144320-24495ad7/75/Biosynthesis-of-Triglycerides-Microbial-Nutrition-pptx-6-2048.jpg",
+        "source_page": "https://www.slideshare.net/slideshow/biosynthesis-of-triglycerides-microbial-nutrition-pptx/272556353",
+        "width": 299,
+        "height": 180,
+        "origin": "product_image_search:Sujeongga / mon le conte",
+        "context": "Biosynthesis of Triglycerides- Microbial Nutrition.pptx",
+        "capture_method": "individual_product_thumbnail"
+      }
+    ],
+    "OHGYO（烏橋）": [
+      {
+        "image_url": "https://i.pinimg.com/originals/b9/e7/b8/b9e7b85041f99232bbe5b7e01767276a.jpg",
+        "source_page": "https://storage.googleapis.com/dyuwgwrbjrugae/chicago-electric-bandsaw-blade-welder-model-03663.html",
+        "width": 267,
+        "height": 200,
+        "origin": "product_image_search:OHGYO（烏橋）",
+        "context": "Chicago Electric Bandsaw Blade Welder Model 03663 at Pauline Smith blog",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://i.pinimg.com/originals/b9/e7/b8/b9e7b85041f99232bbe5b7e01767276a.jpg",
+        "source_page": "https://storage.googleapis.com/dyuwgwrbjrugae/chicago-electric-bandsaw-blade-welder-model-03663.html",
+        "width": 267,
+        "height": 200,
+        "origin": "product_image_search:OHGYO（烏橋）",
+        "context": "Chicago Electric Bandsaw Blade Welder Model 03663 at Pauline Smith blog",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://i.pinimg.com/originals/b9/e7/b8/b9e7b85041f99232bbe5b7e01767276a.jpg",
+        "source_page": "https://storage.googleapis.com/dyuwgwrbjrugae/chicago-electric-bandsaw-blade-welder-model-03663.html",
+        "width": 267,
+        "height": 200,
+        "origin": "product_image_search:OHGYO（烏橋）",
+        "context": "Chicago Electric Bandsaw Blade Welder Model 03663 at Pauline Smith blog",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://i.pinimg.com/originals/b9/e7/b8/b9e7b85041f99232bbe5b7e01767276a.jpg",
+        "source_page": "https://storage.googleapis.com/dyuwgwrbjrugae/chicago-electric-bandsaw-blade-welder-model-03663.html",
+        "width": 267,
+        "height": 200,
+        "origin": "product_image_search:OHGYO（烏橋）",
+        "context": "Chicago Electric Bandsaw Blade Welder Model 03663 at Pauline Smith blog",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://i.pinimg.com/originals/b9/e7/b8/b9e7b85041f99232bbe5b7e01767276a.jpg",
+        "source_page": "https://storage.googleapis.com/dyuwgwrbjrugae/chicago-electric-bandsaw-blade-welder-model-03663.html",
+        "width": 267,
+        "height": 200,
+        "origin": "product_image_search:OHGYO（烏橋）",
+        "context": "Chicago Electric Bandsaw Blade Welder Model 03663 at Pauline Smith blog",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://i.pinimg.com/originals/b9/e7/b8/b9e7b85041f99232bbe5b7e01767276a.jpg",
+        "source_page": "https://storage.googleapis.com/dyuwgwrbjrugae/chicago-electric-bandsaw-blade-welder-model-03663.html",
+        "width": 267,
+        "height": 200,
+        "origin": "product_image_search:OHGYO（烏橋）",
+        "context": "Chicago Electric Bandsaw Blade Welder Model 03663 at Pauline Smith blog",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://i.pinimg.com/originals/b9/e7/b8/b9e7b85041f99232bbe5b7e01767276a.jpg",
+        "source_page": "https://storage.googleapis.com/dyuwgwrbjrugae/chicago-electric-bandsaw-blade-welder-model-03663.html",
+        "width": 267,
+        "height": 200,
+        "origin": "product_image_search:OHGYO（烏橋）",
+        "context": "Chicago Electric Bandsaw Blade Welder Model 03663 at Pauline Smith blog",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://i.pinimg.com/originals/b9/e7/b8/b9e7b85041f99232bbe5b7e01767276a.jpg",
+        "source_page": "https://storage.googleapis.com/dyuwgwrbjrugae/chicago-electric-bandsaw-blade-welder-model-03663.html",
+        "width": 267,
+        "height": 200,
+        "origin": "product_image_search:OHGYO（烏橋）",
+        "context": "Chicago Electric Bandsaw Blade Welder Model 03663 at Pauline Smith blog",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      }
+    ],
+    "REVE BY REVE": [
+      {
+        "image_url": "https://jerwoodvisualarts.org/wp-content/uploads/2025/04/realistic-vibrant-blue-and-purple-dragonfly-arm-tattoo-2329.webp",
+        "source_page": "https://storage.googleapis.com/zrxrvcaqvpfmrblog/dragonfly-tattoo-arm-sleeve.html",
+        "width": 200,
+        "height": 200,
+        "origin": "product_image_search:REVE BY REVE",
+        "context": "Dragonfly Tattoo Arm Sleeve: Symbolism, Style, and Design Ideas",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://jerwoodvisualarts.org/wp-content/uploads/2025/04/realistic-vibrant-blue-and-purple-dragonfly-arm-tattoo-2329.webp",
+        "source_page": "https://storage.googleapis.com/zrxrvcaqvpfmrblog/dragonfly-tattoo-arm-sleeve.html",
+        "width": 200,
+        "height": 200,
+        "origin": "product_image_search:REVE BY REVE",
+        "context": "Dragonfly Tattoo Arm Sleeve: Symbolism, Style, and Design Ideas",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://jerwoodvisualarts.org/wp-content/uploads/2025/04/realistic-vibrant-blue-and-purple-dragonfly-arm-tattoo-2329.webp",
+        "source_page": "https://storage.googleapis.com/zrxrvcaqvpfmrblog/dragonfly-tattoo-arm-sleeve.html",
+        "width": 200,
+        "height": 200,
+        "origin": "product_image_search:REVE BY REVE",
+        "context": "Dragonfly Tattoo Arm Sleeve: Symbolism, Style, and Design Ideas",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://jerwoodvisualarts.org/wp-content/uploads/2025/04/realistic-vibrant-blue-and-purple-dragonfly-arm-tattoo-2329.webp",
+        "source_page": "https://storage.googleapis.com/zrxrvcaqvpfmrblog/dragonfly-tattoo-arm-sleeve.html",
+        "width": 200,
+        "height": 200,
+        "origin": "product_image_search:REVE BY REVE",
+        "context": "Dragonfly Tattoo Arm Sleeve: Symbolism, Style, and Design Ideas",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://jerwoodvisualarts.org/wp-content/uploads/2025/04/realistic-vibrant-blue-and-purple-dragonfly-arm-tattoo-2329.webp",
+        "source_page": "https://storage.googleapis.com/zrxrvcaqvpfmrblog/dragonfly-tattoo-arm-sleeve.html",
+        "width": 200,
+        "height": 200,
+        "origin": "product_image_search:REVE BY REVE",
+        "context": "Dragonfly Tattoo Arm Sleeve: Symbolism, Style, and Design Ideas",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://jerwoodvisualarts.org/wp-content/uploads/2025/04/realistic-vibrant-blue-and-purple-dragonfly-arm-tattoo-2329.webp",
+        "source_page": "https://storage.googleapis.com/zrxrvcaqvpfmrblog/dragonfly-tattoo-arm-sleeve.html",
+        "width": 200,
+        "height": 200,
+        "origin": "product_image_search:REVE BY REVE",
+        "context": "Dragonfly Tattoo Arm Sleeve: Symbolism, Style, and Design Ideas",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://jerwoodvisualarts.org/wp-content/uploads/2025/04/realistic-vibrant-blue-and-purple-dragonfly-arm-tattoo-2329.webp",
+        "source_page": "https://storage.googleapis.com/zrxrvcaqvpfmrblog/dragonfly-tattoo-arm-sleeve.html",
+        "width": 200,
+        "height": 200,
+        "origin": "product_image_search:REVE BY REVE",
+        "context": "Dragonfly Tattoo Arm Sleeve: Symbolism, Style, and Design Ideas",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://jerwoodvisualarts.org/wp-content/uploads/2025/04/realistic-vibrant-blue-and-purple-dragonfly-arm-tattoo-2329.webp",
+        "source_page": "https://storage.googleapis.com/zrxrvcaqvpfmrblog/dragonfly-tattoo-arm-sleeve.html",
+        "width": 200,
+        "height": 200,
+        "origin": "product_image_search:REVE BY REVE",
+        "context": "Dragonfly Tattoo Arm Sleeve: Symbolism, Style, and Design Ideas",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      }
+    ],
+    "SWIMMABEBE": [
+      {
+        "image_url": "https://a-z-animals.com/media/2022/11/Shutterstock_2026390793.jpg",
+        "source_page": "https://ar.inspiredpencil.com/pictures-2023/lion-roar",
+        "width": 270,
+        "height": 180,
+        "origin": "product_image_search:SWIMMABEBE",
+        "context": "Lion Roar",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://a-z-animals.com/media/2022/11/shutterstock_1557343154.jpg",
+        "source_page": "https://ar.inspiredpencil.com/pictures-2023/hd-lion-roaring",
+        "width": 252,
+        "height": 180,
+        "origin": "product_image_search:SWIMMABEBE",
+        "context": "Hd Lion Roaring",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://png.pngtree.com/background/20230616/original/pngtree-lion-is-roaring-loudly-in-a-field-picture-image_3641214.jpg",
+        "source_page": "https://fity.club/lists/w/white-lion-roar-wallpaper/",
+        "width": 299,
+        "height": 180,
+        "origin": "product_image_search:SWIMMABEBE",
+        "context": "White Lion Roar Wallpaper",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://wallpaperaccess.com/full/1118469.jpg",
+        "source_page": "https://wallpaperaccess.com/roaring-lion",
+        "width": 168,
+        "height": 180,
+        "origin": "product_image_search:SWIMMABEBE",
+        "context": "Roaring Lion Wallpapers - Top Free Roaring Lion Backgrounds ...",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://wallpapercave.com/wp/wp2382977.jpg",
+        "source_page": "https://wallpapercave.com/lion-roar-wallpapers",
+        "width": 253,
+        "height": 180,
+        "origin": "product_image_search:SWIMMABEBE",
+        "context": "Lion Roar Wallpapers - Wallpaper Cave",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://static.vecteezy.com/system/resources/previews/030/631/940/non_2x/a-lion-roaring-against-a-golden-hued-sunset-combining-power-and-natural-beauty-offering-space-for-text-near-the-horizon-golden-sunset-roar-power-natural-beauty-ai-generated-photo.jpg",
+        "source_page": "https://www.vecteezy.com/free-photos/lion-roar",
+        "width": 295,
+        "height": 180,
+        "origin": "product_image_search:SWIMMABEBE",
+        "context": "Lion Roar Stock Photos, Images and Backgrounds for Free Download",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://images.stockcake.com/public/6/f/0/6f0d50c4-e163-408b-8d73-d853833a2884/lion-roaring-loudly-stockcake.jpg",
+        "source_page": "https://stockcake.com/i/lion-roaring-loudly_1265950_875890",
+        "width": 198,
+        "height": 197,
+        "origin": "product_image_search:SWIMMABEBE",
+        "context": "Free Lion roaring loudly Image - Lion, Sunset, Savannah | Download at ...",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://wallpapercave.com/wp/wp2382946.jpg",
+        "source_page": "https://wallpapercave.com/lion-roar-wallpapers",
+        "width": 316,
+        "height": 197,
+        "origin": "product_image_search:SWIMMABEBE",
+        "context": "Lion Roar Wallpapers - Wallpaper Cave",
+        "capture_method": "individual_product_thumbnail"
+      }
+    ],
+    "REALCOCO": [
+      {
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/WWE_SmackDown_%282024%29_Logo.svg/640px-WWE_SmackDown_%282024%29_Logo.svg.png",
+        "source_page": "https://en.wikipedia.org/wiki/History_of_WWE_SmackDown",
+        "width": 333,
+        "height": 142,
+        "origin": "product_image_search:REALCOCO",
+        "context": "History of WWE SmackDown - Wikipedia",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/WWE_SmackDown_%282024%29_Logo.svg/640px-WWE_SmackDown_%282024%29_Logo.svg.png",
+        "source_page": "https://en.wikipedia.org/wiki/History_of_WWE_SmackDown",
+        "width": 333,
+        "height": 142,
+        "origin": "product_image_search:REALCOCO",
+        "context": "History of WWE SmackDown - Wikipedia",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/WWE_SmackDown_%282024%29_Logo.svg/640px-WWE_SmackDown_%282024%29_Logo.svg.png",
+        "source_page": "https://en.wikipedia.org/wiki/History_of_WWE_SmackDown",
+        "width": 333,
+        "height": 142,
+        "origin": "product_image_search:REALCOCO",
+        "context": "History of WWE SmackDown - Wikipedia",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/WWE_SmackDown_%282024%29_Logo.svg/640px-WWE_SmackDown_%282024%29_Logo.svg.png",
+        "source_page": "https://en.wikipedia.org/wiki/History_of_WWE_SmackDown",
+        "width": 333,
+        "height": 142,
+        "origin": "product_image_search:REALCOCO",
+        "context": "History of WWE SmackDown - Wikipedia",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/WWE_SmackDown_%282024%29_Logo.svg/640px-WWE_SmackDown_%282024%29_Logo.svg.png",
+        "source_page": "https://en.wikipedia.org/wiki/History_of_WWE_SmackDown",
+        "width": 333,
+        "height": 142,
+        "origin": "product_image_search:REALCOCO",
+        "context": "History of WWE SmackDown - Wikipedia",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/WWE_SmackDown_%282024%29_Logo.svg/640px-WWE_SmackDown_%282024%29_Logo.svg.png",
+        "source_page": "https://en.wikipedia.org/wiki/History_of_WWE_SmackDown",
+        "width": 333,
+        "height": 142,
+        "origin": "product_image_search:REALCOCO",
+        "context": "History of WWE SmackDown - Wikipedia",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/WWE_SmackDown_%282024%29_Logo.svg/640px-WWE_SmackDown_%282024%29_Logo.svg.png",
+        "source_page": "https://en.wikipedia.org/wiki/History_of_WWE_SmackDown",
+        "width": 333,
+        "height": 142,
+        "origin": "product_image_search:REALCOCO",
+        "context": "History of WWE SmackDown - Wikipedia",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      },
+      {
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/WWE_SmackDown_%282024%29_Logo.svg/640px-WWE_SmackDown_%282024%29_Logo.svg.png",
+        "source_page": "https://en.wikipedia.org/wiki/History_of_WWE_SmackDown",
+        "width": 333,
+        "height": 142,
+        "origin": "product_image_search:REALCOCO",
+        "context": "History of WWE SmackDown - Wikipedia",
+        "capture_method": "individual_product_thumbnail",
+        "repeated": true
+      }
+    ],
+    "EVID": [
+      {
+        "image_url": "https://c8.alamy.com/comp/2YWNF52/new-york-new-york-usa-10th-dec-2024-t-pain-big-ass-chain-necklace-icebox-jewelers-2000s-14k-gold-diamonds-weighs-more-that-10-pounds-with-nearly-200-carats-of-diamonds-designed-by-t-pain-after-a-stranger-dared-him-to-do-so-seen-on-display-at-the-ice-cold-an-exhibition-of-hip-hop-jewelry-held-at-the-american-museum-of-natural-history-credit-image-nancy-kaszermanzuma-press-wire-editorial-usage-only!-not-for-commercial-usage!-2YWNF52.jpg",
+        "source_page": "https://www.alamy.com/new-york-new-york-usa-10th-dec-2024-t-pain-big-ass-chain-necklace-icebox-jewelers-2000s-14k-gold-diamonds-weighs-more-that-10-pounds-with-nearly-200-carats-of-diamonds-designed-by-t-pain-after-a-stranger-dared-him-to-do-so-seen-on-display-at-the-ice-cold-an-exhibition-of-hip-hop-jewelry-held-at-the-american-museum-of-natural-history-credit-image-nancy-kaszermanzuma-press-wire-editorial-usage-only!-not-for-commercial-usage!-image635412542.html",
+        "width": 228,
+        "height": 187,
+        "origin": "instagram_search:@evid_studio,@dive_up_evid",
+        "context": "New York, New York, USA. 10th Dec, 2024. T-Pain Big Ass Chain necklace ...",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://cdn.shopify.com/s/files/1/0679/4461/2161/files/T-Pain-Big-Ass-Chain_1000x.png?v=1688656167",
+        "source_page": "https://icecartel.com/blogs/news/most-expensive-rapper-chains-in-the-world",
+        "width": 312,
+        "height": 187,
+        "origin": "instagram_search:@evid_studio,@dive_up_evid",
+        "context": "11 Most Expensive Rapper Chains in The World",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://www.hatton-jewellers.com/wp/wp-content/uploads/2019/11/T-Pain-Big-Ass-Chain-Hatton-Jewellers-300x300.jpg",
+        "source_page": "https://www.hatton-jewellers.com/blog/most-expensive-gold-chains-hip-hop",
+        "width": 187,
+        "height": 187,
+        "origin": "instagram_search:@evid_studio,@dive_up_evid",
+        "context": "Most Expensive Gold Chains In Hip Hop | Hatton Jewellers Blog",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://www.hiphoprx.com/content/uploads/2009/06/t-pain-big-ass-chain-jewelry.jpg",
+        "source_page": "https://www.hiphoprx.com/2009/06/10/t-pain-and-his-big-ass-chain/",
+        "width": 187,
+        "height": 187,
+        "origin": "instagram_search:@evid_studio,@dive_up_evid",
+        "context": "T-Pain And His Big Ass Chain!",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://i.ytimg.com/vi/L8caOV1Hp6Q/maxresdefault.jpg",
+        "source_page": "https://app.assembo.ai/blogs/most-expensive-chain",
+        "width": 333,
+        "height": 187,
+        "origin": "instagram_search:@evid_studio,@dive_up_evid",
+        "context": "Top 10 Most Expensive Chains in the World",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://media.gettyimages.com/id/2151474040/photo/t-pains-big-ass-chain-is-displayed-during-a-press-preview-may-8-2024-in-new-york-for-ice-cold.jpg?s=612x612&w=gi&k=20&c=ezKC3f1JpggitgmqBRlQDe_HXE-kvzSFWu-MUPuiqYY=",
+        "source_page": "https://www.gettyimages.com/photos/cold-chain",
+        "width": 263,
+        "height": 180,
+        "origin": "instagram_search:@evid_studio,@dive_up_evid",
+        "context": "7,666 Cold Chain Stock Photos, High-Res Pictures, and Images - Getty Images",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://acclaimmag.com/wp-content/uploads/2016/04/bigasschain-fb.jpg",
+        "source_page": "https://www.acclaimmag.com/style/vince-staples-speaks-on-the-best-and-worst-rapper-chains/",
+        "width": 307,
+        "height": 180,
+        "origin": "instagram_search:@evid_studio,@dive_up_evid",
+        "context": "Vince Staples speaks on the best and worst rapper chains — Acclaim Magazine",
+        "capture_method": "individual_product_thumbnail"
+      },
+      {
+        "image_url": "https://www.vibe.com/wp-content/uploads/2024/06/GettyImages-90265694.jpg?w=300",
+        "source_page": "https://www.vibe.com/lists/iconic-hip-hop-chains-early-2000s-explainer/",
+        "width": 186,
+        "height": 152,
+        "origin": "instagram_search:@evid_studio,@dive_up_evid",
+        "context": "Iconic Hip-Hop Chains From The Early 2000s: An Explainer",
+        "capture_method": "individual_product_thumbnail"
+      }
+    ]
+  }
+}
