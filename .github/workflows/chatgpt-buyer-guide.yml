@@ -19,7 +19,7 @@ env:
 jobs:
   build-pdf:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 25
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -41,7 +41,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pillow requests beautifulsoup4 qrcode instaloader selenium
 
-      - name: Apply runner safeguards
+      - name: Apply runner safeguards and speed limits
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -56,6 +56,12 @@ jobs:
               'options.add_argument("--headless=new")\n    options.add_argument("--ignore-certificate-errors")\n    options.add_argument("--allow-insecure-localhost")\n    options.set_capability("acceptInsecureCerts", True)',
               1,
           )
+          text = text.replace('_DRIVER.set_page_load_timeout(45)', '_DRIVER.set_page_load_timeout(24)')
+          text = text.replace('time.sleep(3.5)', 'time.sleep(1.3)')
+          text = text.replace('for fraction in (0.2, 0.45, 0.7, 1.0):', 'for fraction in (0.35, 0.75, 1.0):')
+          text = text.replace('time.sleep(0.9)', 'time.sleep(0.35)')
+          text = text.replace('if len(selected) < count:', 'if len(selected) < min(count, 3):', 1)
+          text = text.replace('for product_page in links[:4]:', 'for product_page in links[:1]:')
           path.write_text(text, encoding='utf-8')
           PY
 
@@ -73,8 +79,7 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          p = Path('generated/2026_Tokyo_KFashion_Buyer_Brand_Guide_image_sources.json')
-          data = json.loads(p.read_text(encoding='utf-8'))
+          data = json.loads(Path('generated/2026_Tokyo_KFashion_Buyer_Brand_Guide_image_sources.json').read_text(encoding='utf-8'))
           for brand, images in data['brands'].items():
               assert len(images) >= 6, (brand, len(images))
               assert all(item.get('width', 0) > 0 and item.get('height', 0) > 0 for item in images[:6])
