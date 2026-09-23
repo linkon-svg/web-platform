@@ -49,12 +49,19 @@ jobs:
           text = path.read_text(encoding='utf-8')
           marker = 'import generate_buyer_guide as g\n'
           if 'ORIGINAL_INSTAGRAM_COLLECTOR' not in text:
-              text = text.replace(marker, marker + '\nORIGINAL_INSTAGRAM_COLLECTOR = g.collect_instagram_images\n', 1)
+              text = text.replace(marker, marker + '\nORIGINAL_INSTAGRAM_COLLECTOR = g.collect_instagram_images\ng.SESSION.verify = False\n', 1)
           text = text.replace('return g.collect_instagram_images(brand, count)', 'return ORIGINAL_INSTAGRAM_COLLECTOR(brand, count)')
+          text = text.replace(
+              'options.add_argument("--headless=new")',
+              'options.add_argument("--headless=new")\n    options.add_argument("--ignore-certificate-errors")\n    options.add_argument("--allow-insecure-localhost")\n    options.set_capability("acceptInsecureCerts", True)',
+              1,
+          )
           path.write_text(text, encoding='utf-8')
           PY
 
       - name: Generate buyer guide PDF
+        env:
+          PYTHONWARNINGS: "ignore:Unverified HTTPS request"
         run: python tools/generate_buyer_guide_v2.py
 
       - name: Validate PDF and image sources
