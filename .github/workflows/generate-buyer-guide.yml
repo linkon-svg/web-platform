@@ -13,10 +13,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: chatgpt-pdf-build-20260923
 
       - name: Install system packages
         run: |
@@ -35,6 +37,18 @@ jobs:
 
       - name: Build PDF
         run: python tmp_pdf_build/generate_buyer_guide.py
+
+      - name: Publish PDF to build branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f tmp_pdf_output/2026_Tokyo_KFashion_Buyer_Guide.pdf
+          if git diff --cached --quiet; then
+            echo "No PDF changes to commit"
+          else
+            git commit -m "Add generated Japanese buyer guide PDF"
+            git push origin HEAD:chatgpt-pdf-build-20260923
+          fi
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
