@@ -32,7 +32,7 @@ jobs:
           python -m pip install pillow requests beautifulsoup4 qrcode
 
       - name: Generate PDF
-        run: python tmp_pdf_build/generate_buyer_guide.py
+        run: python tmp_pdf_build/run_fast.py
 
       - name: Publish generated PDF to branch
         run: |
