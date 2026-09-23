@@ -1,0 +1,32 @@
+name: Debug Good Trust Images
+
+on:
+  push:
+    branches: [chatgpt-buyer-guide-pdf]
+    paths:
+      - tools/debug_goodtrust_images.py
+      - .github/workflows/debug-goodtrust.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: chatgpt-buyer-guide-pdf
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pillow selenium
+      - run: python tools/debug_goodtrust_images.py
+      - run: |
+          git config user.name chatgpt-artifact-bot
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add generated/goodtrust_debug
+          git commit -m 'Add Good Trust image diagnostics' || exit 0
+          git push origin HEAD:chatgpt-buyer-guide-pdf
