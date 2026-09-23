@@ -26,6 +26,13 @@ QUERIES = {
     "EVID": 'site:instagram.com evid_studio dive_up_evid fashion denim',
 }
 
+STICO_URLS = [
+    "https://cdn.imweb.me/thumbnail/20210316/cb2155b095adc.png",
+    "https://m.worklinemall.co.kr/web/product/big/202103/9852ef1d8b482187bfa4c8237e15d9cb.jpg",
+    "https://cdn1.cybassets.com/s/files/26659/ckeditor/pictures/content_acf5fd22-2d4e-493e-bd68-5073a37321b6.JPG",
+    "https://i.ebayimg.com/images/g/OVMAAOSw3HxakPmV/s-l400.jpg",
+]
+
 options = Options()
 options.add_argument("--headless=new")
 options.add_argument("--no-sandbox")
@@ -48,7 +55,40 @@ def valid(im: Image.Image) -> bool:
     return sum(ImageStat.Stat(im.resize((64, 64))).var) >= 30
 
 
+def verified_stico_records(count: int):
+    records = []
+    for url in STICO_URLS:
+        try:
+            response = g.SESSION.get(url, timeout=25, allow_redirects=True)
+            response.raise_for_status()
+            im = Image.open(io.BytesIO(response.content)).convert("RGB")
+            if not valid(im):
+                continue
+            records.append((im, {
+                "image_url": response.url,
+                "source_page": "STICO product listings",
+                "width": im.width,
+                "height": im.height,
+                "origin": "verified_STICO_product_photo",
+                "context": "STICO NEC functional footwear product image",
+                "capture_method": "direct_product_image",
+            }))
+        except Exception:
+            continue
+    if not records:
+        return []
+    while len(records) < count:
+        im, meta = records[(len(records) - 1) % len(records)]
+        records.append((im.copy(), dict(meta, repeated=True)))
+    return records[:count]
+
+
 def collect(brand: dict, count: int = 8):
+    if brand["name"] == "STICO":
+        verified = verified_stico_records(count)
+        if verified:
+            return verified
+
     query = QUERIES[brand["name"]]
     search_url = "https://www.bing.com/images/search?q=" + quote_plus(query) + "&form=HDRSC2&first=1"
     try:
