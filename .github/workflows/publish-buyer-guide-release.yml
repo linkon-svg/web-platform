@@ -19,18 +19,22 @@ jobs:
         with:
           ref: chatgpt-pdf-build-20260923
 
-      - name: Upload PDF to public file host
+      - name: Upload PDF to Filebin
         run: |
           PDF="tmp_pdf_output/2026_Tokyo_KFashion_Buyer_Guide.pdf"
           test -f "$PDF"
-          RESPONSE=$(curl -sS -F "files[]=@${PDF};type=application/octet-stream" https://uguu.se/upload)
-          echo "$RESPONSE"
-          URL=$(printf '%s' "$RESPONSE" | jq -r '.files[0].url // empty')
-          case "$URL" in
-            https://*) ;;
-            *) echo "Unexpected upload response: $URL" >&2; exit 1 ;;
-          esac
-          echo "$URL" > tmp_pdf_output/PUBLIC_URL.txt
+          BIN="linkon-kfashion-${GITHUB_RUN_ID}"
+          NAME="2026_Tokyo_KFashion_Buyer_Guide.pdf"
+          URL="https://filebin.net/${BIN}/${NAME}"
+          curl --fail --show-error --silent \
+            --request POST \
+            --data-binary "@${PDF}" \
+            --header "Content-Type: application/pdf" \
+            --header "User-Agent: Linkon-Buyer-Guide/1.0" \
+            "${URL}" > /tmp/filebin-response.json
+          cat /tmp/filebin-response.json
+          curl --fail --show-error --silent --head "${URL}" >/dev/null
+          echo "${URL}" > tmp_pdf_output/PUBLIC_URL.txt
 
       - name: Save public URL
         run: |
