@@ -1,0 +1,59 @@
+name: Publish Tokyo K-Fashion Buyer Guide
+
+on:
+  push:
+    branches:
+      - chatgpt-buyer-guide-pdf
+    paths:
+      - .github/workflows/publish-buyer-guide.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out temporary branch
+        uses: actions/checkout@v4
+        with:
+          ref: chatgpt-buyer-guide-pdf
+
+      - name: Upload PDF to a temporary direct-download host
+        shell: bash
+        run: |
+          set -euo pipefail
+          PDF="generated/2026_Tokyo_KFashion_Buyer_Brand_Guide.pdf"
+          test -f "$PDF"
+          URL="$(curl -fsS --max-time 90 -F "file=@${PDF}" https://0x0.st || true)"
+          if [[ ! "$URL" =~ ^https:// ]]; then
+            RESPONSE="$(curl -fsS --max-time 90 -F "file=@${PDF}" https://tmpfiles.org/api/v1/upload || true)"
+            URL="$(python - <<'PY'
+import json, os
+raw = os.environ.get('RESPONSE', '')
+try:
+    url = json.loads(raw)['data']['url']
+    print(url.replace('https://tmpfiles.org/', 'https://tmpfiles.org/dl/'))
+except Exception:
+    print('')
+PY
+)"
+          fi
+          if [[ ! "$URL" =~ ^https:// ]]; then
+            URL="$(curl -fsS --max-time 90 --upload-file "$PDF" "https://transfer.sh/2026_Tokyo_KFashion_Buyer_Brand_Guide.pdf" || true)"
+          fi
+          if [[ ! "$URL" =~ ^https:// ]]; then
+            echo "All temporary upload hosts failed" >&2
+            exit 1
+          fi
+          printf '%s\n' "$URL" | tee generated/public_pdf_url.txt
+
+      - name: Commit temporary direct URL
+        run: |
+          git config user.name "chatgpt-artifact-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated/public_pdf_url.txt
+          git commit -m "Publish temporary buyer guide download URL"
+          git push origin HEAD:chatgpt-buyer-guide-pdf
