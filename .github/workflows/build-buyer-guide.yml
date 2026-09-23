@@ -1,0 +1,56 @@
+name: Build Tokyo K-Fashion Buyer Guide PDF
+
+on:
+  push:
+    branches:
+      - chatgpt-buyer-guide-pdf-20260923
+    paths:
+      - "tmp_pdf_build/**"
+      - ".github/workflows/build-buyer-guide.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build-pdf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Japanese fonts and Python dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          python -m pip install --upgrade pip
+          python -m pip install pillow requests beautifulsoup4 qrcode
+
+      - name: Generate PDF
+        run: python tmp_pdf_build/generate_buyer_guide.py
+
+      - name: Publish generated PDF to branch
+        run: |
+          mkdir -p generated
+          cp tmp_pdf_output/2026_Tokyo_KFashion_Buyer_Brand_Guide.pdf generated/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated/2026_Tokyo_KFashion_Buyer_Brand_Guide.pdf
+          if git diff --cached --quiet; then
+            echo "No generated PDF change to commit."
+          else
+            git commit -m "Generate Tokyo K-Fashion buyer guide PDF"
+            git push
+          fi
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Tokyo-KFashion-Buyer-Guide-PDF
+          path: tmp_pdf_output/2026_Tokyo_KFashion_Buyer_Brand_Guide.pdf
+          if-no-files-found: error
