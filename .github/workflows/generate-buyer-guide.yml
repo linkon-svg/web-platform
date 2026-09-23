@@ -1,0 +1,45 @@
+name: Generate Buyer Guide PDF
+
+on:
+  push:
+    branches:
+      - chatgpt-pdf-build-20260923
+    paths:
+      - 'tmp_pdf_build/**'
+      - '.github/workflows/generate-buyer-guide.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk libcairo2 libpango-1.0-0 libpangoft2-1.0-0 libgdk-pixbuf-2.0-0 libffi-dev shared-mime-info
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install weasyprint pillow requests beautifulsoup4 qrcode
+
+      - name: Build PDF
+        run: python tmp_pdf_build/generate_buyer_guide.py
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: 2026-Tokyo-KFashion-Buyer-Guide
+          path: tmp_pdf_output/2026_Tokyo_KFashion_Buyer_Guide.pdf
+          if-no-files-found: error
+          retention-days: 7
