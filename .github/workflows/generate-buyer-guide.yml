@@ -50,6 +50,17 @@ jobs:
             git push origin HEAD:chatgpt-pdf-build-20260923
           fi
 
+      - name: Publish PDF as release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="buyer-guide-20260923"
+          PDF="tmp_pdf_output/2026_Tokyo_KFashion_Buyer_Guide.pdf"
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --title "2026 Tokyo K-Fashion Buyer Guide" --notes "Japanese buyer invitation and participating brand guide."
+          fi
+          gh release upload "$TAG" "$PDF" --clobber
+
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
