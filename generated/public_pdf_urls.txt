@@ -1,0 +1,2 @@
+tmpfiles=https://tmpfiles.org/dl/w2wj8TBqPzpw/2026_tokyo_kfashion_buyer_brand_guide.pdf
+filebin=https://filebin.net/chatgpt-kfashion-1790158042-5964/2026_Tokyo_KFashion_Buyer_Brand_Guide.pdf
