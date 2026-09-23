@@ -23,9 +23,9 @@ jobs:
         run: |
           PDF="tmp_pdf_output/2026_Tokyo_KFashion_Buyer_Guide.pdf"
           test -f "$PDF"
-          RESPONSE=$(curl -fsSL -F "files[]=@${PDF}" https://uguu.se/upload)
+          RESPONSE=$(curl -sS -F "files[]=@${PDF};type=application/octet-stream" https://uguu.se/upload)
           echo "$RESPONSE"
-          URL=$(printf '%s' "$RESPONSE" | jq -r '.files[0].url')
+          URL=$(printf '%s' "$RESPONSE" | jq -r '.files[0].url // empty')
           case "$URL" in
             https://*) ;;
             *) echo "Unexpected upload response: $URL" >&2; exit 1 ;;
