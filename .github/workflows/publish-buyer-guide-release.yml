@@ -19,14 +19,22 @@ jobs:
         with:
           ref: chatgpt-pdf-build-20260923
 
-      - name: Publish release asset
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Upload PDF to public file host
         run: |
-          TAG="buyer-guide-20260923"
           PDF="tmp_pdf_output/2026_Tokyo_KFashion_Buyer_Guide.pdf"
           test -f "$PDF"
-          if ! gh release view "$TAG" >/dev/null 2>&1; then
-            gh release create "$TAG" --title "2026 Tokyo K-Fashion Buyer Guide" --notes "Japanese buyer invitation and participating brand guide."
-          fi
-          gh release upload "$TAG" "$PDF" --clobber
+          URL=$(curl -fsSL -F "reqtype=fileupload" -F "fileToUpload=@${PDF}" https://catbox.moe/user/api.php)
+          echo "$URL"
+          case "$URL" in
+            https://*) ;;
+            *) echo "Unexpected upload response: $URL" >&2; exit 1 ;;
+          esac
+          echo "$URL" > tmp_pdf_output/PUBLIC_URL.txt
+
+      - name: Save public URL
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f tmp_pdf_output/PUBLIC_URL.txt
+          git commit -m "Add public buyer guide download URL"
+          git push origin HEAD:chatgpt-pdf-build-20260923
