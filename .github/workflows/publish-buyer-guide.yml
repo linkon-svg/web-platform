@@ -14,37 +14,45 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - name: Check out temporary branch
         uses: actions/checkout@v4
         with:
           ref: chatgpt-buyer-guide-pdf
 
-      - name: Upload PDF to a temporary direct-download host
+      - name: Upload PDF to several temporary direct-download hosts
         shell: bash
         run: |
-          set -euo pipefail
+          set -u
           PDF="generated/2026_Tokyo_KFashion_Buyer_Brand_Guide.pdf"
           test -f "$PDF"
-          URL="$(curl -fsS --max-time 90 -F "file=@${PDF}" https://0x0.st || true)"
-          if [[ ! "$URL" =~ ^https:// ]]; then
-            RESPONSE="$(curl -fsS --max-time 90 -F "file=@${PDF}" https://tmpfiles.org/api/v1/upload || true)"
-            URL="$(printf '%s' "$RESPONSE" | python -c "import json,sys; d=json.load(sys.stdin); print(d['data']['url'].replace('https://tmpfiles.org/','https://tmpfiles.org/dl/'))" 2>/dev/null || true)"
-          fi
-          if [[ ! "$URL" =~ ^https:// ]]; then
-            URL="$(curl -fsS --max-time 90 --upload-file "$PDF" "https://transfer.sh/2026_Tokyo_KFashion_Buyer_Brand_Guide.pdf" || true)"
-          fi
-          if [[ ! "$URL" =~ ^https:// ]]; then
-            echo "All temporary upload hosts failed" >&2
-            exit 1
-          fi
-          printf '%s\n' "$URL" | tee generated/public_pdf_url.txt
+          : > generated/public_pdf_urls.txt
 
-      - name: Commit temporary direct URL
+          TMP_RESPONSE="$(curl -fsS --max-time 90 -F "file=@${PDF}" https://tmpfiles.org/api/v1/upload || true)"
+          TMP_URL="$(printf '%s' "$TMP_RESPONSE" | python -c "import json,sys; d=json.load(sys.stdin); print(d['data']['url'].replace('https://tmpfiles.org/','https://tmpfiles.org/dl/'))" 2>/dev/null || true)"
+          [[ "$TMP_URL" =~ ^https:// ]] && printf 'tmpfiles=%s\n' "$TMP_URL" >> generated/public_pdf_urls.txt
+
+          PIXEL_RESPONSE="$(curl -fsS --max-time 90 -T "$PDF" https://pixeldrain.com/api/file || true)"
+          PIXEL_ID="$(printf '%s' "$PIXEL_RESPONSE" | python -c "import json,sys; d=json.load(sys.stdin); print(d.get('id',''))" 2>/dev/null || true)"
+          [[ -n "$PIXEL_ID" ]] && printf 'pixeldrain=https://pixeldrain.com/api/file/%s?download\n' "$PIXEL_ID" >> generated/public_pdf_urls.txt
+
+          CATBOX_URL="$(curl -fsS --max-time 90 -F 'reqtype=fileupload' -F "fileToUpload=@${PDF}" https://catbox.moe/user/api.php || true)"
+          [[ "$CATBOX_URL" =~ ^https:// ]] && printf 'catbox=%s\n' "$CATBOX_URL" >> generated/public_pdf_urls.txt
+
+          BIN="chatgpt-kfashion-$(date +%s)-${RANDOM}"
+          FILEBIN_URL="https://filebin.net/${BIN}/2026_Tokyo_KFashion_Buyer_Brand_Guide.pdf"
+          if curl -fsS --max-time 90 -T "$PDF" "$FILEBIN_URL" >/dev/null 2>&1; then
+            printf 'filebin=%s\n' "$FILEBIN_URL" >> generated/public_pdf_urls.txt
+          fi
+
+          cat generated/public_pdf_urls.txt
+          test -s generated/public_pdf_urls.txt
+
+      - name: Commit temporary direct URLs
         run: |
           git config user.name "chatgpt-artifact-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add generated/public_pdf_url.txt
-          git commit -m "Publish temporary buyer guide download URL"
+          git add generated/public_pdf_urls.txt
+          git commit -m "Publish buyer guide direct-download URLs"
           git push origin HEAD:chatgpt-buyer-guide-pdf
