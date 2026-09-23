@@ -23,13 +23,16 @@ jobs:
         run: |
           PDF="tmp_pdf_output/2026_Tokyo_KFashion_Buyer_Guide.pdf"
           test -f "$PDF"
-          URL=$(curl -fsSL -F "reqtype=fileupload" -F "fileToUpload=@${PDF}" https://catbox.moe/user/api.php)
-          echo "$URL"
+          RESPONSE=$(curl -fsSL -F "file=@${PDF}" https://tmpfiles.org/api/v1/upload)
+          echo "$RESPONSE"
+          URL=$(printf '%s' "$RESPONSE" | jq -r '.data.url')
           case "$URL" in
-            https://*) ;;
+            https://tmpfiles.org/*) ;;
             *) echo "Unexpected upload response: $URL" >&2; exit 1 ;;
           esac
-          echo "$URL" > tmp_pdf_output/PUBLIC_URL.txt
+          DOWNLOAD_URL=$(printf '%s' "$URL" | sed 's#https://tmpfiles.org/#https://tmpfiles.org/dl/#')
+          echo "$DOWNLOAD_URL"
+          echo "$DOWNLOAD_URL" > tmp_pdf_output/PUBLIC_URL.txt
 
       - name: Save public URL
         run: |
