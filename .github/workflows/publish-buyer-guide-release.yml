@@ -19,27 +19,23 @@ jobs:
         with:
           ref: chatgpt-pdf-build-20260923
 
-      - name: Upload PDF to Filebin
+      - name: Create short download URL
         run: |
-          PDF="tmp_pdf_output/2026_Tokyo_KFashion_Buyer_Guide.pdf"
-          test -f "$PDF"
-          BIN="linkon-kfashion-${GITHUB_RUN_ID}"
-          NAME="2026_Tokyo_KFashion_Buyer_Guide.pdf"
-          URL="https://filebin.net/${BIN}/${NAME}"
-          curl --fail --show-error --silent \
-            --request POST \
-            --data-binary "@${PDF}" \
-            --header "Content-Type: application/pdf" \
-            --header "User-Agent: Linkon-Buyer-Guide/1.0" \
-            "${URL}" > /tmp/filebin-response.json
-          cat /tmp/filebin-response.json
-          curl --fail --show-error --silent --head "${URL}" >/dev/null
-          echo "${URL}" > tmp_pdf_output/PUBLIC_URL.txt
+          SOURCE_URL="https://github.com/linkon-svg/web-platform/releases/download/buyer-guide-20260923/2026_Tokyo_KFashion_Buyer_Guide.pdf"
+          SHORT_URL=$(curl --fail --show-error --silent --get \
+            --data-urlencode "url=${SOURCE_URL}" \
+            "https://tinyurl.com/api-create.php")
+          echo "${SHORT_URL}"
+          case "${SHORT_URL}" in
+            https://tinyurl.com/*) ;;
+            *) echo "Unexpected short URL: ${SHORT_URL}" >&2; exit 1 ;;
+          esac
+          echo "${SHORT_URL}" > tmp_pdf_output/PUBLIC_URL.txt
 
-      - name: Save public URL
+      - name: Save short URL
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f tmp_pdf_output/PUBLIC_URL.txt
-          git commit -m "Update public buyer guide download URL"
+          git commit -m "Update buyer guide short download URL"
           git push origin HEAD:chatgpt-pdf-build-20260923
