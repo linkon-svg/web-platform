@@ -45,6 +45,15 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+
+          base = Path('tools/generate_buyer_guide.py')
+          base_text = base.read_text(encoding='utf-8')
+          base_text = base_text.replace(
+              '"url": "https://www.sticokorea.com/kr/portfolio-styles/", "display": "www.sticokorea.com",',
+              '"url": "https://sticoeu.com/Products", "display": "www.sticokorea.com",',
+          )
+          base.write_text(base_text, encoding='utf-8')
+
           path = Path('tools/generate_buyer_guide_v2.py')
           text = path.read_text(encoding='utf-8')
           marker = 'import generate_buyer_guide as g\n'
