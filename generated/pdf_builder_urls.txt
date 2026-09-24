@@ -1,0 +1,2 @@
+rawgithack=https://raw.githack.com/linkon-svg/web-platform/chatgpt-buyer-guide-pdf/tools/pdf_from_uploaded_source.html
+htmlpreview=https://htmlpreview.github.io/?https://raw.githubusercontent.com/linkon-svg/web-platform/chatgpt-buyer-guide-pdf/tools/pdf_from_uploaded_source.html
