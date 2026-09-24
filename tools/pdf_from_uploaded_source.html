@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tokyo K-Fashion 바이어용 PDF 생성기</title>
+  <style>
+    :root{--bg:#f2efe8;--card:#fff;--ink:#20201e;--muted:#6b665e;--line:#d2ccc1;--accent:#20201e}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR","Yu Gothic","Hiragino Sans",sans-serif}
+    .wrap{max-width:920px;margin:0 auto;padding:48px 24px 80px}.eyebrow{font-size:12px;letter-spacing:.16em;font-weight:800;color:var(--muted)}
+    h1{font-size:38px;line-height:1.14;margin:12px 0 14px;letter-spacing:-.035em}p{line-height:1.7;margin:0;color:#4d4943}
+    .card{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 10px 30px rgba(33,30,25,.05)}
+    .drop{display:block;border:2px dashed #aaa298;border-radius:14px;padding:30px;text-align:center;background:#faf8f3;cursor:pointer;transition:.2s}
+    .drop:hover,.drop.drag{border-color:#222;background:#fff}.drop strong{display:block;font-size:18px;margin-bottom:7px}.drop span{font-size:13px;color:var(--muted)}
+    input[type=file]{display:none}.actions{display:flex;gap:12px;align-items:center;margin-top:18px;flex-wrap:wrap}
+    button,a.btn{appearance:none;border:0;border-radius:12px;padding:14px 20px;font-size:15px;font-weight:800;text-decoration:none;cursor:pointer}
+    button.primary{background:#20201e;color:#fff}button.primary:disabled{opacity:.45;cursor:not-allowed}button.secondary,a.btn{background:#ebe7df;color:#20201e}
+    .file-name{margin-top:14px;font-size:13px;color:var(--muted)}.progress{display:none;margin-top:22px}.bar{height:9px;background:#e4dfd5;border-radius:999px;overflow:hidden}.bar>i{display:block;width:0;height:100%;background:#20201e;transition:width .2s}
+    .status{font-size:13px;color:var(--muted);margin-top:9px}.notice{margin-top:18px;padding:15px 17px;border-radius:12px;background:#f4f1ea;font-size:13px;line-height:1.65;color:#514d46}
+    .result{display:none;margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}iframe{width:100%;height:620px;border:1px solid var(--line);border-radius:12px;background:#fff;margin-top:16px}
+    .check{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:20px}.check div{padding:13px 14px;background:#f7f4ee;border-radius:10px;font-size:13px}
+    .error{display:none;color:#a12626;background:#fff0f0;border:1px solid #e9b6b6;border-radius:10px;padding:13px 15px;margin-top:16px;font-size:13px;line-height:1.55}
+    @media(max-width:640px){h1{font-size:30px}.check{grid-template-columns:1fr}iframe{height:480px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="eyebrow">LOCAL PDF BUILDER · NO UPLOAD</div>
+    <h1>원본 PDF의 제품 사진으로<br>바이어용 PDF 만들기</h1>
+    <p>웹사이트나 인스타그램 이미지를 사용하지 않습니다. 선택한 <b>Japan_Influencer_Product_Guide.pdf</b>의 2–11페이지 제품 영역만 브라우저 안에서 캡처해 새 PDF에 넣습니다.</p>
+
+    <section class="card">
+      <label class="drop" id="dropZone" for="sourcePdf">
+        <strong>원본 PDF 선택 또는 여기로 드래그</strong>
+        <span>파일은 외부 서버로 전송되지 않고 현재 브라우저에서만 처리됩니다.</span>
+      </label>
+      <input id="sourcePdf" type="file" accept="application/pdf,.pdf" />
+      <div class="file-name" id="fileName">선택된 파일 없음</div>
+      <div class="actions">
+        <button class="primary" id="buildBtn" disabled>바이어용 PDF 생성</button>
+        <button class="secondary" id="resetBtn" type="button">초기화</button>
+      </div>
+      <div class="check">
+        <div>✓ 제품 이미지는 원본 PDF에서만 추출</div>
+        <div>✓ 사이트 화면·메뉴·브라우저 캡처 미사용</div>
+        <div>✓ 원본 제품 그리드 전체를 비율 유지</div>
+        <div>✓ EVID도 원본 PDF 11페이지 이미지 사용</div>
+      </div>
+      <div class="notice">원본 페이지의 제품 사진 영역을 통째로 가져오므로 사진이 잘리지 않습니다. 원본 PDF에 이미 포함된 상품명 캡션도 함께 유지됩니다.</div>
+      <div class="progress" id="progressBox">
+        <div class="bar"><i id="barFill"></i></div>
+        <div class="status" id="statusText">준비 중…</div>
+      </div>
+      <div class="error" id="errorBox"></div>
+      <div class="result" id="resultBox">
+        <div class="actions">
+          <a class="btn" id="downloadBtn" download="2026_Tokyo_KFashion_Buyer_Guide_PDF_Images.pdf">완성 PDF 다운로드</a>
+        </div>
+        <iframe id="previewFrame" title="완성 PDF 미리보기"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const { jsPDF }=window.jspdf;
+    const input=document.getElementById('sourcePdf'), drop=document.getElementById('dropZone'), build=document.getElementById('buildBtn');
+    const reset=document.getElementById('resetBtn'), fileName=document.getElementById('fileName'), progress=document.getElementById('progressBox');
+    const bar=document.getElementById('barFill'), status=document.getElementById('statusText'), errorBox=document.getElementById('errorBox');
+    const result=document.getElementById('resultBox'), dl=document.getElementById('downloadBtn'), preview=document.getElementById('previewFrame');
+    let selected=null, resultUrl=null;
+
+    const brands=[
+      {no:'01',name:'GOOD TRUST',company:'GOOD TRUST',cat:'ゴルフ・アクティブウェア',page:2,accent:'#afc58f',concept:'ゴルフから日常まで、スポーツとライフスタイルをつなぐアパレルを提案します。',items:'ポロシャツ、ハーフジップ、ベスト、パンツ、スカート、ワンピース、トレーニングウェア、軽量アウター',buyers:'ゴルフ、スポーツ、アウトドア、デイリーウェアの専門店・卸・EC',site:'www.goodtrust.co.kr'},
+      {no:'02',name:'STICO',company:'NANOTECH CERAMICS CO., LTD.',cat:'機能性フットウェア',page:3,accent:'#ff8b73',concept:'クロッグ、スリッポン、ワークシューズ、ブーツなどを展開する機能性シューズブランドです。',items:'NECシリーズ、ワークシューズ、クロッグ、レインブーツ、用途別機能性フットウェア',buyers:'医療、外食、ワーク、アウトドア、シューズ専門流通',site:'www.sticokorea.com'},
+      {no:'03',name:'commacomma',company:'commacomma',cat:'シャツ・ブラウス・デニム',page:4,accent:'#e9a8c6',concept:'ディテールを活かしたシャツ、ブラウス、スウェット、デニムを展開する韓国ファッションブランドです。',items:'ハートポイントブラウス、カラースウェット、シースルーブラウス、ワイドデニム、パンツ、スカート',buyers:'レディースセレクトショップ、EC、コンセプトストア',site:'commacomma.kr / @commacomma_kr'},
+      {no:'04',name:'ROSENICK',company:'ROSENICK',cat:'レディースシューズ',page:5,accent:'#e68fb6',concept:'韓国国内生産のハンドメイドシューズを中心に、パンプス、ローファー、フラット、ブーツを展開します。',items:'メリージェーン、厚底ローファー、リボンフラット、レースアップ、メッシュスニーカー、パディングブーツ',buyers:'レディースシューズ、ファッション雑貨、百貨店・セレクトショップ',site:'www.rosenick.co.kr / @rosenick_official'},
+      {no:'05',name:'Sujeongga / mon le conte',company:'Sujeongga',cat:'ベビーシューズ・ライフスタイル雑貨',page:6,accent:'#cdb67a',concept:'ベビーのファーストシューズを中心に、育児雑貨やギフトアイテムを提案します。',items:'Monbebe Toddle Shoes、ベビーソックスシューズ、おむつバッグ、育児雑貨、ギフトアイテム',buyers:'ベビー・キッズ専門店、ギフト、百貨店キッズ、ライフスタイルショップ',site:'monleconte.kr'},
+      {no:'06',name:'OHGYO（烏橋）',company:'DALMAJI TIGER',cat:'メンズ・ウィメンズ・アクセサリー',page:7,accent:'#a9bbd3',concept:'韓国の物語性と立体的なアヴァンギャルドデザインを融合するアート＆ファッションブランドです。',items:'レイヤードドレス、アシンメトリーシャツ、ジャケット、サルエルパンツ、ネックレス、リング',buyers:'デザイナーズセレクト、コンセプトストア、アート系リテール・メディア',site:'ohgyo.com / @ohgyo_official'},
+      {no:'07',name:'REVE BY REVE',company:'PLOT CO., LTD.',cat:'レディースシューズ',page:8,accent:'#b5a0c8',concept:'日常のコーディネートに上品さを添える、サンダル、パンプス、ローファー、スリングバックを提案します。',items:'entrechat simple sandal、Ava Stiletto、Ronnie Loafer、Ribbon Satin Slingback',buyers:'レディースシューズ、セレクトショップ、百貨店・EC',site:'revebyreve.co.kr'},
+      {no:'08',name:'SWIMMABEBE',company:'SMB Co., Ltd.',cat:'ベビー＆キッズスイムウェア',page:9,accent:'#8cc7ce',concept:'ベビー・キッズ水着を中心に、ファミリーラインやリゾートウェアまで幅広く展開します。',items:'ベビー水着、キッズ水着、ラッシュガード、セットアップ、ファミリーリゾートウェア',buyers:'キッズ、スポーツ、リゾート、ライフスタイル専門流通',site:'swimmabebe.com / @swim_ma_bebe'},
+      {no:'09',name:'REALCOCO',company:'PBR Inc.',cat:'レディースファッション',page:10,accent:'#d6a478',concept:'デイリーからオケージョンまで、ワンピースを中心に幅広い女性向けスタイルを提案します。',items:'花柄ワンピース、シャツワンピース、シフォン、プリーツ、ミニマルドレス、ブラウス、ニット',buyers:'レディースEC、セレクトショップ、百貨店オンライン、卸',site:'realcoco.com'},
+      {no:'10',name:'EVID',company:'COOP. DESIGNALL',cat:'ストリートウェア・アップサイクル',page:11,accent:'#9bae90',concept:'グラフィック、刺繍、アートワークを取り入れたカスタムウェアを制作するアートファッションスタジオです。',items:'セットアップ、デニムパンツ、ジャケット、スカート、カスタムデニム、アートワークウェア',buyers:'ストリート、アート、コンセプトストア、アップサイクル関連流通',site:'@evid_studio / @dive_up_evid'}
+    ];
+
+    function setFile(f){if(!f||f.type!=='application/pdf'){showError('PDF 파일을 선택해 주세요.');return}selected=f;fileName.textContent=f.name+' · '+(f.size/1024/1024).toFixed(1)+' MB';build.disabled=false;result.style.display='none';errorBox.style.display='none'}
+    input.addEventListener('change',e=>setFile(e.target.files[0]));
+    ['dragenter','dragover'].forEach(n=>drop.addEventListener(n,e=>{e.preventDefault();drop.classList.add('drag')}));
+    ['dragleave','drop'].forEach(n=>drop.addEventListener(n,e=>{e.preventDefault();drop.classList.remove('drag')}));
+    drop.addEventListener('drop',e=>setFile(e.dataTransfer.files[0]));
+    reset.addEventListener('click',()=>{selected=null;input.value='';fileName.textContent='선택된 파일 없음';build.disabled=true;progress.style.display='none';result.style.display='none';errorBox.style.display='none';if(resultUrl)URL.revokeObjectURL(resultUrl)});
+    function showError(msg){errorBox.textContent=msg;errorBox.style.display='block';progress.style.display='none';build.disabled=!selected}
+    function prog(p,msg){progress.style.display='block';bar.style.width=p+'%';status.textContent=msg}
+
+    const PW=1240,PH=1754,BG='#f4f1e9',INK='#20201e',MUTED='#6b665e',LINE='#d0cac0';
+    function ctxPage(){const c=document.createElement('canvas');c.width=PW;c.height=PH;const x=c.getContext('2d');x.fillStyle=BG;x.fillRect(0,0,PW,PH);x.textBaseline='top';return {c,x}}
+    function f(size,weight=400){return `${weight} ${size}px "Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif`}
+    function text(x,t,px,py,size=24,weight=400,color=INK){x.font=f(size,weight);x.fillStyle=color;x.fillText(t,px,py)}
+    function wrap(x,t,px,py,maxW,size=24,weight=400,color=INK,lineH=Math.round(size*1.55),maxLines=99){x.font=f(size,weight);x.fillStyle=color;let line='',lines=[];for(const ch of t){const test=line+ch;if(x.measureText(test).width<=maxW||!line)line=test;else{lines.push(line);line=ch}}if(line)lines.push(line);if(lines.length>maxLines){lines=lines.slice(0,maxLines);lines[maxLines-1]=lines[maxLines-1].slice(0,-1)+'…'}lines.forEach((l,i)=>x.fillText(l,px,py+i*lineH));return py+lines.length*lineH}
+    function rr(x,px,py,w,h,r,fill,stroke){x.beginPath();x.roundRect(px,py,w,h,r);if(fill){x.fillStyle=fill;x.fill()}if(stroke){x.strokeStyle=stroke;x.lineWidth=2;x.stroke()}}
+    function footer(x,n){x.strokeStyle=LINE;x.lineWidth=1;x.beginPath();x.moveTo(82,1688);x.lineTo(1158,1688);x.stroke();text(x,'2026 TOKYO K-FASHION / BUYER GUIDE',82,1703,14,700,MUTED);text(x,String(n).padStart(2,'0'),1125,1703,14,700,MUTED)}
+    function imageContain(x,img,dx,dy,dw,dh){const r=Math.min(dw/img.width,dh/img.height),w=img.width*r,h=img.height*r;x.fillStyle='#fff';x.fillRect(dx,dy,dw,dh);x.drawImage(img,dx+(dw-w)/2,dy+(dh-h)/2,w,h)}
+
+    async function renderSource(pdf,pageNo,scale=1.65){const p=await pdf.getPage(pageNo),vp=p.getViewport({scale});const c=document.createElement('canvas');c.width=Math.ceil(vp.width);c.height=Math.ceil(vp.height);await p.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;return c}
+    function cropGrid(src,pageNo){const c=document.createElement('canvas');const x0=.048,y0=.144,w0=.904,h0=(pageNo===9?.575:.568);c.width=Math.round(src.width*w0);c.height=Math.round(src.height*h0);c.getContext('2d').drawImage(src,Math.round(src.width*x0),Math.round(src.height*y0),c.width,c.height,0,0,c.width,c.height);return c}
+    function cropCover(src){const c=document.createElement('canvas');c.width=Math.round(src.width*.9);c.height=Math.round(src.height*.54);c.getContext('2d').drawImage(src,Math.round(src.width*.05),Math.round(src.height*.18),c.width,c.height,0,0,c.width,c.height);return c}
+
+    function cover(coverImg){const {c,x}=ctxPage();text(x,'BUYER & DISTRIBUTION PARTNER GUIDE',82,70,16,700,MUTED);text(x,'2026 TOKYO',82,132,68,700);text(x,'K-FASHION',82,208,68,700);text(x,'POP-UP SHOWROOM & BUSINESS MATCHING',82,306,24,700);x.fillStyle=INK;x.fillRect(82,365,210,7);text(x,'2026.10.08 THU',82,410,18,700);text(x,'11:00–19:00',82,443,17,400,MUTED);text(x,'2026.10.09 FRI',400,410,18,700);text(x,'09:00–19:00',400,443,17,400,MUTED);text(x,'OMOTESANDO',720,410,18,700);text(x,'KOH’S LICK CURRO 2F',720,443,17,400,MUTED);imageContain(x,coverImg,82,510,1076,640);text(x,'日本のバイヤー・流通関係者向け 出展ブランドガイド',82,1195,30,700);wrap(x,'韓国・釜山発のファッションブランド10社を、東京・表参道でご紹介します。',82,1245,1076,20,400,MUTED,32,2);rr(x,82,1340,1076,250,18,'#fff',LINE);text(x,'EVENT',112,1372,15,700,MUTED);text(x,'2026 Tokyo K-Fashion Pop-up Showroom & Business Matching',112,1411,23,700);text(x,'会場  Omotesando KOH’S LICK CURRO 2F',112,1463,18,500);text(x,'東京都渋谷区神宮前5-7-13',112,1496,18,500);text(x,'入場無料 / 事前申込・選定制 / 日本語通訳対応',112,1543,18,700);footer(x,1);return c}
+    function overview(){const {c,x}=ctxPage();text(x,'EVENT OVERVIEW',82,70,16,700,MUTED);text(x,'日本のバイヤー・流通関係者の皆様へ',82,123,38,700);wrap(x,'韓国・釜山地域のファッション企業10社が東京・表参道に集結。商品を実際にご覧いただき、ブランド担当者との商談や今後の取引可能性をご検討いただける2日間です。',82,190,1076,22,400,INK,36,4);const cards=[['開催日','2026年10月8日（木）11:00–19:00\n2026年10月9日（金）09:00–19:00'],['会場','Omotesando KOH’S LICK CURRO 2F\n東京都渋谷区神宮前5-7-13'],['内容','商品展示 / B2B商談 / ブランド紹介\nネットワーキング / 一部サンプル購入'],['対応','会場内で日本語通訳対応\n関心カテゴリーに応じたブランド紹介'],['参加費','無料（事前申込・選定制）']];let y=370;for(const [a,b] of cards){rr(x,82,y,1076,b.includes('\n')?160:120,16,'#fff',LINE);text(x,a,110,y+24,15,700,MUTED);b.split('\n').forEach((s,i)=>text(x,s,110,y+60+i*34,21,700));y+=b.includes('\n')?180:140}x.strokeStyle=INK;x.lineWidth=2;x.beginPath();x.moveTo(82,1315);x.lineTo(1158,1315);x.stroke();const stats=[['10','韓国ファッション\n参加ブランド'],['1:1','ブランド担当者との\nB2B商談'],['¥18,000','選定バイヤー1社1名\n交通費補助'],['10/1','参加申込締切\n名刺提出必須']];stats.forEach((s,i)=>{const px=82+i*269;if(i){x.strokeStyle=LINE;x.beginPath();x.moveTo(px,1330);x.lineTo(px,1510);x.stroke()}text(x,s[0],px+18,1350,32,700);s[1].split('\n').forEach((z,j)=>text(x,z,px+18,1413+j*27,16,700))});x.strokeStyle=INK;x.beginPath();x.moveTo(82,1530);x.lineTo(1158,1530);x.stroke();text(x,'主催：釜山地方中小ベンチャー企業庁',82,1570,17,700);text(x,'主管：釜山繊維ファッション産業連合会',82,1604,17,700);text(x,'バイヤー招待窓口：Linkon',82,1638,17,700);footer(x,2);return c}
+    function brandPage(b,img,n){const {c,x}=ctxPage();x.fillStyle=b.accent;x.fillRect(0,0,PW,12);text(x,`${b.no} / BRAND & ITEMS`,82,63,16,700,MUTED);text(x,b.name,82,108,b.name.length>20?38:48,700);text(x,b.cat,82,173,25,700);text(x,`COMPANY / ${b.company}`,82,217,15,700,MUTED);imageContain(x,img,82,275,1076,710);x.strokeStyle=INK;x.lineWidth=3;x.beginPath();x.moveTo(82,1025);x.lineTo(1158,1025);x.stroke();wrap(x,b.concept,82,1060,1076,23,700,INK,36,3);text(x,'主なアイテム',82,1195,15,700,MUTED);wrap(x,b.items,82,1231,495,18,400,INK,29,5);text(x,'想定バイヤー',662,1195,15,700,MUTED);wrap(x,b.buyers,662,1231,496,18,400,INK,29,5);rr(x,82,1418,1076,180,16,'#eae5dc',b.accent);text(x,'取引情報',108,1445,17,700);wrap(x,'卸価格・MOQ・納期・日本展開条件等は、会場での商談時に個別にご案内します。関心商品や希望条件がある場合は、参加申込時にお知らせください。',108,1480,1018,17,400,INK,28,4);text(x,'OFFICIAL',82,1624,14,700,MUTED);text(x,b.site,82,1651,18,700);footer(x,n);return c}
+    function application(){const {c,x}=ctxPage();text(x,'BUYER APPLICATION',82,70,16,700,MUTED);text(x,'バイヤー参加申込・交通費補助',82,120,38,700);const steps=[['01','招待メールに返信','2026年10月1日（木）までにお申し込みください。'],['02','名刺データを添付','会社名・部署・役職・氏名を確認できる名刺画像またはPDFをお送りください。'],['03','Linkonによる確認・選定','所属企業、業態、役職等を確認し、参加確定者へ個別にメールでご案内します。'],['04','イベント当日にご来場','参加確定メールを受けたご本人が会場へお越しください。']];let y=220;steps.forEach(s=>{rr(x,82,y,1076,150,16,'#fff',LINE);text(x,s[0],108,y+27,31,700);text(x,s[1],210,y+24,22,700);wrap(x,s[2],210,y+64,900,17,400,MUTED,28,3);y+=170});rr(x,82,920,1076,470,18,INK,null);text(x,'¥18,000',112,955,54,700,'#fff');text(x,'選定されたバイヤー企業への交通費補助',430,973,25,700,'#fff');const bullets=['バイヤー企業1社につき、来場者1名を対象に会場で日本円の現金をお渡しします。','同一企業から複数名でご来場の場合も、支給対象は1名のみです。','商談・商品の購入は必須ではありません。','受領後の使途は自由で、会場内の一部出展商品のサンプル購入にもご利用いただけます。','勤務先の社内規程により現金を受領できない場合があります。事前にご確認ください。'];let by=1055;bullets.forEach(b=>{x.fillStyle='#fff';x.beginPath();x.arc(430,by+10,5,0,Math.PI*2);x.fill();by=wrap(x,b,450,by,670,17,400,'#fff',28,2)+12});x.strokeStyle=INK;x.lineWidth=3;x.beginPath();x.moveTo(82,1460);x.lineTo(1158,1460);x.stroke();text(x,'BUYER INVITATION CONTACT',82,1495,15,700,MUTED);text(x,'Linkon',82,1530,36,700);text(x,'代表  キム・ビョンス',82,1583,18,700);text(x,'E-mail',655,1510,15,700,MUTED);text(x,'linkon@linkonkr.com',775,1510,19,700);text(x,'Tel.',655,1552,15,700,MUTED);text(x,'+82 10 4760 5789',775,1552,19,700);text(x,'Web',655,1594,15,700,MUTED);text(x,'pre.linkon.com',775,1594,19,700);wrap(x,'ご送付いただいた名刺情報は、本イベントの参加確認、選定結果のご連絡および当日の本人確認の目的にのみ使用します。会場での展示・販売商品、在庫、価格は変更される場合があります。',82,1640,1076,13,400,MUTED,22,3);footer(x,13);return c}
+    function addPage(doc,canvas,isFirst){if(!isFirst)doc.addPage('a4','portrait');doc.addImage(canvas.toDataURL('image/jpeg',.9),'JPEG',0,0,210,297,undefined,'FAST')}
+
+    build.addEventListener('click',async()=>{
+      if(!selected)return;build.disabled=true;result.style.display='none';errorBox.style.display='none';prog(2,'원본 PDF를 읽는 중…');
+      try{
+        const data=new Uint8Array(await selected.arrayBuffer());const pdf=await pdfjsLib.getDocument({data}).promise;if(pdf.numPages<11)throw new Error('원본 PDF는 최소 11페이지여야 합니다.');
+        const srcCover=await renderSource(pdf,1);const coverImg=cropCover(srcCover);const grids=[];
+        for(let i=0;i<brands.length;i++){prog(8+i*5,`${brands[i].name} 제품 사진을 원본 PDF ${brands[i].page}페이지에서 추출 중…`);const rendered=await renderSource(pdf,brands[i].page);grids.push(cropGrid(rendered,brands[i].page));await new Promise(r=>setTimeout(r,0))}
+        prog(62,'새 바이어용 페이지를 구성 중…');const pages=[cover(coverImg),overview()];brands.forEach((b,i)=>pages.push(brandPage(b,grids[i],i+3)));pages.push(application());
+        const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});pages.forEach((p,i)=>{prog(67+Math.round(i/pages.length*27),`PDF ${i+1}/${pages.length}페이지 저장 중…`);addPage(doc,p,i===0)});
+        prog(96,'다운로드 파일을 준비 중…');const blob=doc.output('blob');if(resultUrl)URL.revokeObjectURL(resultUrl);resultUrl=URL.createObjectURL(blob);dl.href=resultUrl;preview.src=resultUrl;result.style.display='block';prog(100,'완료되었습니다. 미리보기를 확인한 뒤 PDF를 내려받으세요.');dl.click();
+      }catch(err){console.error(err);showError('PDF 생성 중 오류가 발생했습니다: '+(err?.message||err))}finally{build.disabled=false}
+    });
+  </script>
+</body>
+</html>
