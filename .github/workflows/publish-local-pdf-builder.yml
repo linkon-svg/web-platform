@@ -1,0 +1,62 @@
+name: Publish Local PDF-Image Buyer Guide Builder
+
+on:
+  push:
+    branches:
+      - chatgpt-buyer-guide-pdf
+    paths:
+      - tools/pdf_from_uploaded_source.html
+      - .github/workflows/publish-local-pdf-builder.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: chatgpt-buyer-guide-pdf
+
+      - name: Validate builder HTML
+        run: |
+          test -s tools/pdf_from_uploaded_source.html
+          grep -q '원본 PDF의 제품 사진' tools/pdf_from_uploaded_source.html
+          grep -q 'pdfjsLib.getDocument' tools/pdf_from_uploaded_source.html
+          grep -q 'cropGrid' tools/pdf_from_uploaded_source.html
+
+      - name: Upload builder to temporary static hosts
+        shell: bash
+        run: |
+          set -u
+          HTML='tools/pdf_from_uploaded_source.html'
+          : > generated/pdf_builder_urls.txt
+
+          CATBOX_URL="$(curl -fsS --max-time 90 -F 'reqtype=fileupload' -F "fileToUpload=@${HTML}" https://catbox.moe/user/api.php || true)"
+          [[ "$CATBOX_URL" =~ ^https:// ]] && printf 'catbox=%s\n' "$CATBOX_URL" >> generated/pdf_builder_urls.txt
+
+          TMP_RESPONSE="$(curl -fsS --max-time 90 -F "file=@${HTML}" https://tmpfiles.org/api/v1/upload || true)"
+          TMP_URL="$(printf '%s' "$TMP_RESPONSE" | python -c "import json,sys; d=json.load(sys.stdin); print(d['data']['url'].replace('https://tmpfiles.org/','https://tmpfiles.org/dl/'))" 2>/dev/null || true)"
+          [[ "$TMP_URL" =~ ^https:// ]] && printf 'tmpfiles=%s\n' "$TMP_URL" >> generated/pdf_builder_urls.txt
+
+          printf 'rawgithack=https://raw.githack.com/linkon-svg/web-platform/chatgpt-buyer-guide-pdf/tools/pdf_from_uploaded_source.html\n' >> generated/pdf_builder_urls.txt
+          printf 'htmlpreview=https://htmlpreview.github.io/?https://raw.githubusercontent.com/linkon-svg/web-platform/chatgpt-buyer-guide-pdf/tools/pdf_from_uploaded_source.html\n' >> generated/pdf_builder_urls.txt
+
+          cat generated/pdf_builder_urls.txt
+          test -s generated/pdf_builder_urls.txt
+
+      - name: Commit published URLs
+        run: |
+          git config user.name 'chatgpt-artifact-bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add generated/pdf_builder_urls.txt
+          if git diff --cached --quiet; then
+            echo 'No URL changes'
+          else
+            git commit -m 'Publish local PDF-image buyer guide builder URLs'
+            git push origin HEAD:chatgpt-buyer-guide-pdf
+          fi
